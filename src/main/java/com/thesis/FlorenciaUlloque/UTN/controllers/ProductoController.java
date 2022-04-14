@@ -1,8 +1,6 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoProducto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Producto;
-import com.thesis.FlorenciaUlloque.UTN.repositories.DtoProductoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProductoRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ProductoService;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +15,11 @@ public class ProductoController {
 
     private final ProductoService productoService;
     private final ProductoRepository repository;
-    private final DtoProductoRepository dtoProductoRepository;
 
 
-    public ProductoController(ProductoService productoService, ProductoRepository repository, DtoProductoRepository dtoProductoRepository) {
+    public ProductoController(ProductoService productoService, ProductoRepository repository) {
         this.productoService = productoService;
-        this.repository = repository;
-        this.dtoProductoRepository = dtoProductoRepository;
+        this.repository = repository;;
     }
 
 
@@ -49,13 +45,6 @@ public class ProductoController {
     public Producto getProductosByFormaVenta(@PathVariable int idFormaVenta) {
         return repository.findByFormaVenta(idFormaVenta);
     }
-
-
-    @GetMapping("/marca/{nombre}")
-    public List<dtoProducto> getProductoByMarca(@PathVariable String nombre) {
-        return dtoProductoRepository.findByMarcaNombre(nombre);
-    }
-
 
     //trae todos los datos de los productos según el nombre de la marca
     @GetMapping("/AllProductsBymarca/{nombre}")

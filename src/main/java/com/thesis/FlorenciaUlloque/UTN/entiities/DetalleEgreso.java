@@ -4,29 +4,29 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "detalleEgreso")
-@Table(name = "detalle_egreso")
+@Table(name = "Detalle_Egreso")
 public class DetalleEgreso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_detalle")
-    private int idDetalle;
+    @Column(name = "id_Detalle")
+    private int idDetalleEgreso;
     @ManyToOne
     @JoinColumn(name = "idEgreso")
     private SalidaProducto salidaProducto;
 
     @OneToMany(mappedBy = "detalleEgreso")//  ?
     @Column(name = "producto_detalleEgreso")
-    private List<Producto> listadoProductos;
+    private List<Producto> productos;
 
     private int cantidad;
     private float precio;
 
-    public long getIdDetalle() {
-        return idDetalle;
+    public long getIdDetalleEgreso() {
+        return idDetalleEgreso;
     }
 
-    public void setIdDetalle(int idDetalle) {
-        this.idDetalle = idDetalle;
+    public void setIdDetalleEgreso(int idDetalleEgreso) {
+        this.idDetalleEgreso = idDetalleEgreso;
     }
 
     public SalidaProducto getSalidaProducto() {
@@ -37,12 +37,12 @@ public class DetalleEgreso {
         this.salidaProducto = salidaProducto;
     }
 
-    public List<Producto> getListadoProductos() {
-        return listadoProductos;
+    public List<Producto> getProductos() {
+        return productos;
     }
 
-    public void setListadoProductos(List<Producto> listadoProductos) {
-        this.listadoProductos = listadoProductos;
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
 
     public int getCantidad() {
@@ -61,10 +61,10 @@ public class DetalleEgreso {
         this.precio = precio;
     }
 
-    public DetalleEgreso(int idDetalle, SalidaProducto salidaProducto, List<Producto> listadoProductos, int cantidad, float precio) {
-        this.idDetalle = idDetalle;
+    public DetalleEgreso(int idDetalleEgreso, SalidaProducto salidaProducto, List<Producto> listadoProductos, int cantidad, float precio) {
+        this.idDetalleEgreso = idDetalleEgreso;
         this.salidaProducto = salidaProducto;
-        this.listadoProductos = listadoProductos;
+        this.productos = listadoProductos;
         this.cantidad = cantidad;
         this.precio = precio;
     }
@@ -72,9 +72,9 @@ public class DetalleEgreso {
     @Override
     public String toString() {
         return "DetalleSalida{" +
-                "idDetalle=" + idDetalle +
+                "idDetalle=" + idDetalleEgreso +
                 ", salidaProducto=" + salidaProducto +
-                ", listadoProductos=" + listadoProductos +
+                ", listadoProductos=" + productos +
                 ", cantidad=" + cantidad +
                 ", precio=" + precio +
                 '}';

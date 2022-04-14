@@ -9,11 +9,11 @@ import java.util.List;
 
 @Entity(name = "producto")
 @Table(name = "Productos")
-public class Producto {
+public class Producto{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
-    private int idProducto;
+    private long idProducto;
 
     private long codBarras;
     private String nombre;
@@ -39,7 +39,7 @@ public class Producto {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "idDetalleIngreso", insertable = false, updatable = false)
+    @JoinColumn(name = "idDetalle", insertable = false, updatable = false)
     private DetalleIngreso detalleIngreso;
 
     @JsonIgnore
@@ -84,7 +84,7 @@ public class Producto {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto(long idProducto) {
         this.idProducto = idProducto;
     }
 
@@ -194,7 +194,7 @@ public class Producto {
 
 
 
-    public Producto(int idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra, double precioVenta, FormaVenta formaVenta, Marca marca, Subcategoria subcategoria, Animal animal, float pesoNeto, DetalleIngreso detalleIngreso, DetalleEgreso detalleEgreso, Stock stock, UnidadMedida unidadMedida) {
+    public Producto(long idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra, double precioVenta, FormaVenta formaVenta, Marca marca, Subcategoria subcategoria, Animal animal, float pesoNeto, DetalleIngreso detalleIngreso, DetalleEgreso detalleEgreso, Stock stock, UnidadMedida unidadMedida) {
         this.idProducto = idProducto;
         this.codBarras = codBarras;
         this.nombre = nombre;
@@ -215,7 +215,7 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(int idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra, double precioVenta, FormaVenta formaVenta, Marca marca, Subcategoria subcategoria, Animal animal, float pesoNeto, DetalleIngreso detalleIngreso, DetalleEgreso detalleEgreso, Stock stock) {
+    public Producto(long idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra, double precioVenta, FormaVenta formaVenta, Marca marca, Subcategoria subcategoria, Animal animal, float pesoNeto, DetalleIngreso detalleIngreso, DetalleEgreso detalleEgreso, Stock stock) {
         this.idProducto = idProducto;
         this.codBarras = codBarras;
         this.nombre = nombre;
