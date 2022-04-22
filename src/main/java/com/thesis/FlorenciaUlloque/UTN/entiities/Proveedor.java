@@ -1,5 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,12 +15,14 @@ public class Proveedor {
     private String nombre;
     private long telefono;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "proveedores", fetch = FetchType.EAGER)
     private List<Marca> marcas;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "proveedor")
     @Column(name = "IngresoProductos_proveedor")
-    private List<IngresoProductos> ingresoProductosList;
+    private List<IngresoProductos> listaProductos;
 
     public long getIdProveedor() {
         return idProveedor;
@@ -52,12 +56,12 @@ public class Proveedor {
         this.marcas = marcas;
     }
 
-    public List<IngresoProductos> getIngresoProductosList() {
-        return ingresoProductosList;
+    public List<IngresoProductos> getListaProductos() {
+        return listaProductos;
     }
 
-    public void setIngresoProductosList(List<IngresoProductos> ingresoProductosList) {
-        this.ingresoProductosList = ingresoProductosList;
+    public void setListaProductos(List<IngresoProductos> listaProductos) {
+        this.listaProductos = listaProductos;
     }
 
     public Proveedor() {

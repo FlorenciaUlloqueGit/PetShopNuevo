@@ -11,7 +11,7 @@ public class FormaVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFormaVenta;
     private String nombre;
-    @OneToOne(mappedBy = "formaVenta", fetch = FetchType.LAZY/* , cascade = CascadeType.ALL, orphanRemoval = true*/)
+    @OneToOne(mappedBy = "formaVenta" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Producto producto;
 
     public int getIdFormaVenta() {

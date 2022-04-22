@@ -3,15 +3,15 @@ package com.thesis.FlorenciaUlloque.UTN.entiities;
 import javax.persistence.*;
 
 @Entity(name = "formaPago")
-@Table(name = "FormaPago")
+@Table(name = "Forma_pagos")
 public class FormaPago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFormaPago;
     private String nombre;
-    @OneToOne(mappedBy = "formaPago")
+    @OneToOne(mappedBy = "formaPago" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private IngresoProductos ingresoProductos;
-    @OneToOne(mappedBy = "formaPago")
+    @OneToOne(mappedBy = "formaPago" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private SalidaProducto salidaProducto;
 
     public int getIdFormaPago() {

@@ -1,5 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +13,7 @@ public class SalidaProducto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idEgreso;
     private double total;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date fecha;
     @OneToOne
     @JoinColumn(name = "formaPago_idFormaPago")

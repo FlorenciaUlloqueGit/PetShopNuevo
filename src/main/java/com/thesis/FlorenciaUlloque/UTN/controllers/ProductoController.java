@@ -23,26 +23,26 @@ public class ProductoController {
     }
 
 
-    @GetMapping("/listadoConCostos")
+    @GetMapping("/listadoConCostos") //FUNCIONA!!!!!!!!!!!!!!!
     public List<String> getAllProductosWithAllCost(@RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "limit", defaultValue = "25") int limit) {
         return repository.findAllProductosWithAllCost(page,limit); //agregar limite de pagina
     }
-    @GetMapping("/listadoConCostoVenta")
+    @GetMapping("/listadoConCostoVenta") //funcionaaaaaaa!!!!
     public List<String> getAllProductoListWithSellCost(@RequestParam(value = "page", defaultValue = "0") int page,
                                                  @RequestParam(value = "limit", defaultValue = "25") int limit) {
         return repository.findAllProductosWithSellCost(page,limit); //agregar limite de pagina
     }
 
 
-    @GetMapping("")
+    @GetMapping("") //funcionaaaaaaaaaaaaaaaaa
     public List<Producto> getAllProductos(@RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "limit", defaultValue = "25") int limit) {
         return productoService.getAllProductos(page, limit);
     }
 
-    @GetMapping("/formaVenta/{idFormaVenta}")
-    public Producto getProductosByFormaVenta(@PathVariable int idFormaVenta) {
+    @GetMapping("/formaVenta/{idFormaVenta}") //no funciona
+    public List<Producto> getProductosByFormaVenta(@PathVariable int idFormaVenta) {
         return repository.findByFormaVenta(idFormaVenta);
     }
 
@@ -52,19 +52,19 @@ public class ProductoController {
         return repository.findAllDatesByMarcaNombre(nombre);
     }
 
-    @GetMapping("/subcategoria/{idSubcategoria}")
+    @GetMapping("/subcategoria/{idSubcategoria}") //no anda
     public Producto getProductoBySubcategoria(@PathVariable int idSubcategoria) {
         return repository.findBySubCategoria(idSubcategoria);
     }
 
-    @GetMapping("/animal/{idAnimal}")
+    @GetMapping("/animal/{idAnimal}") //no anda
     public Producto getProductoByAnimal(@PathVariable int idAnimal) {
         return repository.findByAnimal(idAnimal);
     }
 
-    @GetMapping("/fechaVencimiento/{idFechaVencimieto}")
-    public Producto getProductosByFechaVencimiento(@PathVariable Date fechaVencimiento) {
-        return repository.findByFechaVencimiento(fechaVencimiento);
+    @GetMapping("/fechaVencimiento/{fecha}") //para manejar la fecha,.... revisar y hacer
+    public Producto getProductosByFechaVencimiento(@PathVariable Date fecha) {
+        return repository.findByFechaVencimiento(fecha);
     }
     @GetMapping("/codBarras/{codBarras}") //funcionan todos los atributos!!
     public Producto getProductoByCodBarras(@PathVariable long codBarras) {
@@ -78,17 +78,17 @@ public class ProductoController {
     }
 
 
-    @PostMapping("")
+    @PostMapping("") //funciona!
     public Producto createProducto(@RequestBody Producto producto){
         return productoService.createProducto(producto);
     }
 
-    @PutMapping("/{idProducto}")
+    @PutMapping("/{idProducto}") //FUNCIONAAA
     public Producto updateProducto(@PathVariable int idProducto, @RequestBody Producto producto){
         return productoService.updateProductos(idProducto, producto);
     }
 
-    @DeleteMapping("/{idProducto}")
+    @DeleteMapping("/{idProducto}") //FUNCIONAAA
     public String deleteProducto( @PathVariable int idProducto){
         productoService.deleteProductos(idProducto);
         return "El producto ha sido eliminado exitosamente";

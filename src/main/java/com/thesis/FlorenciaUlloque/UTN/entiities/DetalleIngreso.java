@@ -1,5 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,13 +13,14 @@ public class DetalleIngreso {
     @Column(name = "id_Detalle")
     private int idDetalle;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "idIngreso")
     private IngresoProductos ingresoProductos;
 
-    @OneToMany(mappedBy = "detalleIngreso")//  ?
-    @Column(name = "producto_detalleIngreso")
-    private List<Producto> listadoProductos;
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
+    private Producto producto;;
 
     private int cantidad;
     private double precio;
@@ -30,20 +33,20 @@ public class DetalleIngreso {
         this.idDetalle = idDetalle;
     }
 
-    public IngresoProductos getEntradaProducto() {
+    public IngresoProductos getIngresoProductos() {
         return ingresoProductos;
     }
 
-    public void setEntradaProducto(IngresoProductos ingresoProductos) {
+    public void setIngresoProductos(IngresoProductos ingresoProductos) {
         this.ingresoProductos = ingresoProductos;
     }
 
-    public List<Producto> getListadoProductos() {
-        return listadoProductos;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setListadoProductos(List<Producto> listadoProductos) {
-        this.listadoProductos = listadoProductos;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public int getCantidad() {
@@ -62,25 +65,14 @@ public class DetalleIngreso {
         this.precio = precio;
     }
 
-    public DetalleIngreso(int idDetalleIngreso, IngresoProductos ingresoProductos, List<Producto> listadoProductos, int cantidad, double precio) {
-        this.idDetalle = idDetalleIngreso;
-        this.ingresoProductos = ingresoProductos;
-        this.listadoProductos = listadoProductos;
-        this.cantidad = cantidad;
-        this.precio = precio;
-    }
-
     public DetalleIngreso() {
     }
 
-    @Override
-    public String toString() {
-        return "DetalleEntrada{" +
-                "idDetalle=" + idDetalle +
-                ", entradaProducto=" + ingresoProductos +
-                ", listadoProductos=" + listadoProductos +
-                ", cantidad=" + cantidad +
-                ", precio=" + precio +
-                '}';
+    public DetalleIngreso(int idDetalle, IngresoProductos ingresoProductos, Producto producto, int cantidad, double precio) {
+        this.idDetalle = idDetalle;
+        this.ingresoProductos = ingresoProductos;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precio = precio;
     }
 }

@@ -1,5 +1,8 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -13,14 +16,16 @@ public class IngresoProductos {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="idProveedor")
     private Proveedor proveedor;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date fecha;
     private double total;
-    @OneToOne(cascade = CascadeType.ALL)
+
     @JoinColumn(name = "idFormaPago")
+    @OneToOne //(fetch =FetchType.LAZY)
     private FormaPago formaPago;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "ingresoProductos" , cascade = CascadeType.ALL)
-    @Column(name = "detalleIngreso_ingresoProductos")
     private List<DetalleIngreso> listadoDetalleIngresos;
 
     public int getIdIngreso() {
@@ -63,33 +68,27 @@ public class IngresoProductos {
         this.listadoDetalleIngresos = listadoDetalleIngresos;
     }
 
-    public IngresoProductos(int idIngreso, Proveedor proveedor, Date fecha, double total, List<DetalleIngreso> listadoDetalleIngresos) {
+    public FormaPago getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(FormaPago formaPago) {
+        this.formaPago = formaPago;
+    }
+
+
+    public IngresoProductos(int idIngreso, Proveedor proveedor, Date fecha, double total, FormaPago formaPago, List<DetalleIngreso> listadoDetalleIngresos) {
         this.idIngreso = idIngreso;
         this.proveedor = proveedor;
         this.fecha = fecha;
         this.total = total;
+        this.formaPago = formaPago;
         this.listadoDetalleIngresos = listadoDetalleIngresos;
     }
 
     public IngresoProductos() {
     }
 
-    public IngresoProductos(int idIngreso, Proveedor proveedor, Date fecha, double total) {
-        this.idIngreso = idIngreso;
-        this.proveedor = proveedor;
-        this.fecha = fecha;
-        this.total = total;
-    }
 
-    @Override
-    public String toString() {
-        return "EntradaProducto{" +
-                "idIngreso=" + idIngreso +
-                ", proveedor=" + proveedor +
-                ", fecha=" + fecha +
-                ", total=" + total +
-                ", listadoDetalleEntradas=" + listadoDetalleIngresos +
-                '}';
-    }
 }
 

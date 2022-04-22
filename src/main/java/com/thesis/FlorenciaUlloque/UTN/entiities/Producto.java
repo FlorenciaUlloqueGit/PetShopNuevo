@@ -1,5 +1,6 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.annotation.Lazy;
 
@@ -13,10 +14,11 @@ public class Producto{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
-    private long idProducto;
+    private int idProducto;
 
     private long codBarras;
     private String nombre;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date fechaVencimiento;
     private double precioCompra;
     private double precioVenta;
@@ -26,7 +28,7 @@ public class Producto{
     private Marca marca;
 
     @JoinColumn(name = "idFormaVenta")
-    @OneToOne //(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne (fetch =FetchType.LAZY)
     private FormaVenta formaVenta;
 
     @ManyToOne
@@ -38,9 +40,8 @@ public class Producto{
     private float pesoNeto;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "idDetalle", insertable = false, updatable = false)
-    private DetalleIngreso detalleIngreso;
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private List<DetalleIngreso> detalleIngreso;
 
     @JsonIgnore
     @ManyToOne
@@ -48,24 +49,23 @@ public class Producto{
     private DetalleEgreso detalleEgreso;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "idStock")
+    @OneToOne(mappedBy = "producto" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Stock stock;
 
     @ManyToOne
     @JoinColumn(name = "idUnidadMedidaPeso")
     private UnidadMedida unidadMedida;
 
-    public UnidadMedida getUnidadMedida() {
-        return unidadMedida;
-    }
-
-    public DetalleIngreso getDetalleIngreso() {
+    public List<DetalleIngreso> getDetalleIngreso() {
         return detalleIngreso;
     }
 
-    public void setDetalleIngreso(DetalleIngreso detalleIngreso) {
+    public void setDetalleIngreso(List<DetalleIngreso> detalleIngreso) {
         this.detalleIngreso = detalleIngreso;
+    }
+
+    public UnidadMedida getUnidadMedida() {
+        return unidadMedida;
     }
 
     public DetalleEgreso getDetalleEgreso() {
@@ -80,11 +80,11 @@ public class Producto{
         this.unidadMedida = unidadMedida;
     }
 
-    public long getIdProducto() {
+    public int getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(long idProducto) {
+    public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
     }
 
@@ -168,14 +168,6 @@ public class Producto{
         this.pesoNeto = pesoNeto;
     }
 
-    public DetalleIngreso getDetalleEntrada() {
-        return detalleIngreso;
-    }
-
-    public void setDetalleEntrada(DetalleIngreso detalleIngreso) {
-        this.detalleIngreso = detalleIngreso;
-    }
-
     public DetalleEgreso getDetalleSalida() {
         return detalleEgreso;
     }
@@ -193,16 +185,21 @@ public class Producto{
     }
 
 
+    public Producto() {
+    }
 
-    public Producto(long idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra, double precioVenta, FormaVenta formaVenta, Marca marca, Subcategoria subcategoria, Animal animal, float pesoNeto, DetalleIngreso detalleIngreso, DetalleEgreso detalleEgreso, Stock stock, UnidadMedida unidadMedida) {
+    public Producto(int idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra,
+                    double precioVenta, Marca marca, FormaVenta formaVenta, Subcategoria subcategoria, Animal animal,
+                    float pesoNeto, List<DetalleIngreso> detalleIngreso, DetalleEgreso detalleEgreso, Stock stock,
+                    UnidadMedida unidadMedida) {
         this.idProducto = idProducto;
         this.codBarras = codBarras;
         this.nombre = nombre;
         this.fechaVencimiento = fechaVencimiento;
         this.precioCompra = precioCompra;
         this.precioVenta = precioVenta;
-        this.formaVenta = formaVenta;
         this.marca = marca;
+        this.formaVenta = formaVenta;
         this.subcategoria = subcategoria;
         this.animal = animal;
         this.pesoNeto = pesoNeto;
@@ -210,26 +207,6 @@ public class Producto{
         this.detalleEgreso = detalleEgreso;
         this.stock = stock;
         this.unidadMedida = unidadMedida;
-    }
-
-    public Producto() {
-    }
-
-    public Producto(long idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra, double precioVenta, FormaVenta formaVenta, Marca marca, Subcategoria subcategoria, Animal animal, float pesoNeto, DetalleIngreso detalleIngreso, DetalleEgreso detalleEgreso, Stock stock) {
-        this.idProducto = idProducto;
-        this.codBarras = codBarras;
-        this.nombre = nombre;
-        this.fechaVencimiento = fechaVencimiento;
-        this.precioCompra = precioCompra;
-        this.precioVenta = precioVenta;
-        this.formaVenta = formaVenta;
-        this.marca = marca;
-        this.subcategoria = subcategoria;
-        this.animal = animal;
-        this.pesoNeto = pesoNeto;
-        this.detalleIngreso = detalleIngreso;
-        this.detalleEgreso = detalleEgreso;
-        this.stock = stock;
     }
 
     @Override

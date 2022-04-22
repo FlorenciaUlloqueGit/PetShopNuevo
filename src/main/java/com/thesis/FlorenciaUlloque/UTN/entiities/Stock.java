@@ -10,9 +10,10 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idStock;
     private int cantidad;
-    @OneToMany(mappedBy = "stock")
-    @Column(name = "producto_stock")
-    private List<Producto> productos;
+
+    @JoinColumn(name = "idProducto")
+    @OneToOne (fetch =FetchType.LAZY)
+    private Producto producto;
 
     public int getIdStock() {
         return idStock;
@@ -30,29 +31,21 @@ public class Stock {
         this.cantidad = cantidad;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
-    public Stock(int idStock, int cantidad, List<Producto> productos) {
+    public Stock(int idStock, int cantidad, Producto producto) {
         this.idStock = idStock;
         this.cantidad = cantidad;
-        this.productos = productos;
+        this.producto = producto;
     }
 
     public Stock() {
     }
 
-    @Override
-    public String toString() {
-        return "Stock{" +
-                "idStock=" + idStock +
-                ", cantidad=" + cantidad +
-                ", productos=" + productos +
-                '}';
-    }
 }
