@@ -1,6 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.xml.bind.v2.TODO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,18 +13,24 @@ public class SalidaProducto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idEgreso;
+
     private double total;
+
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date fecha;
+
     @OneToOne
     @JoinColumn(name = "formaPago_idFormaPago")
     private FormaPago formaPago;
 
-    @OneToMany(mappedBy = "salidaProducto" , cascade = CascadeType.ALL)
+    //agregar cliente
+
+   // TODO: asegurarme del orpham remove cuando borre una inserciòn de la clase salidaProducto
+    @OneToMany(mappedBy = "salidaProducto" , cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "detalleSalida_salidaProducto")
     private List<DetalleEgreso> listadoSalidaProducto;
 
-    public long getIdEgreso() {
+    public int getIdEgreso() {
         return idEgreso;
     }
 

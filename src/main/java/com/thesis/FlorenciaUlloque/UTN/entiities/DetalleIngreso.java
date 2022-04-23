@@ -13,14 +13,14 @@ public class DetalleIngreso {
     @Column(name = "id_Detalle")
     private int idDetalle;
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "idIngreso")
     private IngresoProductos ingresoProductos;
 
     @ManyToOne
     @JoinColumn(name = "idProducto")
-    private Producto producto;;
+    private Producto producto;
 
     private int cantidad;
     private double precio;

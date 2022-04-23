@@ -24,8 +24,9 @@ public class IngresoProductos {
     @OneToOne //(fetch =FetchType.LAZY)
     private FormaPago formaPago;
 
+    // TODO: asegurarme del orpham remove cuando borre una inserciòn de la clase salidaProducto
+    @OneToMany(mappedBy = "ingresoProductos" , cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    @OneToMany(mappedBy = "ingresoProductos" , cascade = CascadeType.ALL)
     private List<DetalleIngreso> listadoDetalleIngresos;
 
     public int getIdIngreso() {
@@ -58,14 +59,6 @@ public class IngresoProductos {
 
     public void setTotal(double total) {
         this.total = total;
-    }
-
-    public List<DetalleIngreso> getListadoDetalleEntradas() {
-        return listadoDetalleIngresos;
-    }
-
-    public void setListadoDetalleEntradas(List<DetalleIngreso> listadoDetalleIngresos) {
-        this.listadoDetalleIngresos = listadoDetalleIngresos;
     }
 
     public FormaPago getFormaPago() {

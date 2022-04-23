@@ -10,18 +10,19 @@ public class DetalleEgreso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_Detalle")
     private int idDetalleEgreso;
+
     @ManyToOne
     @JoinColumn(name = "idEgreso")
     private SalidaProducto salidaProducto;
 
-    @OneToMany(mappedBy = "detalleEgreso")//  ?
-    @Column(name = "producto_detalleEgreso")
-    private List<Producto> productos;
+    @ManyToOne
+    @JoinColumn(name = "idProducto")
+    private Producto producto;
 
     private int cantidad;
-    private float precio;
+    private double precio;
 
-    public long getIdDetalleEgreso() {
+    public int getIdDetalleEgreso() {
         return idDetalleEgreso;
     }
 
@@ -37,12 +38,12 @@ public class DetalleEgreso {
         this.salidaProducto = salidaProducto;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public int getCantidad() {
@@ -53,31 +54,20 @@ public class DetalleEgreso {
         this.cantidad = cantidad;
     }
 
-    public float getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(float precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
-    public DetalleEgreso(int idDetalleEgreso, SalidaProducto salidaProducto, List<Producto> listadoProductos, int cantidad, float precio) {
+    public DetalleEgreso(int idDetalleEgreso, SalidaProducto salidaProducto, Producto producto, int cantidad, double precio) {
         this.idDetalleEgreso = idDetalleEgreso;
         this.salidaProducto = salidaProducto;
-        this.productos = listadoProductos;
+        this.producto = producto;
         this.cantidad = cantidad;
         this.precio = precio;
-    }
-
-    @Override
-    public String toString() {
-        return "DetalleSalida{" +
-                "idDetalle=" + idDetalleEgreso +
-                ", salidaProducto=" + salidaProducto +
-                ", listadoProductos=" + productos +
-                ", cantidad=" + cantidad +
-                ", precio=" + precio +
-                '}';
     }
 
     public DetalleEgreso() {
