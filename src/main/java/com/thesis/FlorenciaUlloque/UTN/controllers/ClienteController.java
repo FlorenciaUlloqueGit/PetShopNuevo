@@ -3,13 +3,14 @@ package com.thesis.FlorenciaUlloque.UTN.controllers;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ClienteRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ClienteService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
 
-@RestController
+@Controller
 @RequestMapping("/clientes")
 public class ClienteController {
 
@@ -64,4 +65,11 @@ public class ClienteController {
         return "El cliente ha sido eliminado exitosamente";
 
     }
+    /*
+    @GetMapping("/registro")
+    public class String registro(){
+        return "registro";
+    }
+
+     */
 }

@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Farmacéutica Dorada</title>
+</head>
+<body style="background-color: rgb(250, 237, 202)">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Almacén de Mascotas</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
+    <h1 style="text-align: center">
+        <br><br>
+        Únetenos a nuestra familia
+        <br><br><br>
+    </h1>
+</div>
+<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
+
+    <br>
+    <h2 style="text-align: center">Formulario de nuevo usuario</h2>
+    <br>
+
+</div>
+
+<br>
+<br>
+<br>
+<form style="text-align: center; " th:action="@/clientes/registrar" method="POST">
+    <div class="container" style="text-align: center ;" >
+        <div class="row">
+            <div  class="col-12" style="text-align: center;">
+                <label  for="exampleInputEmail1" class="form-label" style="font-size:x-large;"> <b> Usuario</b></label>
+                <input
+                        type="text"
+                        class="form-control"
+                        name="txtUsuario"
+                        id="validationCustomUsername" aria-describedby="inputGroupPrepend"  required/>
+                <div class="invalid-feedback">
+                    Ingresa tu usuario o email
+                </div>
+                <div id="emailHelp" class="form-text" >
+                    Nunca compartas tus datos con nadie
+                </div>
+                <br>
+                <br>
+
+            </div>
+
+            <div class="col-12">
+                <label for="exampleInputPassword1" style="font-size:x-large;" class="form-label"  > <b>Contraseña</b></label >
+                <input type="password"  name="txtContra" class="form-control" required />
+                <div class="invalid-feedback">
+                    Ingresa tu contraseña
+                </div>
+                <div id="emailHelp" class="form-text" >
+                    ¿Aun no tienes una cuenta? Aprieta el botón crear usuario.
+                </div>
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary text-white" th:href="@{/registro}">
+            <i class="fas fa-user-plus"></i>Crear Cuenta </button>
+        <button type="button" class="btn btn-primary text-white"  th:href="@{/registro}"> Crear usuario </button>
+</form>
+
+<div th:if="$(error)" class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+    <p th:text="$error"></p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true"></span>
+    </button>
+</div>
+</body>
+
+
+
+</html>
