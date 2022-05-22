@@ -1,4 +1,4 @@
-package com.thesis.FlorenciaUlloque.UTN.repositories;
+package com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories;
 
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
@@ -12,9 +12,7 @@ import java.util.List;
 @Repository
 public interface VendedorRepository extends PagingAndSortingRepository<Vendedor,Integer > {
 
-
-    Vendedor findByNombre(String apellido);
-    Vendedor findByUsuario(String email);
+    Vendedor findByUsuario(String usuario);
     Vendedor findByIdVendedor(int idVendedor);
 
 

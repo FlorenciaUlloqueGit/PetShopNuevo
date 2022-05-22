@@ -26,20 +26,16 @@ public class Marca {
         this.producto = producto;
     }
 
-    @JsonIgnore //@JsonIgnoreProperties(value={"entidad1", "entidad2"}
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "marca_proveedor",joinColumns = @JoinColumn(name = "idMarca", nullable = false),
-    inverseJoinColumns = @JoinColumn(name = "idProveedor", nullable = false))
-    private List<Proveedor> proveedores;
+    @ManyToOne
+    @JoinColumn(name = "idProveedor")
+    private Proveedor proveedor;
 
-
-    public void addProveedor(Proveedor proveedor) {
-        proveedores.add(proveedor);
-        proveedor.getMarcas().add(this);
+    public Proveedor getProveedor() {
+        return proveedor;
     }
-    public void removeProveedor(Proveedor proveedor) {
-        proveedores.remove(proveedor);
-        proveedor.getMarcas().remove(this);
+
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
     }
 
     public int getIdMarca() {
@@ -58,23 +54,21 @@ public class Marca {
         this.nombre = nombre;
     }
 
-    public List<Proveedor> getProveedores() {
-        return proveedores;
-    }
 
-    public void setProveedores(List<Proveedor> proveedores) {
-        this.proveedores = proveedores;
-    }
-
-    public Marca(int idMarca, String nombre, List<Proveedor> proveedores) {
+    public Marca(int idMarca, String nombre, Proveedor proveedor) {
         this.idMarca = idMarca;
         this.nombre = nombre;
-        this.proveedores = proveedores;
+        this.proveedor = proveedor;
     }
 
     public Marca(int idMarca, String nombre) {
         this.idMarca = idMarca;
         this.nombre = nombre;
+    }
+
+    public Marca(String nombre, Proveedor proveedor) {
+        this.nombre = nombre;
+        this.proveedor = proveedor;
     }
 
     public Marca() {

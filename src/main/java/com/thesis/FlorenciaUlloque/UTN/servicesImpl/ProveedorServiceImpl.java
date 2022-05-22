@@ -1,14 +1,10 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.ProveedorDto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ProveedorService;
-import org.springframework.beans.BeanUtils;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,69 +20,61 @@ public class ProveedorServiceImpl  implements ProveedorService {
     }
 
 
+    public List<Proveedor> findAllProveedor(){
+        List <Proveedor>listaReal  = (List<Proveedor>) repository.findAll();
+        List<Proveedor> listaDto = new ArrayList<>();
+
+        Proveedor proveedor;
+        for (Proveedor Prov: listaReal) {
+            proveedor = new Proveedor();
+            proveedor.setIdProveedor((int) Prov.getIdProveedor());
+            proveedor.setNombre(Prov.getNombre());
+            proveedor.setTelefono(Prov.getTelefono());
+            listaDto.add(proveedor);
+        }
+
+        return listaDto;
+    }
 
     @Override
-    public Proveedor createProveedor(Proveedor proveedor) {
-        //si no es nulo, osea si ya el email existe, lanza la excerpción.
-
-
-        if (repository.findById(proveedor.getIdProveedor()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
+    public boolean deleteProveedor(int id) {
+        boolean existe = true;
+        Proveedor proveedor = repository.findById(id);
+        if (proveedor == null) {
+            existe = false;
         }
-            Proveedor nuevoProveedor = new Proveedor();
-
-            BeanUtils.copyProperties(proveedor, nuevoProveedor);
-            repository.save(nuevoProveedor);
-            return nuevoProveedor;
-
-        }
-
-
-        @Override
-        public List<Proveedor> getAllProveedores ( int page, int limit){
-            List<Proveedor> returnValue = new ArrayList<>();
-            Pageable pageableRequest = PageRequest.of(page, limit);
-            Page<Proveedor> proveedorPage = repository.findAll(pageableRequest);
-            List<Proveedor> proveedors = proveedorPage.getContent();
-
-
-            for (Proveedor proveedor1 : proveedors) {
-                returnValue.add(proveedor1);
-            }
-
-            return returnValue;
-        }
-
-        @Override
-        public Proveedor updateProveedor ( long id, Proveedor proveedor){
-
-            Proveedor proveedorForUpdate = repository.findById(id);
-            if (proveedorForUpdate == null) {
-                throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-            }
-
-
-            proveedorForUpdate.setNombre(proveedor.getNombre());
-            proveedorForUpdate.setTelefono(proveedor.getTelefono());
-            //    proveedorForUpdate.setMarcas(proveedor.getMarcas());  //no estoy segura de esta
-
-
-            Proveedor returnValue = repository.save(proveedorForUpdate);
-
-            return returnValue;
-        }
-
-
-    @Override
-    public void deleteProveedor(long id) {
-        Proveedor proveedorForDelete = repository.findById(id);
-
-        if (proveedorForDelete == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        }
-        repository.delete(proveedorForDelete);
-
+        repository.delete(proveedor);
+        return existe;
     }
 
 
+    @Override
+    public Proveedor updateProveedor(Proveedor proveedor) {
+        Proveedor returnValue;
+
+        Proveedor proveedorForUpdate = new Proveedor();
+
+        proveedorForUpdate.setNombre(proveedor.getNombre());
+        proveedorForUpdate.setTelefono(proveedor.getTelefono());
+        proveedorForUpdate.setIdProveedor((int) proveedor.getIdProveedor());
+
+        returnValue = repository.save(proveedorForUpdate);
+        return returnValue;
+    }
+
+
+    @Override
+    public boolean saveProveedor(ProveedorDto proveedor) {
+
+        boolean registrado;
+        if (repository.findByNombre(proveedor.getNombre()) != null) {
+            registrado = true;
+        } else{
+            registrado = false;
+            Proveedor newProveedor = new Proveedor(proveedor.getNombre(), proveedor.getTelefono());
+
+            repository.save(newProveedor);
+        }
+        return registrado;
+    }
 }

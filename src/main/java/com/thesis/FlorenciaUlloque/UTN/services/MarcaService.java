@@ -1,13 +1,16 @@
 package com.thesis.FlorenciaUlloque.UTN.services;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDtos;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Marca;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
 
 import java.util.List;
 
 public interface MarcaService {
-    Marca createMarca(Marca marca);
-    List<Marca> getAllMarcas(int page, int limit);
-    Marca updateMarca(long id, Marca marca);
-    void deleteMarca(long id);
+    Marca updateMarca(Marca marca);
+    boolean deleteMarca(int id);
+    List<MarcaDto> findAllMarcas();
+    boolean saveMarca(MarcaDtos marcaDto);
+    List<Proveedor> listaProveedores();
 }

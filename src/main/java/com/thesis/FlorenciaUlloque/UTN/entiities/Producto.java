@@ -3,8 +3,10 @@ package com.thesis.FlorenciaUlloque.UTN.entiities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,10 +18,12 @@ public class Producto{
     @Column(name = "id_producto")
     private int idProducto;
 
+    @Column(nullable = true)
     private long codBarras;
     private String nombre;
-    @JsonFormat(pattern="dd-MM-yyyy")
-    private Date fechaVencimiento;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(nullable = true)
+    private LocalDate fechaVencimiento;
     private double precioCompra;
     private double precioVenta;
 
@@ -28,15 +32,25 @@ public class Producto{
     private Marca marca;
 
     @JoinColumn(name = "idFormaVenta")
-    @OneToOne (fetch =FetchType.LAZY)
+    @OneToOne
     private FormaVenta formaVenta;
 
     @ManyToOne
-    @JoinColumn(name = "idSubCategoria")
-    private Subcategoria subcategoria;
+    @JoinColumn(name = "idCategoria")
+    private Categoria categoria;
+
     @ManyToOne
-    @JoinColumn(name = "idAnimal")
-    private Animal animal;
+    @JoinColumn(name = "idTipoAnimal")
+    private TipoAnimal tipoAnimal;
+
+    @ManyToOne
+    @JoinColumn(name = "idEdad")
+    private Edad edad;
+
+    @ManyToOne
+    @JoinColumn(name = "idTam")
+    private Tamano tamano;
+
     private float pesoNeto;
 
     @JsonIgnore
@@ -55,6 +69,51 @@ public class Producto{
     @ManyToOne
     @JoinColumn(name = "idUnidadMedidaPeso")
     private UnidadMedida unidadMedida;
+
+    public Producto(long codBarras, String nombre, LocalDate fechaVencimiento, double precioCompra,
+                    double precioVenta, Marca marca, FormaVenta formaVenta, Categoria categoria,
+                   float pesoNeto, UnidadMedida unidadMedida, TipoAnimal tipoAnimal,
+                    Tamano tamano, Edad edad) {
+        this.codBarras = codBarras;
+        this.nombre = nombre;
+        this.fechaVencimiento = fechaVencimiento;
+        this.precioCompra = precioCompra;
+        this.precioVenta = precioVenta;
+        this.marca = marca;
+        this.formaVenta = formaVenta;
+        this.categoria = categoria;
+        this.pesoNeto = pesoNeto;
+        this.unidadMedida = unidadMedida;
+        this.tipoAnimal = tipoAnimal;
+        this.tamano = tamano;
+        this.edad = edad;
+    }
+    public Producto(String nombre, LocalDate fechaVencimiento, double precioCompra,
+                    double precioVenta, Marca marca, FormaVenta formaVenta, Categoria categoria,
+                    float pesoNeto, UnidadMedida unidadMedida, TipoAnimal tipoAnimal,
+                    Tamano tamano, Edad edad) {
+        this.nombre = nombre;
+        this.fechaVencimiento = fechaVencimiento;
+        this.precioCompra = precioCompra;
+        this.precioVenta = precioVenta;
+        this.marca = marca;
+        this.formaVenta = formaVenta;
+        this.categoria = categoria;
+        this.pesoNeto = pesoNeto;
+        this.unidadMedida = unidadMedida;
+        this.tipoAnimal = tipoAnimal;
+        this.tamano = tamano;
+        this.edad = edad;
+    }
+
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 
     public List<DetalleIngreso> getDetalleIngreso() {
         return detalleIngreso;
@@ -104,11 +163,11 @@ public class Producto{
         this.nombre = nombre;
     }
 
-    public Date getFechaVencimiento() {
+    public LocalDate getFechaVencimiento() {
         return fechaVencimiento;
     }
 
-    public void setFechaVencimiento(Date fechaVencimiento) {
+    public void setFechaVencimiento(LocalDate fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
 
@@ -144,22 +203,6 @@ public class Producto{
         this.marca = marca;
     }
 
-    public Subcategoria getSubcategoria() {
-        return subcategoria;
-    }
-
-    public void setSubcategoria(Subcategoria subcategoria) {
-        this.subcategoria = subcategoria;
-    }
-
-    public Animal getAnimal() {
-        return animal;
-    }
-
-    public void setAnimal(Animal animal) {
-        this.animal = animal;
-    }
-
     public float getPesoNeto() {
         return pesoNeto;
     }
@@ -184,48 +227,36 @@ public class Producto{
         this.stock = stock;
     }
 
+    public TipoAnimal getTipoAnimal() {
+        return tipoAnimal;
+    }
+
+    public void setTipoAnimal(TipoAnimal tipoAnimal) {
+        this.tipoAnimal = tipoAnimal;
+    }
+
+    public Edad getEdad() {
+        return edad;
+    }
+
+    public void setEdad(Edad edad) {
+        this.edad = edad;
+    }
+
+    public Tamano getTamano() {
+        return tamano;
+    }
+
+    public void setTamano(Tamano tamano) {
+        this.tamano = tamano;
+    }
 
     public Producto() {
     }
 
-    public Producto(int idProducto, long codBarras, String nombre, Date fechaVencimiento, double precioCompra,
-                    double precioVenta, Marca marca, FormaVenta formaVenta, Subcategoria subcategoria, Animal animal,
-                    float pesoNeto, List<DetalleIngreso> detalleIngreso, DetalleEgreso detalleEgreso, Stock stock,
-                    UnidadMedida unidadMedida) {
-        this.idProducto = idProducto;
-        this.codBarras = codBarras;
-        this.nombre = nombre;
-        this.fechaVencimiento = fechaVencimiento;
-        this.precioCompra = precioCompra;
-        this.precioVenta = precioVenta;
-        this.marca = marca;
-        this.formaVenta = formaVenta;
-        this.subcategoria = subcategoria;
-        this.animal = animal;
-        this.pesoNeto = pesoNeto;
-        this.detalleIngreso = detalleIngreso;
-        this.detalleEgreso = detalleEgreso;
-        this.stock = stock;
-        this.unidadMedida = unidadMedida;
-    }
 
-    @Override
-    public String toString() {
-        return "Producto{" +
-                "idProducto=" + idProducto +
-                ", codBarras=" + codBarras +
-                ", nombre='" + nombre + '\'' +
-                ", fechaVencimiento=" + fechaVencimiento +
-                ", precioCompra=" + precioCompra +
-                ", precioVenta=" + precioVenta +
-                ", formaVentaList=" + formaVenta +
-                ", marca=" + marca +
-                ", subcategoria=" + subcategoria +
-                ", animal=" + animal +
-                ", pesoNeto=" + pesoNeto +
-                ", detalleEntrada=" + detalleIngreso +
-                ", detalleSalida=" + detalleEgreso +
-                ", stock=" + stock +
-                '}';
-    }
+
+
+
+
 }

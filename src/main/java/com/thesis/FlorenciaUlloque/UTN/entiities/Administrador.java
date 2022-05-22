@@ -4,15 +4,27 @@ package com.thesis.FlorenciaUlloque.UTN.entiities;
 import javax.persistence.*;
 
 @Entity (name = "administrador")
-@Table(name = "Administradores")
+@Table(name = "admins")
 public class Administrador  {
     @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private int idAdmin;
 
-    private String nombre;
     private String usuario;
     private String pass;
+
+
+    @ManyToOne
+    @JoinColumn(name = "idRol")
+    private Rol rol;
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
 
     public int getIdAdmin() {
         return idAdmin;
@@ -20,15 +32,6 @@ public class Administrador  {
 
     public void setIdAdmin(int idAdmin) {
         this.idAdmin = idAdmin;
-    }
-
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getUsuario() {
@@ -47,10 +50,8 @@ public class Administrador  {
         this.pass = pass;
     }
 
-    public Administrador(int idAdmin, String nombre, String usuario, String pass) {
+    public Administrador(int idAdmin, String usuario, String pass) {
         this.idAdmin = idAdmin;
-
-        this.nombre = nombre;
         this.usuario = usuario;
         this.pass = pass;
     }
@@ -58,7 +59,9 @@ public class Administrador  {
     public Administrador() {
     }
 
-
-
-
+    public Administrador(String usuario, String pass, Rol rol) {
+        this.usuario = usuario;
+        this.pass = pass;
+        this.rol = rol;
+    }
 }

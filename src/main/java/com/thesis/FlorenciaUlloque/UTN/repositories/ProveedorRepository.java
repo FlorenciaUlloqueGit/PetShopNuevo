@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProveedorRepository extends PagingAndSortingRepository<Proveedor, Long> {
+public interface ProveedorRepository extends PagingAndSortingRepository<Proveedor, Integer> {
 
     Proveedor findByNombre(String nombre);
-    Proveedor findById(long id);
+    Proveedor findById(int id);
 
     @Query(value = "select id_proveedor, nombre, telefono from proveedores", nativeQuery = true)
     List<String> findAllProveedors(int page, int limit); //REVISAR

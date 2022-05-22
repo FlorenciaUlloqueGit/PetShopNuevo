@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface MarcaRepository  extends PagingAndSortingRepository<Marca, Integer> {
     Marca findByNombre(String nombre);
-    Marca findByIdMarca(long id);
+    Marca findByIdMarca(int id);
     @Query(value = "select  m.nombre from marcas m", nativeQuery = true)
     List<String> findAllMarcas(int page, int limit); //REVISAR
 }

@@ -1,18 +1,14 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
-
-import com.sun.xml.bind.v2.TODO;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoStocks.StockDtos;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDetalle;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoStock;
 import com.thesis.FlorenciaUlloque.UTN.entiities.DetalleIngreso;
-import com.thesis.FlorenciaUlloque.UTN.entiities.IngresoProductos;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Producto;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Stock;
 import com.thesis.FlorenciaUlloque.UTN.repositories.DetalleIngresoRepository;
-import com.thesis.FlorenciaUlloque.UTN.repositories.IngresoProductosRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.DetalleIngresoService;
-import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import com.thesis.FlorenciaUlloque.UTN.services.ProductoService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,70 +18,89 @@ import java.util.List;
 public class DetalleIngresoServiceImpl implements DetalleIngresoService {
 
     private final DetalleIngresoRepository repository;
+    private final ProductoService productoService;
 
-    public DetalleIngresoServiceImpl(DetalleIngresoRepository repository) {
+    public DetalleIngresoServiceImpl(DetalleIngresoRepository repository, ProductoService productoService) {
         this.repository = repository;
+        this.productoService = productoService;
     }
 
-
-    @Override
-    public DetalleIngreso createDetalle(DetalleIngreso detalleIngreso) {
-
-        if (repository.findByIdDetalle(detalleIngreso.getIdDetalle()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
-        }
-        DetalleIngreso  newDetalle = new DetalleIngreso();
-
-        BeanUtils.copyProperties(detalleIngreso, newDetalle);
-      //  TODO: Para que tome el precio se lo debe plasmar antes en el json
-        double precio = detalleIngreso.getCantidad() * detalleIngreso.getProducto().getPrecioCompra();
-        newDetalle.setPrecio(precio);
-        repository.save(newDetalle);
-        return newDetalle;
+    public List<DetalleIngreso> findAll(){
+        List <DetalleIngreso>listaReal  = (List<DetalleIngreso>) repository.findAll();
+        return listaReal;
     }
 
     @Override
-    public List<DetalleIngreso> getAllDetalles(int page, int limit) {
-        List<DetalleIngreso> returnValue = new ArrayList<>();
-        Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<DetalleIngreso> detallePage   = repository.findAll(pageableRequest);
-        List<DetalleIngreso> ingresos = detallePage.getContent();
+    public void save(DetalleIngreso detalleIngreso) {
 
+        repository.save(detalleIngreso);
 
-        for (DetalleIngreso ingreso : ingresos) {
-            returnValue.add(ingreso);
-        }
+    }
 
+    @Override
+    public DetalleIngreso update(DetalleIngreso detalle) {
+        DetalleIngreso returnValue;
+
+        DetalleIngreso detalleForUpdate = new DetalleIngreso();
+
+        detalleForUpdate.setIdDetalle(detalle.getIdDetalle());
+        detalleForUpdate.setProducto(detalle.getProducto());
+        detalleForUpdate.setIngresoProductos(detalle.getIngresoProductos());
+        detalleForUpdate.setCantidad(detalle.getCantidad());
+        detalleForUpdate.setPrecio(detalle.getPrecio());
+
+        returnValue = repository.save(detalleForUpdate);
         return returnValue;
     }
 
     @Override
-    public DetalleIngreso updateDetalle(int id, DetalleIngreso detalleIngreso) {
-        DetalleIngreso ingresoForUpdate = repository.findByIdDetalle(id);
-        if (ingresoForUpdate == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+    public boolean delete(int id) {
+        boolean existe = true;
+        DetalleIngreso detalleIngreso = repository.findByIdDetalle(id);
+        if (detalleIngreso == null) {
+            existe = false;
         }
-
-        ingresoForUpdate.setIngresoProductos(detalleIngreso.getIngresoProductos());
-        ingresoForUpdate.setCantidad(detalleIngreso.getCantidad());
-        double precio = ingresoForUpdate.getCantidad() * ingresoForUpdate.getProducto().getPrecioCompra();
-        ingresoForUpdate.setPrecio(precio);
-        ingresoForUpdate.setProducto(detalleIngreso.getProducto());
-
-        DetalleIngreso returnValue = repository.save(ingresoForUpdate);
-
-        return returnValue;
+        repository.delete(detalleIngreso);
+        return existe;
     }
 
     @Override
-    public void deleteDetalle(int id) {
-        DetalleIngreso ingresoProductos = repository.findByIdDetalle(id);
+    public List<ProductoDetalle> getDetalleByNombreProducto(String nombre) {
+        List <Producto>listaReal  =  productoService.listAllByName(nombre);
+        List<ProductoDetalle> listaDto = new ArrayList<>();
 
-        if (ingresoProductos == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        ProductoDetalle productoDetalle ;
+        for (Producto producto : listaReal) {
+            productoDetalle = new ProductoDetalle();
+            productoDetalle.setIdProducto(producto.getIdProducto());
+            productoDetalle.setNombre(producto.getNombre());
+            productoDetalle.setCodBarras(producto.getCodBarras());
+            productoDetalle.setCategoria(producto.getCategoria());
+            productoDetalle.setPrecioCompra(producto.getPrecioCompra());
+            listaDto.add(productoDetalle);
         }
-        repository.delete(ingresoProductos);
 
-
+        return listaDto;
     }
+
+    @Override
+    public List<ProductoDetalle> getDetalleByCodBarrasProducto(long codBarras) {
+        List <Producto>listaReal  =  productoService.listAllByCodBarras(codBarras);
+        List<ProductoDetalle> listaDto = new ArrayList<>();
+
+        ProductoDetalle productoDetalle ;
+        for (Producto producto : listaReal) {
+            productoDetalle = new ProductoDetalle();
+            productoDetalle.setIdProducto(producto.getIdProducto());
+            productoDetalle.setNombre(producto.getNombre());
+            productoDetalle.setCodBarras(producto.getCodBarras());
+            productoDetalle.setCategoria(producto.getCategoria());
+            productoDetalle.setPrecioCompra(producto.getPrecioCompra());
+            listaDto.add(productoDetalle);
+        }
+
+        return listaDto;
+    }
+
+
 }

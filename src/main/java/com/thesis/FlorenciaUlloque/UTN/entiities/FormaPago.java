@@ -9,9 +9,12 @@ public class FormaPago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFormaPago;
     private String nombre;
-    @OneToOne(mappedBy = "formaPago" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idIngreso")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private IngresoProductos ingresoProductos;
-    @OneToOne(mappedBy = "formaPago" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+
+    @JoinColumn(name = "idEgreso")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private SalidaProducto salidaProducto;
 
     public int getIdFormaPago() {

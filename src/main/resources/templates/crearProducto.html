@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Registro de Productos</title>
+  <!-- Latest compiled and minified CSS -->
+
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+    />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script type="text/javascript" src="Scripts/jquery-2.1.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body style="background-color: rgb(250, 237, 202)">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Almacén de Mascotas</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/registro}">Iniciar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
+    <h1 style="text-align: center">
+        <br><br>
+        Alta de Productos
+        <br><br><br>
+    </h1>
+</div>
+<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
+
+    <br>
+    <h2 style="text-align: center">Formulario de nuevos productos</h2>
+    <br>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="container">
+    <div th:if=${param.exito}>
+        <div class="alert alert-info">Felicitaciones! Se ha registrado el producto exitosamente.</div>
+    </div>
+    <div th:if=${param.error}>
+        <div class="alert alert-danger">El producto ingresado ya existe</div>
+    </div>
+
+      <form th:action="@{/productos}" method="post" th:object="${productoDtos}" >
+
+          <div class="form-group">
+              <label for="codBarras">Ingrese el código de barras (si es que el producto lo posee)</label>
+              <input type="number" class="form-control" id="codBarras" th:field="*{codBarras}"
+                     placeholder="0515496666660">
+          </div>
+
+          <div class="form-group">
+              <label for="nombre">Ingrese el Nombre del producto</label>
+              <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
+                     required autofocus="autofocus"  placeholder="Oreja Comestible">
+          </div>
+
+
+          <div class="form-group">
+              <label for="fechaVencimiento">Ingrese la fecha de vencimiento</label>
+              <input type="date" class="form-control" id="fechaVencimiento" th:field="*{fechaVencimiento}">
+          </div>
+
+
+          <div class="form-group">
+              <label for="pesoNeto">Ingrese el Peso del producto (en caso de no contar con el peso, ingrese aproximado)</label>
+              <input type="number" class="form-control" id="pesoNeto" th:field="*{pesoNeto}"
+                     required autofocus="autofocus" >
+          </div>
+
+
+          <div class="form-group">
+              <label for="unidadMedida">Determine la unidad de medida del producto</label>
+              <select  th:field="*{unidadMedida}" class="form-control form-control" id="unidadMedida">
+                  <option th:each="unidadMedida:${unidadesMedidas}"
+                          th:value="${unidadMedida.idUnidadMedida}"
+                          th:text="${unidadMedida.nombre}" />
+              </select>
+          </div>
+
+          <div class="form-group">
+              <label for="precioCompra">Ingrese el precio de compra</label>
+              <input type="number" class="form-control" id="precioCompra" th:field="*{precioCompra}"
+                     required autofocus="autofocus" >
+          </div>
+
+          <div class="form-group">
+              <label for="precioVenta">Ingrese el precio de venta</label>
+              <input type="number" class="form-control" id="precioVenta" th:field="*{precioVenta}"
+                     required autofocus="autofocus" >
+          </div>
+
+
+          <div class="form-group">
+              <label for="formaVenta">Seleccione una forma de venta</label>
+              <select  th:field="*{formaVenta}" class="form-control form-control" id="formaVenta">
+                  <option th:each="formaVenta:${formasVentas}"
+                          th:value="${formaVenta.idFormaVenta}"
+                          th:text="${formaVenta.nombre}" />
+              </select>
+          </div>
+
+          <div class="form-group">
+              <label for="marca">Determine una marca</label>
+              <select  th:field="*{marca}" class="form-control form-control" id="marca">
+                  <option th:each="marca:${marcas}"
+                          th:value="${marca.idMarca}"
+                          th:text="${marca.nombre}" />
+              </select>
+          </div>
+
+          <div class="form-group">
+              <label for="categoria">Seleccione una categoría de producto</label>
+              <select  th:field="*{categoria}" class="form-control form-control" id="categoria" name="categoria">
+                  <option th:each="categoria:${categorias}"
+                          th:value="${categoria.idCategoria}"
+                          th:text="${categoria.nombre}" />
+              </select>
+          </div>
+
+
+          <div class="form-group">
+              <label for="tipoAnimal">Seleccione la especie del animal que usará el producto </label>
+              <select   th:field="*{tipoAnimal}"class="form-control form-control" id="tipoAnimal">
+                  <option th:each="tipoAnimal:${tipoAnimales}"
+                          th:value="${tipoAnimal.idTipo}"
+                          th:text="${tipoAnimal.nombre}" />
+              </select>
+          </div>
+
+          <div class="form-group">
+              <label for="edad">Edad del animal que usará el producto</label>
+              <select  th:field="*{edad}" class="form-control form-control" id="edad" >
+                  <option th:each="edad:${edades}"
+                          th:value="${edad.idEdad}"
+                          th:text="${edad.nombre}" />
+              </select>
+          </div>
+
+          <div class="form-group">
+              <label for="tamano">Tamaño del animal que usará el producto</label>
+              <select  th:field="*{tamano}" class="form-control form-control" id="tamano">
+                  <option th:each="tamano:${tamanos}"
+                          th:value="${tamano.idTam}"
+                          th:text="${tamano.nombre}" />
+              </select>
+          </div>
+                <BR>
+
+               <div>
+              <button type="submit" class="btn btn-success">Registrar</button>
+              </div>
+          </form>
+
+    </div>
+
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></select>
+        </script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+</body>
+</html>
+

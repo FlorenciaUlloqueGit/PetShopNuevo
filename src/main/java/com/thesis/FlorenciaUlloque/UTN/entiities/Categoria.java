@@ -11,15 +11,19 @@ public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idCategoria;
-
     private String nombre;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
-//    @Column(name = "subcategoria_categoria")
-    private List<Subcategoria> listadoSubcategorias;
+    @OneToMany(mappedBy = "categoria" , cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Producto> productos;
 
+    public List<Producto> getProductos() {
+        return productos;
+    }
 
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
 
     public int getIdCategoria() {
         return idCategoria;
@@ -37,30 +41,19 @@ public class Categoria {
         this.nombre = nombre;
     }
 
-    public List<Subcategoria> getListadoSubcategorias() {
-        return listadoSubcategorias;
-    }
 
-    public void setListadoSubcategorias(List<Subcategoria> listadoSubcategorias) {
-        this.listadoSubcategorias = listadoSubcategorias;
-    }
-
-    public Categoria(int idCategoria, String nombre, List<Subcategoria> listadoSubcategorias) {
+    public Categoria(int idCategoria, String nombre, List<Producto> productos) {
         this.idCategoria = idCategoria;
         this.nombre = nombre;
-        this.listadoSubcategorias = listadoSubcategorias;
+        this.productos = productos;
+    }
 
+    public Categoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     public Categoria() {
     }
 
-    @Override
-    public String toString() {
-        return "Categoria{" +
-                "idCategoria=" + idCategoria +
-                ", nombre='" + nombre + '\'' +
-                ", listadoSubcategorias=" + listadoSubcategorias +
-                '}';
-    }
+
 }

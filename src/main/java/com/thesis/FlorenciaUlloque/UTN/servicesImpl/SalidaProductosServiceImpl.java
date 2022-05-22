@@ -1,86 +1,96 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
-import com.thesis.FlorenciaUlloque.UTN.entiities.IngresoProductos;
-import com.thesis.FlorenciaUlloque.UTN.entiities.SalidaProducto;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
-import com.thesis.FlorenciaUlloque.UTN.repositories.IngresoProductosRepository;
+import com.thesis.FlorenciaUlloque.UTN.entiities.*;
+import com.thesis.FlorenciaUlloque.UTN.repositories.FormaPagoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.SalidaProductosRepository;
-import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
+import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.ClienteRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.SalidaProductosService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 public class SalidaProductosServiceImpl implements SalidaProductosService {
 
+
     private final SalidaProductosRepository repository;
+    private final ClienteRepository clienteRepository;
+    private final FormaPagoRepository formaPagoRepository;
 
-    public SalidaProductosServiceImpl(SalidaProductosRepository repository) {
+    public SalidaProductosServiceImpl(SalidaProductosRepository repository, ClienteRepository clienteRepository, FormaPagoRepository formaPagoRepository) {
         this.repository = repository;
+        this.clienteRepository = clienteRepository;
+        this.formaPagoRepository = formaPagoRepository;
     }
 
 
-
     @Override
-    public SalidaProducto createSalida(SalidaProducto salida) {
+    public SalidaProducto updateEgreso(SalidaProducto salidaProducto) {
+        SalidaProducto returnValue;
 
-        if (repository.findByIdEgreso(salida.getIdEgreso()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
-        }
-        SalidaProducto newSalida = new SalidaProducto();
+        SalidaProducto salidaForUpdate = new SalidaProducto();
 
-        BeanUtils.copyProperties(salida, newSalida);
-        repository.save(newSalida);
-        return newSalida;
-    }
-
-    @Override
-    public List<SalidaProducto> getAllSalidas(int page, int limit) {
-        List<SalidaProducto> returnValue = new ArrayList<>();
-        Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<SalidaProducto> clientePage   = repository.findAll(pageableRequest);
-        List<SalidaProducto> salidas = clientePage.getContent();
-
-
-        for (SalidaProducto salida : salidas) {
-            returnValue.add(salida);
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public SalidaProducto updateSalidas(int id, SalidaProducto salidaProducto) {
-        SalidaProducto salidaForUpdate = repository.findByIdEgreso(id);
-        if (salidaForUpdate == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        }
-
+        salidaForUpdate.setIdEgreso(salidaProducto.getIdEgreso());
+        salidaForUpdate.setTotal(salidaProducto.getTotal());
         salidaForUpdate.setFormaPago(salidaProducto.getFormaPago());
         salidaForUpdate.setFecha(salidaProducto.getFecha());
-       // salidaForUpdate.setCliente(salidaProducto.getCliente());
-        salidaForUpdate.setTotal(salidaProducto.getTotal());
+        salidaForUpdate.setCliente(salidaProducto.getCliente());
+        salidaForUpdate.setListadoSalidaProducto(salidaProducto.getListadoSalidaProducto());
 
-        SalidaProducto returnValue = repository.save(salidaForUpdate);
-
+        returnValue = repository.save(salidaForUpdate);
         return returnValue;
     }
 
     @Override
-    public void deleteSalidas(int id) {
-        SalidaProducto salida = repository.findByIdEgreso(id);
-
-        if (salida == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+    public boolean deleteEgreso(int id) {
+        boolean existe = true;
+        SalidaProducto salidaProducto = repository.findByIdEgreso(id);
+        if (salidaProducto == null) {
+            existe = false;
         }
-        repository.delete(salida);
+        repository.delete(salidaProducto);
+        return existe;
+    }
 
+    @Override
+    public List<SalidaProducto> getAllEgresos() {
+        List <SalidaProducto>listaReal  = (List<SalidaProducto>) repository.findAll();
+
+        return listaReal;
+    }
+
+
+    @Override
+    public SalidaProducto saveEgreso(SalidaProducto salida) {
+
+        LocalDate fecha = salida.getFecha();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaFormato = LocalDate.parse(fecha.format(formatter));
+
+        salida.setTotal(0);
+        salida.setIdEgreso(0);
+
+        SalidaProducto salidaProducto = new SalidaProducto(salida.getIdEgreso(), salida.getTotal(), fechaFormato,
+                salida.getFormaPago(), salida.getCliente(), salida.getListadoSalidaProducto());
+
+        repository.save(salidaProducto);
+        return salidaProducto;
+    }
+
+    @Override
+    public List<Cliente> listaClientes() {
+        List<Cliente> clienteList;
+        clienteList = (List<Cliente>) clienteRepository.findAll();
+        return  clienteList;
+    }
+
+    @Override
+    public List<FormaPago> listaFormasPagos() {
+        List<FormaPago> formaPagoList;
+        formaPagoList = (List<FormaPago>) formaPagoRepository.findAll();
+        return  formaPagoList;
     }
 }

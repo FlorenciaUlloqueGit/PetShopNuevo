@@ -15,6 +15,11 @@ public class Stock {
     @OneToOne (fetch =FetchType.LAZY)
     private Producto producto;
 
+    public Stock(Producto producto, int cantidad) {
+        this.producto = producto;
+        this.cantidad = cantidad;
+    }
+
     public int getIdStock() {
         return idStock;
     }

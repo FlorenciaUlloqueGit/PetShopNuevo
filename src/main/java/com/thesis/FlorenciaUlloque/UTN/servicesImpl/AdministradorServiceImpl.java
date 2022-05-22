@@ -2,14 +2,8 @@ package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Administrador;
-import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
-import com.thesis.FlorenciaUlloque.UTN.entiities.Marca;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
-import com.thesis.FlorenciaUlloque.UTN.repositories.AdministradorRepository;
-import com.thesis.FlorenciaUlloque.UTN.repositories.ClienteRepository;
+import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.AdministradorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.AdministradorService;
-import com.thesis.FlorenciaUlloque.UTN.services.ClienteService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

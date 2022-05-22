@@ -17,8 +17,8 @@ public class Tamano {
 
     @JsonIgnore
     @OneToMany(mappedBy = "tamano", cascade = CascadeType.ALL) //all propaga la operacion hasta la ultima dirección. si elimino user details tambien se propaga a sus listas
-    @Column(name = "animal_tamano")
-    private List<Animal>animales;
+    @Column(name = "producto_tamano")
+    private List<Producto>productos;
 
     public int getIdTam() {
         return idTam;
@@ -36,29 +36,22 @@ public class Tamano {
         this.nombre = nombre;
     }
 
-
-    public List<Animal> getAnimales() {
-        return animales;
+    public List<Producto> getProductos() {
+        return productos;
     }
 
-    public void setAnimales(List<Animal> animales) {
-        this.animales = animales;
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
 
-    public Tamano(int idTam, String nombre, List<Animal> animales) {
+    public Tamano(int idTam, String nombre, List<Producto> productos) {
         this.idTam = idTam;
         this.nombre = nombre;
-        this.animales = animales;
+        this.productos = productos;
     }
 
     public Tamano() {
     }
 
-    @Override
-    public String toString() {
-        return "Tamano{" +
-                "idTam=" + idTam +
-                ", nombre='" + nombre + '\'' +
-                '}';
-    }
+
 }

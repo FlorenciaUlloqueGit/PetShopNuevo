@@ -1,16 +1,18 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDtos;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Marca;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
 import com.thesis.FlorenciaUlloque.UTN.repositories.MarcaRepository;
-import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.MarcaService;
-import com.thesis.FlorenciaUlloque.UTN.services.ProveedorService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/marcas")
 public class MarcaController {
 
@@ -24,27 +26,6 @@ public class MarcaController {
 
     }
 
-   @GetMapping("/lista")
-    public List<String> getALLMarcasbyName(@RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "limit", defaultValue = "25") int limit) {
-
-        return repository.findAllMarcas(page, limit); //agregar limite de pagina
-    }
-
-
-
-
-
-
-    @GetMapping
-    public List<Marca> getAllMarcas(@RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "limit", defaultValue = "25") int limit) {
-
-        return marcaService.getAllMarcas(page, limit); //agregar limite de pagina
-    }
-
-
-
 
     @GetMapping("{nombre}")
     public Marca getMarcaByName(@PathVariable String nombre) {
@@ -57,23 +38,87 @@ public class MarcaController {
     }
 
 
-
-
-    @PostMapping("")
-    public Marca createMarca(@RequestBody Marca marca ){
-        return marcaService.createMarca(marca);
+    @ModelAttribute("marca")
+    public MarcaDto mapearMarca() {
+        return new MarcaDto();
     }
 
-    @PutMapping("{idMarca}")
-    public Marca updateMarca(@PathVariable long id, @RequestBody Marca marca){
 
-        return marcaService.updateMarca(id, marca);
+    @ModelAttribute("marcaDtos")
+    public MarcaDtos mapeaMarcaDtos() {
+        return new MarcaDtos();
     }
 
-    @DeleteMapping("{idMarca}")
-    public String deleteMovie( @PathVariable long id){
-        marcaService.deleteMarca(id);
-        return "El proveedor ha sido eliminado exitosamente";
+    @ModelAttribute("marcaReal")
+    public Marca mapearVendedorREal() {
+        return new Marca();
+    }
+
+    @GetMapping
+    public String mostrarFormulario(Model model) {
+
+        MarcaDtos marca = new MarcaDtos();
+        List<Proveedor> proveedores = marcaService.listaProveedores();
+
+        model.addAttribute("proveedores", proveedores);
+        model.addAttribute("marcaDtos", marca);
+        return "crearMarca";
+    }
+
+    @PostMapping
+    public String create(@ModelAttribute("marcaDtos") MarcaDtos marcaDtos) {
+        boolean registrado = marcaService.saveMarca(marcaDtos);
+        if (registrado == true){
+            marcaService.saveMarca(marcaDtos);
+            return "redirect:/marcas?error";
+        }else {
+            return "redirect:/marcas?exito";
+        }
+    }
+
+
+    @GetMapping("/update/{idMarca}")
+    public String mostrarformUpdate(@PathVariable int idMarca, Model model){
+
+        List<Proveedor> proveedores = marcaService.listaProveedores();
+
+        model.addAttribute("marca", repository.findByIdMarca(idMarca));
+        model.addAttribute("proveedores", proveedores);
+        return "UpdateMarca";
+    }
+
+
+    @PostMapping("/updateMarca/{idMarca}")
+    public String updatearVendedor(@ModelAttribute("marcaReal")Marca marca,
+                                   @PathVariable int idMarca){
+
+        Marca marcaExiste = repository.findByIdMarca(idMarca);
+
+        marcaExiste.setIdMarca(marca.getIdMarca());
+        marcaExiste.setNombre(marca.getNombre());
+        marcaExiste.setProveedor(marca.getProveedor());
+        marcaService.updateMarca(marcaExiste);
+
+        return "redirect:/marcas/update/{idMarca}?exito";
 
     }
+
+
+
+
+    @GetMapping({"/listar", "/"})
+    public String listar(Model model){
+        model.addAttribute("marcaReal", marcaService.findAllMarcas());
+        return "listadoMarcas";
+    }
+
+
+    @GetMapping("/delete/{idMarca}")
+    public String deleteVendedor( @PathVariable int idMarca){
+        marcaService.deleteMarca(idMarca);
+        return "redirect:/marcas/listar?exito";
+
+    }
+
+
 }

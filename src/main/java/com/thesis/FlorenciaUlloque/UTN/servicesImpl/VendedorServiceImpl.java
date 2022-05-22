@@ -1,14 +1,12 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.VendedorDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.VendedorDtos;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Rol;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Vendedor;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
-import com.thesis.FlorenciaUlloque.UTN.repositories.VendedorRepository;
+import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.VendedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.VendedorService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,58 +22,62 @@ public class VendedorServiceImpl implements VendedorService {
     }
 
 
+    public List<VendedorDtos> findAllVendedores(){
+       List <Vendedor>listaReal  = (List<Vendedor>) repository.findAll();
+       List<VendedorDtos> listaDto = new ArrayList<>();
 
-    @Override
-    public Vendedor createVendedor(Vendedor vendedor) {
-
-        if (repository.findByUsuario(vendedor.getUsuario()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
+        VendedorDtos vendedorDtos ;
+        for (Vendedor vendedor: listaReal) {
+            vendedorDtos = new VendedorDtos();
+            vendedorDtos.setIdVendedor(vendedor.getIdVendedor());
+            vendedorDtos.setPass(vendedor.getPass());
+            vendedorDtos.setUsuario(vendedor.getUsuario());
+            listaDto.add(vendedorDtos);
         }
-        Vendedor newVendedor  = new Vendedor();
 
-        BeanUtils.copyProperties(vendedor, newVendedor);
-        repository.save(newVendedor);
-        return newVendedor;
-
+       return listaDto;
     }
 
     @Override
-    public List<Vendedor> getAllVendedores(int page, int limit) {
-        List<Vendedor> returnValue = new ArrayList<>();
-        Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<Vendedor> clientePage   = repository.findAll(pageableRequest);
-        List<Vendedor> vendedores = clientePage.getContent();
+    public Vendedor updateVendedor(Vendedor vendedor) {
+        Vendedor returnValue;
 
+        Vendedor vendedorForUpdate = new Vendedor();
 
-        for (Vendedor vendedor : vendedores) {
-            returnValue.add(vendedor);
-        }
+            vendedorForUpdate.setUsuario(vendedor.getUsuario());
+            vendedorForUpdate.setPass(vendedor.getPass());
+            vendedorForUpdate.setRol(new Rol(2,"vendedor"));
+            vendedorForUpdate.setIdVendedor(vendedor.getIdVendedor());
 
+            returnValue = repository.save(vendedorForUpdate);
         return returnValue;
     }
 
     @Override
-    public Vendedor updateVendedor(int idVendedor, Vendedor vendedor) {
-        Vendedor vendedorForUpdate = repository.findByIdVendedor(idVendedor);
-        if (vendedorForUpdate == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        }
-        vendedorForUpdate.setNombre(vendedor.getNombre());
-        vendedorForUpdate.setUsuario( vendedor.getUsuario());
-        vendedorForUpdate.setPass(vendedor.getPass());
-
-        Vendedor returnValue = repository.save(vendedorForUpdate);
-
-        return returnValue;
-    }
-
-    @Override
-    public void deleteVendedor(int id) {
+    public boolean deleteVendedor(int id) {
+        boolean existe = true;
         Vendedor vendedor = repository.findByIdVendedor(id);
         if (vendedor == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+           existe = false;
         }
         repository.delete(vendedor);
+        return existe;
     }
 
+    @Override
+    public boolean saveVendedor(VendedorDto vendedorDto) {
+
+        boolean registrado;
+        if (repository.findByUsuario(vendedorDto.getUsuario()) != null) {
+            registrado = true;
+        } else{
+            registrado = false;
+            vendedorDto.setRol(new Rol(2, "vendedor"));
+            Vendedor newVendedor = new Vendedor(vendedorDto.getUsuario(), vendedorDto.getPass(),
+                    vendedorDto.getRol());
+
+            repository.save(newVendedor);
+        }
+        return registrado;
+    }
 }

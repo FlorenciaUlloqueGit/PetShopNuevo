@@ -1,14 +1,17 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteRegistroDto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Rol;
 import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
-import com.thesis.FlorenciaUlloque.UTN.repositories.ClienteRepository;
+import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.ClienteRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ClienteService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,22 +24,6 @@ public class ClienteServiceImpl implements ClienteService {
 
     public ClienteServiceImpl(ClienteRepository repository) {
         this.repository = repository;
-    }
-
-
-    @Override
-    public Cliente createCliente(Cliente cliente) {
-
-
-
-        if (repository.findByEmail(cliente.getEmail()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
-        }
-            Cliente  newCliente = new Cliente();
-
-            BeanUtils.copyProperties(cliente, newCliente);
-            repository.save(newCliente);
-            return newCliente;
     }
 
     @Override
@@ -56,20 +43,23 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente updateCliente(int id, Cliente cliente) {
-        Cliente clienteForUpdate = repository.findByIdCliente(id);
+    public Cliente updateCliente( ClienteRegistroDto clienteRegistroDto) {
+
+        String email = clienteRegistroDto.getEmail();
+        Cliente returnValue;
+        Cliente clienteForUpdate = repository.findByEmail(email);
         if (clienteForUpdate == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+           // throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            returnValue = null;
+        } else{
+            clienteForUpdate.setApellido(clienteRegistroDto.getApellido());
+            clienteForUpdate.setNombre(clienteRegistroDto.getNombre());
+            clienteForUpdate.setTelefono(clienteRegistroDto.getTelefono());
+            clienteForUpdate.setPass(clienteRegistroDto.getPass());
+            clienteForUpdate.setDireccion(clienteRegistroDto.getDireccion());
+
+            returnValue = repository.save(clienteForUpdate);
         }
-
-
-        clienteForUpdate.setEmail(cliente.getEmail());
-        clienteForUpdate.setApellido(cliente.getApellido());
-        clienteForUpdate.setNombre(cliente.getNombre());
-        clienteForUpdate.setTelefono(cliente.getTelefono());
-
-        Cliente returnValue = repository.save(clienteForUpdate);
-
         return returnValue;
     }
 
@@ -82,6 +72,54 @@ public class ClienteServiceImpl implements ClienteService {
         }
         repository.delete(cliente);
 
-
     }
+
+
+
+    public List<ClienteDto> findAllClientes(){
+        List <Cliente>listaReal  = (List<Cliente>) repository.findAll();
+        List<ClienteDto> listaDto = new ArrayList<>();
+
+        ClienteDto clienteDto ;
+        for (Cliente cliente : listaReal) {
+            clienteDto = new ClienteDto();
+            clienteDto.setIdCliente(cliente.getIdCliente());
+            clienteDto.setNombre(cliente.getNombre());
+            clienteDto.setApellido(cliente.getApellido());
+            clienteDto.setEmail(cliente.getEmail());
+            clienteDto.setPass(cliente.getPass());
+            clienteDto.setTelefono(cliente.getTelefono());
+            clienteDto.setDireccion(cliente.getDireccion());
+            listaDto.add(clienteDto);
+        }
+
+        return listaDto;
+    }
+
+    @Override
+    public boolean saveRegistro(ClienteRegistroDto clienteRegistroDto) {
+        boolean registrado = false;
+
+        if (repository.findByEmail(clienteRegistroDto.getEmail()) != null) {
+            registrado = true;
+            //   throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
+        } else{
+
+            clienteRegistroDto.setRol(new Rol(1, "cliente"));
+
+            Cliente  newCliente = new Cliente(clienteRegistroDto.getEmail(), clienteRegistroDto.getPass(),
+                    clienteRegistroDto.getNombre(), clienteRegistroDto.getApellido(), clienteRegistroDto.getTelefono(),
+                    clienteRegistroDto.getDireccion(), clienteRegistroDto.getRol());
+            repository.save(newCliente);
+
+        }
+        return registrado;
+    }
+
+    @Override
+    public Cliente createCliente(Cliente cliente) {
+        return null;
+    }
+
+
 }

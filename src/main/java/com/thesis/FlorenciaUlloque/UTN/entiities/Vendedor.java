@@ -8,16 +8,40 @@ public class Vendedor  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idVendedor;
-   /* @ManyToOne
-    @JoinColumn(name = "rol_idRol")
-        private Rol rol;
-
-    */
 
     private String usuario;
     private String pass;
-    private String nombre;
 
+
+    @ManyToOne
+    @JoinColumn(name = "idRol")
+    private Rol rol;
+
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
+    public Vendedor(int idVendedor, String usuario, String pass, Rol rol) {
+        this.idVendedor = idVendedor;
+        this.usuario = usuario;
+        this.pass = pass;
+        this.rol = rol;
+    }
+
+    public Vendedor(String usuario, String pass, Rol rol) {
+        this.usuario = usuario;
+        this.pass = pass;
+        this.rol = rol;
+    }
+
+    public Vendedor(int idVendedor) {
+        this.idVendedor = idVendedor;
+    }
 
 
     public int getIdVendedor() {
@@ -44,14 +68,6 @@ public class Vendedor  {
         this.pass = pass;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public Vendedor() {
     }
 
@@ -61,7 +77,6 @@ public class Vendedor  {
                 "idVendedor=" + idVendedor +
                 ", usuario='" + usuario + '\'' +
                 ", pass='" + pass + '\'' +
-                ", nombre='" + nombre + '\'' +
                 '}';
     }
 }

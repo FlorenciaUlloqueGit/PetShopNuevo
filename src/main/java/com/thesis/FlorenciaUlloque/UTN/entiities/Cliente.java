@@ -1,6 +1,10 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 
 @Entity(name = "cliente")
 @Table(name = "clientes")
@@ -15,7 +19,38 @@ public class Cliente{ //crear clase cliente en la base
     private String nombre;
     private String apellido;
     private long telefono;
+    private String direccion;
 
+
+    /*
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "cliente_rol",
+            joinColumns =  @JoinColumn(
+                    name = "cliente_idCliente", referencedColumnName = "idCliente"),
+            inverseJoinColumns = @JoinColumn(name = "rol_idRol", referencedColumnName = "idRol")
+    )
+    private Collection<Rol> roles;
+
+     */
+
+    @ManyToOne
+    @JoinColumn(name = "idRol")
+    private Rol rol;
+
+    @JsonIgnore
+    @OneToMany(mappedBy ="cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SalidaProducto> salidaProductos;
+
+    public Cliente(String email, String pass, Rol rol) {
+        this.email = email;
+        this.pass = pass;
+        this.rol = rol;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
 
 
     public int getIdCliente() {
@@ -26,7 +61,13 @@ public class Cliente{ //crear clase cliente en la base
         this.idCliente = idCliente;
     }
 
+    public String getDireccion() {
+        return direccion;
+    }
 
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
 
     public String getEmail() {
         return email;
@@ -71,7 +112,8 @@ public class Cliente{ //crear clase cliente en la base
     public Cliente() {
     }
 
-    public Cliente(int idCliente, String email, String pass, String nombre, String apellido, long telefono) {
+    public Cliente(int idCliente, String email, String pass, String nombre, String apellido, long telefono,
+    List<SalidaProducto> salidaProductos) {
         this.idCliente = idCliente;
 
         this.email = email;
@@ -79,6 +121,17 @@ public class Cliente{ //crear clase cliente en la base
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
+        this.salidaProductos = salidaProductos;
+    }
+
+    public Cliente(String email, String pass, String nombre, String apellido, long telefono, String direccion, Rol rol) {
+        this.email = email;
+        this.pass = pass;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.rol = rol;
     }
 
     @Override
@@ -90,6 +143,7 @@ public class Cliente{ //crear clase cliente en la base
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", telefono=" + telefono +
+                ", salidaProductos=" + salidaProductos +
                 '}';
     }
 }

@@ -1,14 +1,15 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.ProveedorDto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ProveedorService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/proveedores")
 public class ProveedorController  {
 
@@ -22,48 +23,73 @@ public class ProveedorController  {
 
     }
 
-    @GetMapping("/lista")
-    public List<String> geListProveedors(@RequestParam(value = "page", defaultValue = "0") int page,
-                                             @RequestParam(value = "limit", defaultValue = "25") int limit) {
-
-        return repository.findAllProveedors(page, limit); //agregar limite de pagina
-    }
-
-
-
-
-    @GetMapping
-    public List<Proveedor> getAllProveedores(@RequestParam(value = "page", defaultValue = "0") int page,
-                                             @RequestParam(value = "limit", defaultValue = "25") int limit) {
-
-        return proveedorService.getAllProveedores(page, limit); //agregar limite de pagina
-    }
-
-
-
-
-    @GetMapping("{nombre}")
-    public Proveedor getProveedorByName(@PathVariable String nombre) {
+    @GetMapping("/nombre/{nombre}")
+    public Proveedor getProveedorByNombre(@PathVariable String nombre) {
         return repository.findByNombre(nombre);
     }
 
 
-
-    @PostMapping("")
-    public Proveedor createProveedor(@RequestBody Proveedor proveedor){
-        return proveedorService.createProveedor(proveedor);
+    @ModelAttribute("proveedor")
+    public ProveedorDto mapearProveedor() {
+        return new ProveedorDto();
     }
 
-    @PutMapping("{id}")
-    public Proveedor updateProveedor(@PathVariable long id, @RequestBody Proveedor proveedor){
-
-        return proveedorService.updateProveedor(id, proveedor);
+    @ModelAttribute("proveedorReal")
+    public Proveedor mapearREal() {
+        return new Proveedor();
     }
 
-    @DeleteMapping("{id}")
-    public String deleteMovie( @PathVariable long id){
-        proveedorService.deleteProveedor(id);
-        return "El proveedor ha sido eliminado exitosamente";
+    @GetMapping
+    public String mostrarFormularioCrearProv() {
+        return "crearProveedor";
+    }
+
+    @PostMapping
+    public String create(@ModelAttribute("proveedor") ProveedorDto proveedorDto) {
+
+        boolean registrado = proveedorService.saveProveedor(proveedorDto);
+        if (registrado == true){
+            proveedorService.saveProveedor(proveedorDto);
+            return "redirect:/proveedores?error";
+        }else {
+            return "redirect:/proveedores?exito";
+        }
+    }
+
+
+    @GetMapping("/update/{idProveedor}")
+    public String mostrarformUpdate(@PathVariable int idProveedor, Model model){
+        model.addAttribute("proveedor", repository.findById(idProveedor));
+        return "UpdateProveedor";
+    }
+
+
+    @PostMapping("/updateProveedor/{idProveedor}")
+    public String updatear(@ModelAttribute("proveedorReal")Proveedor proveedor,
+                                   @PathVariable int idProveedor){
+
+        Proveedor proveedorExiste = repository.findById(idProveedor);
+
+        proveedorExiste.setNombre(proveedor.getNombre());
+        proveedorExiste.setTelefono(proveedor.getTelefono());
+        proveedorService.updateProveedor(proveedorExiste);
+
+        return "redirect:/proveedores/update/{idProveedor}?exito";
+
+    }
+
+
+    @GetMapping({"/listar", "/"})
+    public String listar(Model model){
+        model.addAttribute("proveedorReal", proveedorService.findAllProveedor());
+        return "listadoProveedores";
+    }
+
+
+    @GetMapping("/delete/{idProveedor}")
+    public String delete( @PathVariable int idProveedor){
+        proveedorService.deleteProveedor(idProveedor);
+        return "redirect:/proveedores/listar?exito";
 
     }
 }

@@ -1,4 +1,4 @@
-package com.thesis.FlorenciaUlloque.UTN.repositories;
+package com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories;
 
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;

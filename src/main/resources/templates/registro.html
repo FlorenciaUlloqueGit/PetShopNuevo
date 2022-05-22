@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Registro de usuarios</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+</head>
+<body style="background-color: rgb(250, 237, 202)">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Almacén de Mascotas</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/registro}">Iniciar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
+    <h1 style="text-align: center">
+        <br><br>
+        Únetenos a nuestra familia
+        <br><br><br>
+    </h1>
+</div>
+<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
+
+    <br>
+    <h2 style="text-align: center">Formulario de nuevo usuario</h2>
+    <br>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div th:if=${param.exito}>
+        <div class="alert alert-info">Felicitaciones! Se ha registrado exitosamente.</div>
+      </div>
+
+        <div th:if=${param.error}>
+            <div class="alert alert-info">Error! El mail ingresado ya existe</div>
+        </div>
+
+
+        <form th:action="@{/registro}" method="post" th:object="${cliente}">
+        <div class="form-group">
+          <label class="control-label" for="nombre">Nombre : </label> <input
+                id="nombre" type="text" class="form-control" th:field="*{nombre}"
+                required autofocus="autofocus">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="apellido">Apellido : </label> <input
+                id="apellido" class="form-control" th:field="*{apellido}"
+                required autofocus="autofocus">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="email">Email : </label> <input
+                id="email" type="email" class="form-control" th:field="*{email}"
+                required autofocus="autofocus">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="pass">Password : </label> <input
+                type="password" id="pass" class="form-control" th:field="*{pass}"
+                required autofocus="autofocus">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="Telefono">Teléfono : </label> <input
+                type="number" id="telefono" class="form-control" th:field="*{telefono}"
+                required autofocus="autofocus">
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="direccion">Dirección : </label> <input
+                type="text" id="direccion" class="form-control" th:field="*{direccion}"
+                required autofocus="autofocus">
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-success">Registrar</button>
+          <span>Si estás registrado <a th:href="@{/loginNuevo}">inicia sesión aqui</a></span>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+

@@ -1,87 +1,98 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
-import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.IngresoDtos;
+import com.thesis.FlorenciaUlloque.UTN.entiities.FormaPago;
 import com.thesis.FlorenciaUlloque.UTN.entiities.IngresoProductos;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
-import com.thesis.FlorenciaUlloque.UTN.repositories.ClienteRepository;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
+import com.thesis.FlorenciaUlloque.UTN.repositories.FormaPagoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.IngresoProductosRepository;
-import com.thesis.FlorenciaUlloque.UTN.services.ClienteService;
+import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 public class IngresoProductosServiceImpl implements IngresoProductosService {
 
     private final IngresoProductosRepository repository;
+    private final ProveedorRepository proveedorRepository;
+    private final FormaPagoRepository formaPagoRepository;
 
-    public IngresoProductosServiceImpl(IngresoProductosRepository repository) {
+    public IngresoProductosServiceImpl(IngresoProductosRepository repository, ProveedorRepository proveedorRepository, FormaPagoRepository formaPagoRepository) {
         this.repository = repository;
+        this.proveedorRepository = proveedorRepository;
+        this.formaPagoRepository = formaPagoRepository;
     }
 
 
     @Override
-    public IngresoProductos createIngreso(IngresoProductos ingresoProductos) {
+    public IngresoProductos updateIngreso(IngresoProductos ingresoProductos) {
+        IngresoProductos returnValue;
 
-        if (repository.findByIdIngreso(ingresoProductos.getIdIngreso()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
-        }
-        IngresoProductos  newIngreso = new IngresoProductos();
+        IngresoProductos ingresoForUpdate = new IngresoProductos();
 
-        BeanUtils.copyProperties(ingresoProductos, newIngreso);
-        repository.save(newIngreso);
-        return newIngreso;
-    }
+        ingresoForUpdate.setIdIngreso(ingresoProductos.getIdIngreso());
+        ingresoForUpdate.setTotal(ingresoProductos.getTotal());
+        ingresoForUpdate.setFormaPago(ingresoProductos.getFormaPago());
+        ingresoForUpdate.setFecha(ingresoProductos.getFecha());
+        ingresoForUpdate.setProveedor(ingresoProductos.getProveedor());
+        ingresoForUpdate.setListadoDetalleIngresos(ingresoProductos.getListadoDetalleIngresos());
 
-    @Override
-    public List<IngresoProductos> getAllIngresos(int page, int limit) {
-
-        List<IngresoProductos> returnValue = new ArrayList<>();
-        Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<IngresoProductos> clientePage   = repository.findAll(pageableRequest);
-        List<IngresoProductos> ingresos = clientePage.getContent();
-
-
-        for (IngresoProductos ingreso : ingresos) {
-            returnValue.add(ingreso);
-        }
-
-        return returnValue;
-    }
-
-
-    @Override
-    public IngresoProductos updateIngreso(int id, IngresoProductos ingreso) {
-        IngresoProductos ingresoForUpdate = repository.findByIdIngreso(id);
-        if (ingresoForUpdate == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        }
-
-        ingresoForUpdate.setFormaPago(ingreso.getFormaPago());
-        ingresoForUpdate.setFecha(ingreso.getFecha());
-        ingresoForUpdate.setProveedor(ingreso.getProveedor());
-        ingresoForUpdate.setTotal(ingreso.getTotal());
-
-        IngresoProductos returnValue = repository.save(ingresoForUpdate);
-
+        returnValue = repository.save(ingresoForUpdate);
         return returnValue;
     }
 
     @Override
-    public void deleteIngreso(int id) {
+    public boolean deleteIngreso(int id) {
+        boolean existe = true;
         IngresoProductos ingresoProductos = repository.findByIdIngreso(id);
-
         if (ingresoProductos == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            existe = false;
         }
         repository.delete(ingresoProductos);
+        return existe;
+    }
 
+    @Override
+    public List<IngresoProductos> getAllIngresos() {
+        List <IngresoProductos>listaReal  = (List<IngresoProductos>) repository.findAll();
+
+        return listaReal;
+    }
+
+
+    @Override
+    public IngresoProductos saveIngreso(IngresoProductos ingreso) {
+
+        LocalDate fecha = ingreso.getFecha();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaFormato = LocalDate.parse(fecha.format(formatter));
+
+        ingreso.setTotal(0);
+        ingreso.setIdIngreso(0);
+
+            IngresoProductos ingresoProductos = new IngresoProductos(ingreso.getIdIngreso(), ingreso.getProveedor(), fechaFormato,
+                    ingreso.getTotal(), ingreso.getFormaPago(), ingreso.getListadoDetalleIngresos());
+
+            repository.save(ingresoProductos);
+            return ingresoProductos;
+    }
+
+    @Override
+    public List<Proveedor> listaProveedores() {
+        List<Proveedor> proveedorList;
+        proveedorList = (List<Proveedor>) proveedorRepository.findAll();
+        return  proveedorList;
+    }
+
+    @Override
+    public List<FormaPago> listaFormasPagos() {
+        List<FormaPago> formaPagoList;
+        formaPagoList = (List<FormaPago>) formaPagoRepository.findAll();
+        return  formaPagoList;
     }
 }

@@ -1,14 +1,15 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoStock;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoStocks.StockDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoStocks.StockDtos;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Producto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Stock;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
+import com.thesis.FlorenciaUlloque.UTN.repositories.ProductoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.StockRepository;
+import com.thesis.FlorenciaUlloque.UTN.services.ProductoService;
 import com.thesis.FlorenciaUlloque.UTN.services.StockService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,64 +19,102 @@ import java.util.List;
 public class StockServiceImpl implements StockService {
 
     private final StockRepository repository;
+    private final ProductoRepository productoRepository;
+    private final ProductoService productoService;
 
-    public StockServiceImpl(StockRepository repository) {
+    public StockServiceImpl(StockRepository repository, ProductoRepository productoRepository, ProductoService productoService) {
         this.repository = repository;
-    }
-
-
-    @Override
-    public Stock createStock(Stock stock) {
-
-    //verifica que el idProducto no exista
-        if (repository.findByProductoIdProducto(stock.getProducto().getIdProducto()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
-        }
-        Stock  newStock = new Stock();
-
-        BeanUtils.copyProperties(stock, newStock);
-        repository.save(newStock);
-        return newStock;
+        this.productoRepository = productoRepository;
+        this.productoService = productoService;
     }
 
     @Override
-    public List<Stock> getAllStocks(int page, int limit) {
-        List<Stock> returnValue = new ArrayList<>();
-        Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<Stock> clientePage   = repository.findAll(pageableRequest);
-        List<Stock> stocks = clientePage.getContent();
+    public Stock update(Stock stock) {
+        Stock returnValue;
 
+        Stock stockForUpdate = new Stock();
 
-        for (Stock stock : stocks) {
-            returnValue.add(stock);
-        }
-
-        return returnValue;
-    }
-
-    @Override
-    public Stock updateStock(int id, Stock stock) {
-        Stock stockForUpdate = repository.findByIdStock(id);
-        if (stockForUpdate == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        }
-
-
-        stockForUpdate.setProducto(stock.getProducto());
+        stockForUpdate.setIdStock(stock.getIdStock());
         stockForUpdate.setCantidad(stock.getCantidad());
+        stockForUpdate.setProducto(stock.getProducto());
 
-        Stock returnValue = repository.save(stockForUpdate);
-
+        returnValue = repository.save(stockForUpdate);
         return returnValue;
     }
 
     @Override
-    public void deleteStock(int id) {
+    public boolean delete(int id) {
+        boolean existe = true;
         Stock stock = repository.findByIdStock(id);
-
         if (stock == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            existe = false;
         }
         repository.delete(stock);
+        return existe;
+    }
+
+    @Override
+    public List<StockDto> findAllStocks() {
+        List <Stock>listaReal  = (List<Stock>) repository.findAll();
+        List<StockDto> listaDto = new ArrayList<>();
+
+        StockDto stockDto ;
+        for (Stock stock : listaReal) {
+            stockDto = new StockDto();
+            stockDto.setIdStock(stock.getIdStock());
+            stockDto.setCantidad(stock.getCantidad());
+            stockDto.setProducto(stock.getProducto());
+            listaDto.add(stockDto);
+        }
+
+        return listaDto;
+    }
+
+    @Override
+    public boolean save(StockDtos stockDtos) {
+        boolean registrado;
+        if (repository.findByProductoIdProducto(stockDtos.getProducto().getIdProducto()) != null) {
+            registrado = true;
+        } else{
+            registrado = false;
+            Stock newStock = new Stock(stockDtos.getProducto(), stockDtos.getCantidad());
+
+            repository.save(newStock);
+        }
+        return registrado;
+    }
+
+    @Override
+    public List<ProductoStock> getStockByNombreProducto(String nombre) {
+        List <Producto>listaReal  =  productoService.listAllByName(nombre);
+        List<ProductoStock> listaDto = new ArrayList<>();
+
+        ProductoStock  productoStock ;
+        for (Producto producto : listaReal) {
+            productoStock = new ProductoStock();
+            productoStock.setIdProducto(producto.getIdProducto());
+            productoStock.setNombre(producto.getNombre());
+            productoStock.setCodBarras(producto.getCodBarras());
+            listaDto.add(productoStock);
+        }
+
+        return listaDto;
+    }
+
+    @Override
+    public List<ProductoStock> getStockByCodBarrasProducto(long codBarras) {
+        List <Producto>listaReal  =  productoService.listAllByCodBarras(codBarras);
+        List<ProductoStock> listaDto = new ArrayList<>();
+
+        ProductoStock  productoStock ;
+        for (Producto producto : listaReal) {
+            productoStock = new ProductoStock();
+            productoStock.setIdProducto(producto.getIdProducto());
+            productoStock.setNombre(producto.getNombre());
+            productoStock.setCodBarras(producto.getCodBarras());
+            listaDto.add(productoStock);
+        }
+
+        return listaDto;
     }
 }

@@ -16,15 +16,16 @@ public class Proveedor {
     private long telefono;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "proveedores", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "proveedor")
+    @Column(name = "marca_proveedor")
     private List<Marca> marcas;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "proveedor")
+    @OneToMany(mappedBy = "proveedor", orphanRemoval = false)
     @Column(name = "IngresoProductos_proveedor")
     private List<IngresoProductos> listaProductos;
 
-    public long getIdProveedor() {
+    public int getIdProveedor() {
         return idProveedor;
     }
 
@@ -65,6 +66,11 @@ public class Proveedor {
     }
 
     public Proveedor() {
+    }
+
+    public Proveedor(String nombre, long telefono) {
+        this.nombre = nombre;
+        this.telefono = telefono;
     }
 
     @Override

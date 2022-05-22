@@ -1,9 +1,12 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.xml.bind.v2.TODO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,19 +19,41 @@ public class SalidaProducto {
 
     private double total;
 
-    @JsonFormat(pattern="dd-MM-yyyy")
-    private Date fecha;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha;
 
-    @OneToOne
-    @JoinColumn(name = "formaPago_idFormaPago")
+
+    @JoinColumn(name = "idFormaPago")
+    @OneToOne(fetch = FetchType.LAZY)
     private FormaPago formaPago;
 
-    //agregar cliente
+    @ManyToOne
+    @JoinColumn(name = "idCliente", nullable = true)
+    private Cliente cliente;
 
    // TODO: asegurarme del orpham remove cuando borre una inserciòn de la clase salidaProducto
+    @JsonIgnore
     @OneToMany(mappedBy = "salidaProducto" , cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "detalleSalida_salidaProducto")
     private List<DetalleEgreso> listadoSalidaProducto;
+
+    public SalidaProducto(int idEgreso, double total, LocalDate fecha, FormaPago formaPago, Cliente cliente,
+                          List<DetalleEgreso> listadoSalidaProducto) {
+        this.idEgreso = idEgreso;
+        this.total = total;
+        this.fecha = fecha;
+        this.formaPago = formaPago;
+        this.cliente = cliente;
+        this.listadoSalidaProducto = listadoSalidaProducto;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public int getIdEgreso() {
         return idEgreso;
@@ -46,11 +71,11 @@ public class SalidaProducto {
         this.total = total;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
@@ -70,23 +95,15 @@ public class SalidaProducto {
         this.listadoSalidaProducto = listadoSalidaProducto;
     }
 
-    public SalidaProducto(int idEgreso, double total, Date fecha, FormaPago formaPago) {
+    public SalidaProducto(int idEgreso, double total, LocalDate fecha, FormaPago formaPago,Cliente cliente) {
         this.idEgreso = idEgreso;
         this.total = total;
         this.fecha = fecha;
         this.formaPago = formaPago;
+        this.cliente = cliente;
     }
 
     public SalidaProducto() {
     }
 
-    @Override
-    public String toString() {
-        return "SalidaProducto{" +
-                "idEgreso=" + idEgreso +
-                ", total=" + total +
-                ", fecha=" + fecha +
-                ", formaPago=" + formaPago +
-                '}';
-    }
 }

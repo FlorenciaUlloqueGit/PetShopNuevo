@@ -17,8 +17,8 @@ public class Edad {
 
     @JsonIgnore
     @OneToMany(mappedBy = "edad", cascade = CascadeType.ALL)
-    @Column(name = "animal_edad")
-    private List<Animal> animales;
+    @Column(name = "producto_edad")
+    private List<Producto> productos;
 
     public int getIdEdad() {
         return idEdad;
@@ -36,33 +36,20 @@ public class Edad {
         this.nombre = nombre;
     }
 
-    public List<Animal> getAnimales() {
-        return animales;
+    public List<Producto> getProductos() {
+        return productos;
     }
 
-    public void setAnimales(List<Animal> animales) {
-        this.animales = animales;
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
-/*
-    public Edad(int idEdad, String nombre, List<Animal> animales) {
+
+    public Edad(int idEdad, String nombre, List<Producto> productos) {
         this.idEdad = idEdad;
         this.nombre = nombre;
-        this.animales = animales;
+        this.productos = productos;
     }
 
-    public Edad(int idEdad, String nombre) {
-        this.idEdad = idEdad;
-        this.nombre = nombre;
-    }
-
- */
-
-    @Override
-    public String toString() {
-        return "Edad{" +
-                "idEdad=" + idEdad +
-                ", nombre='" + nombre + '\'' +
-                ", animales=" + animales +
-                '}';
+    public Edad() {
     }
 }

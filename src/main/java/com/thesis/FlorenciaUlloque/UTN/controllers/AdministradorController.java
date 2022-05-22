@@ -1,7 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Administrador;
-import com.thesis.FlorenciaUlloque.UTN.repositories.AdministradorRepository;
+import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.AdministradorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.AdministradorService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +33,8 @@ public class AdministradorController {
 
 
     @GetMapping("/nombre/{nombre}")
-    public Administrador getAdminByNombre(@PathVariable String nombre) {
-        return repository.findByNombre(nombre);
+    public Administrador getAdminByUsuario(@PathVariable String nombre) {
+        return repository.findByUsuario(nombre);
     }
 
     @GetMapping("/idAdmin/{id}")

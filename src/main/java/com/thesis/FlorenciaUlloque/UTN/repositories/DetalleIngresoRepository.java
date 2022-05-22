@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Repository
@@ -19,6 +20,7 @@ public interface DetalleIngresoRepository extends PagingAndSortingRepository<Det
     DetalleIngreso findByIdDetalle(int idDetalle);
     DetalleIngreso findByProductoCodBarras(long codBarras);
     DetalleIngreso findByProductoIdProducto(int idProducto);
+    List<DetalleIngreso> findAllByIngresoProductosIdIngreso(int idIngreso);
 
 
 }

@@ -1,15 +1,12 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDtos;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Marca;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
-import com.thesis.FlorenciaUlloque.UTN.exceptions.ErrorMessages;
 import com.thesis.FlorenciaUlloque.UTN.repositories.MarcaRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.MarcaService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,63 +16,73 @@ import java.util.List;
 public class MarcaServiceImpl implements MarcaService {
 
     private final MarcaRepository repository;
+    private final ProveedorRepository proveedorRepository;
 
-    public MarcaServiceImpl(MarcaRepository repository) {
+    public MarcaServiceImpl(MarcaRepository repository, ProveedorRepository proveedorRepository) {
         this.repository = repository;
+        this.proveedorRepository = proveedorRepository;
     }
 
+    public List<MarcaDto> findAllMarcas(){
+        List <Marca>listaReal  = (List<Marca>) repository.findAll();
+        List<MarcaDto> listaDto = new ArrayList<>();
 
-    @Override
-    public Marca createMarca(Marca marca) {
-
-        if (repository.findByNombre(marca.getNombre()) != null) {
-            throw new RuntimeException(ErrorMessages.RECORD_ALREADY_EXIST.getErrorMessage());
-        }
-            Marca newMarca = new Marca();
-
-            BeanUtils.copyProperties(marca, newMarca);
-            repository.save(newMarca);
-            return newMarca;
-    }
-
-    @Override
-    public List<Marca> getAllMarcas(int page, int limit) {
-        List<Marca> returnValue = new ArrayList<>();
-        Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<Marca> MarcaPage = repository.findAll(pageableRequest);
-        List<Marca> marcas = MarcaPage.getContent();
-
-
-        for (Marca marca : marcas) {
-            returnValue.add(marca);
+        MarcaDto marcaDto;
+        for (Marca marca: listaReal) {
+            marcaDto = new MarcaDto();
+            marcaDto.setNombre(marca.getNombre());
+            marcaDto.setProveedor(marca.getProveedor());
+            marcaDto.setIdMarca(marca.getIdMarca());
+            listaDto.add(marcaDto);
         }
 
-        return returnValue;
+        return listaDto;
     }
 
     @Override
-    public Marca updateMarca(long id, Marca marca) {
-        Marca marcaForUpdate = repository.findByIdMarca(id);
-        if (marcaForUpdate == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        }
+    public Marca updateMarca(Marca marca) {
+        Marca returnValue;
+
+        Marca marcaForUpdate = new Marca();
 
         marcaForUpdate.setNombre(marca.getNombre());
-        marcaForUpdate.setProveedores(marca.getProveedores());  //no estoy segura de esta
+        marcaForUpdate.setIdMarca(marca.getIdMarca());
+        marcaForUpdate.setProveedor(marca.getProveedor());
 
-        Marca returnValue = repository.save(marcaForUpdate);
-
+        returnValue = repository.save(marcaForUpdate);
         return returnValue;
     }
 
     @Override
-    public void deleteMarca(long id) {
+    public boolean deleteMarca(int id) {
+        boolean existe = true;
         Marca marca = repository.findByIdMarca(id);
-
         if (marca == null) {
-            throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+            existe = false;
         }
         repository.delete(marca);
+        return existe;
+    }
 
+    @Override
+    public boolean saveMarca(MarcaDtos marcaDtos) {
+
+        boolean registrado;
+        if (repository.findByNombre(marcaDtos.getNombre()) != null) {
+            registrado = true;
+        } else{
+            registrado = false;
+            Marca newMarca = new Marca(marcaDtos.getNombre(), marcaDtos.getProveedor());
+
+            repository.save(newMarca);
+        }
+        return registrado;
+    }
+
+    @Override
+    public List<Proveedor> listaProveedores() {
+        List<Proveedor> proveedorList;
+        proveedorList = (List<Proveedor>) proveedorRepository.findAll();
+        return  proveedorList;
     }
 }

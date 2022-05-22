@@ -11,7 +11,8 @@ public class FormaVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idFormaVenta;
     private String nombre;
-    @OneToOne(mappedBy = "formaVenta" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idProducto")
+    @OneToOne( cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Producto producto;
 
     public int getIdFormaVenta() {

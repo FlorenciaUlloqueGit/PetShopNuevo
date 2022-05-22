@@ -1,11 +1,10 @@
-package com.thesis.FlorenciaUlloque.UTN.controllers;
+package com.thesis.FlorenciaUlloque.UTN.controllers.usuarios;
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
-import com.thesis.FlorenciaUlloque.UTN.repositories.ClienteRepository;
+import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.ClienteRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ClienteService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 
@@ -52,11 +51,6 @@ public class ClienteController {
         return clienteService.createCliente(cliente);
     }
 
-    @PutMapping("/{idCliente}")
-    public Cliente updateCliente(@PathVariable int idCliente, @RequestBody Cliente cliente){
-
-        return clienteService.updateCliente(idCliente, cliente);
-    }
 
     @DeleteMapping("/{idCliente}")
     public String deleteCliente( @PathVariable int idCliente){
