@@ -1,15 +1,23 @@
 package com.thesis.FlorenciaUlloque.UTN.services;
 
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDetalle;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDetalleVenta;
 import com.thesis.FlorenciaUlloque.UTN.entiities.DetalleEgreso;
-import com.thesis.FlorenciaUlloque.UTN.entiities.DetalleIngreso;
+
 
 import java.util.List;
 
 public interface DetalleEgresoService {
+    DetalleEgreso update(DetalleEgreso detalleEgreso);
 
-    DetalleEgreso createDetalle(DetalleEgreso detalle);
-    List<DetalleEgreso> getAllDetalles(int page, int limit);
-    DetalleEgreso updateDetalle(int id, DetalleEgreso detalle);
-    void deleteDetalle(int id);
+    boolean delete(int id);
+
+    List<DetalleEgreso> findAll();
+
+    void save(DetalleEgreso detalleEgreso);
+
+    List<ProductoDetalleVenta> getDetalleByNombreProducto(String nombre);
+
+    List<ProductoDetalleVenta> getDetalleByCodBarrasProducto(long codBarras);
 }
