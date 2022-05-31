@@ -8,6 +8,7 @@ import com.thesis.FlorenciaUlloque.UTN.entiities.*;
 import com.thesis.FlorenciaUlloque.UTN.repositories.DetalleIngresoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.IngresoProductosRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.StockRepository;
+import com.thesis.FlorenciaUlloque.UTN.services.DetalleIngresoService;
 import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
 import com.thesis.FlorenciaUlloque.UTN.services.StockService;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Controller
@@ -27,15 +29,16 @@ public class IngresoProductosController {
     private final DetalleIngresoRepository detalleIngresoRepository;
     private final StockRepository stockRepository;
     private final StockService stockService;
+    private final DetalleIngresoService detalleIngresoService;
 
-
-    public IngresoProductosController(IngresoProductosService ingresoProductosService, IngresoProductosRepository repository, DetalleIngresoRepository detalleIngresoRepository, StockRepository stockRepository, StockService stockService) {
+    public IngresoProductosController(IngresoProductosService ingresoProductosService, IngresoProductosRepository repository, DetalleIngresoRepository detalleIngresoRepository, StockRepository stockRepository, StockService stockService, DetalleIngresoService detalleIngresoService) {
         this.ingresoProductosService = ingresoProductosService;
         this.repository = repository;
 
         this.detalleIngresoRepository = detalleIngresoRepository;
         this.stockRepository = stockRepository;
         this.stockService = stockService;
+        this.detalleIngresoService = detalleIngresoService;
     }
 
     /*
@@ -233,9 +236,15 @@ public class IngresoProductosController {
            int cant = detalleIngreso.getCantidad();
            Stock stock = stockRepository.findByProductoIdProducto(producto.getIdProducto());
            stock.setCantidad(stock.getCantidad()- cant);
+            if(Objects.equals(stock.getProducto().getFormaVenta().getNombre(), "Por peso")){
+                stock.setCantidadKg((int) (stock.getProducto().getPesoNeto() * stock.getCantidad()));
+                stock.setCantidadRestante(stock.getCantidadKg());
+            }
            stockService.update(stock);
-            ingresoProductosService.deleteIngreso(idIngreso);
+           detalleIngresoService.delete(detalleIngreso.getIdDetalle());
+
         }
+        ingresoProductosService.deleteIngreso(idIngreso);
         return "redirect:/ingresos/listar?exito";
 
     }

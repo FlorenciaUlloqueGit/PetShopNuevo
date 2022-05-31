@@ -48,14 +48,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Ingreso de mercadería
+        Registro de ventas
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Detalle del Ingreso creado</h2>
+    <h2 style="text-align: center">Detalle de venta</h2>
     <br>
 
 </div>
@@ -90,6 +90,8 @@
         <div class="container">
             <a th:href="@{/detalleEgresos/{idEgreso}(idEgreso=${egresoIdTotal.idEgreso})}"
                class="btn btn-info"> Agregar productos</a>
+            <a th:href="@{/detalleEgresos/crearDetalleKG/{idEgreso}(idEgreso=${egresoIdTotal.idEgreso})}"
+               class="btn btn-success"> Agregar productos vendidos por gramo</a>
 
             <!--
             <a th:href="@{/ingresos/update/{idIngreso}(idIngreso=${ingresoIdTotal.idIngreso})}}"
@@ -130,7 +132,7 @@
                        class="btn btn-danger">
                     Eliminar</a></td>
                 <td>
-                    <input type="number" class="form-control" th:value="${detalleEgreso.idEgreso}" disabled hidden>
+                    <input type="number"  step=".01" class="form-control" th:value="${detalleEgreso.idEgreso}" disabled hidden>
                 </td>
             </tr>
             </tbody>

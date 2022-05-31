@@ -19,7 +19,7 @@ public class DetalleEgreso {
     @JoinColumn(name = "idProducto")
     private Producto producto;
 
-    private int cantidad;
+    private float cantidad;
     private double precio;
 
     public int getIdDetalleEgreso() {
@@ -46,11 +46,11 @@ public class DetalleEgreso {
         this.producto = producto;
     }
 
-    public int getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(float cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -62,7 +62,7 @@ public class DetalleEgreso {
         this.precio = precio;
     }
 
-    public DetalleEgreso(int idDetalleEgreso, SalidaProducto salidaProducto, Producto producto, int cantidad, double precio) {
+    public DetalleEgreso(int idDetalleEgreso, SalidaProducto salidaProducto, Producto producto, float cantidad, double precio) {
         this.idDetalleEgreso = idDetalleEgreso;
         this.salidaProducto = salidaProducto;
         this.producto = producto;

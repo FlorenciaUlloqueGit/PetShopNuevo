@@ -48,6 +48,15 @@ public class Cliente{ //crear clase cliente en la base
         this.rol = rol;
     }
 
+    public Cliente(String email, String nombre, String apellido, long telefono, String direccion, Rol rol) {
+        this.email = email;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.rol = rol;
+    }
+
     public Rol getRol() {
         return rol;
     }

@@ -1,15 +1,16 @@
 package com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos;
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Producto;
+import com.thesis.FlorenciaUlloque.UTN.entiities.UnidadMedida;
 
 public class DetalleEgresoDtoIdEgreso {
     private int idDetalleEgreso;
     private int idEgreso;
     private Producto producto;
-    private int cantidad;
+    private float cantidad;
     private double total;
 
-    public DetalleEgresoDtoIdEgreso(int idDetalleEgreso, int idEgreso, Producto producto, int cantidad, double total) {
+    public DetalleEgresoDtoIdEgreso(int idDetalleEgreso, int idEgreso, Producto producto, float cantidad, double total) {
         this.idDetalleEgreso = idDetalleEgreso;
         this.idEgreso = idEgreso;
         this.producto = producto;
@@ -44,11 +45,11 @@ public class DetalleEgresoDtoIdEgreso {
         this.producto = producto;
     }
 
-    public int getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(float cantidad) {
         this.cantidad = cantidad;
     }
 

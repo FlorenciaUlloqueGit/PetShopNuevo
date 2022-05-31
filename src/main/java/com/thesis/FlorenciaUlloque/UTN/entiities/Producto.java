@@ -63,7 +63,7 @@ public class Producto{
     private DetalleEgreso detalleEgreso;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "producto" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "producto" , cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
     private Stock stock;
 
     @ManyToOne
@@ -72,7 +72,7 @@ public class Producto{
 
     public Producto(long codBarras, String nombre, LocalDate fechaVencimiento, double precioCompra,
                     double precioVenta, Marca marca, FormaVenta formaVenta, Categoria categoria,
-                   float pesoNeto, UnidadMedida unidadMedida, TipoAnimal tipoAnimal,
+                    float pesoNeto, UnidadMedida unidadMedida, TipoAnimal tipoAnimal,
                     Tamano tamano, Edad edad) {
         this.codBarras = codBarras;
         this.nombre = nombre;
@@ -105,7 +105,6 @@ public class Producto{
         this.tamano = tamano;
         this.edad = edad;
     }
-
 
     public Categoria getCategoria() {
         return categoria;

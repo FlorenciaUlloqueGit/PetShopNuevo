@@ -1,5 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoStocks.StockDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoStocks.StockDtos;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.*;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDetalle;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDtoDetalle;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Controller
@@ -277,9 +280,23 @@ public class DetalleIngresosController {
         detalleIngreso.setPrecio(subtotal);
 
         Stock stock = stockRepository.findByProductoIdProducto(detalleIngreso.getProducto().getIdProducto());
-        int cantidadFinal = stock.getCantidad() + detalleIngreso.getCantidad();
-        stock.setCantidad(cantidadFinal);
-        stockService.update(stock);
+        if(stock == null){
+            StockDtos newStock = new StockDtos(producto, detalleIngreso.getCantidad());
+            if(Objects.equals(newStock.getProducto().getFormaVenta().getNombre(), "Por peso")){
+                newStock.setCantidadKg((int) (newStock.getProducto().getPesoNeto() * newStock.getCantidad()));
+                newStock.setCantidadRestante(newStock.getCantidadKg());
+            }
+            stockService.save(newStock);
+        } else{
+            int cantidadFinal = stock.getCantidad() + detalleIngreso.getCantidad();
+            stock.setCantidad(cantidadFinal);
+            if(Objects.equals(stock.getProducto().getFormaVenta().getNombre(), "Por peso")){
+                stock.setCantidadKg((int) (stock.getProducto().getPesoNeto() * stock.getCantidad()));
+                stock.setCantidadRestante(stock.getCantidadKg());
+            }
+            stockService.update(stock);
+        }
+
 
         detalleIngresoService.save(detalleIngreso);
 
@@ -306,7 +323,7 @@ public class DetalleIngresosController {
 
     @PostMapping("/updateDetalle/{idDetalle}")
     public String updatearVendedor(@ModelAttribute("detalleIngresoDtoUpdate")DetalleIngresoDtoUpdate detalleIngreso,
-                                   @PathVariable int idDetalle){
+                                   @PathVariable int idDetalle) {
 
         DetalleIngreso ingresoExiste = repository.findByIdDetalle(idDetalle);
 
@@ -322,13 +339,13 @@ public class DetalleIngresosController {
         int totalARestar = 0;
         boolean esSuma = false;
         Stock stock = stockRepository.findByProductoIdProducto(ingresoExiste.getProducto().getIdProducto());
-        if(cantVieja> cantNueva){
-             totalARestar = cantVieja- cantNueva;
+        if (cantVieja > cantNueva) {
+            totalARestar = cantVieja - cantNueva;
             esSuma = false;
-        }else if(cantVieja < cantNueva){
-             totalASumar = cantNueva - cantVieja;
+        } else if (cantVieja < cantNueva) {
+            totalASumar = cantNueva - cantVieja;
             esSuma = true;
-        } else if(cantVieja == cantNueva){
+        } else if (cantVieja == cantNueva) {
             stock.setCantidad(stock.getCantidad());
         }
         ingresoExiste.setCantidad(detalleIngreso.getCantidad());
@@ -337,13 +354,19 @@ public class DetalleIngresosController {
         detalleIngresoService.update(ingresoExiste);
 
         int cantFinal;
-        if(esSuma == true){
-            cantFinal = stock.getCantidad() +totalASumar;
+        if (esSuma == true) {
+            cantFinal = stock.getCantidad() + totalASumar;
             stock.setCantidad(cantFinal);
-        }else{
-            cantFinal = stock.getCantidad() -totalARestar;
+        } else {
+            cantFinal = stock.getCantidad() - totalARestar;
             stock.setCantidad(cantFinal);
         }
+
+        if(Objects.equals(stock.getProducto().getFormaVenta().getNombre(), "Por peso")){
+            stock.setCantidadKg((int) (stock.getProducto().getPesoNeto() * stock.getCantidad()));
+            stock.setCantidadRestante(stock.getCantidadKg());
+        }
+
         stockService.update(stock);
         double total = ingresoProductosRepository.calcularTotalIngreso(ingresoProductos.getIdIngreso());
         ingresoProductos.setTotal(total);
@@ -427,6 +450,10 @@ public class DetalleIngresosController {
         Stock stock = stockRepository.findByProductoIdProducto(detalleIngreso.getProducto().getIdProducto());
         int cantidadFinal = stock.getCantidad() + detalleIngreso.getCantidad();
         stock.setCantidad(cantidadFinal);
+        if(Objects.equals(stock.getProducto().getFormaVenta().getNombre(), "Por peso")){
+            stock.setCantidadKg((int) (stock.getProducto().getPesoNeto() * stock.getCantidad()));
+            stock.setCantidadRestante(stock.getCantidadKg());
+        }
         stockService.update(stock);
 
         detalleIngresoService.save(detalleIngreso);
@@ -448,6 +475,10 @@ public class DetalleIngresosController {
         Stock stock = stockRepository.findByProductoIdProducto(detalleIngreso.getProducto().getIdProducto());
         int cantidadFinal = stock.getCantidad() - detalleIngreso.getCantidad();
         stock.setCantidad(cantidadFinal);
+        if(Objects.equals(stock.getProducto().getFormaVenta().getNombre(), "Por peso")){
+            stock.setCantidadKg((int) (stock.getProducto().getPesoNeto() * stock.getCantidad()));
+            stock.setCantidadRestante(stock.getCantidadKg());
+        }
         stockService.update(stock);
 
         idIngreso = detalleIngreso.getIngresoProductos().getIdIngreso();

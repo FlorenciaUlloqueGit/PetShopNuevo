@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Controller
@@ -136,12 +137,17 @@ public class StockController {
 
     @PostMapping
     public String create(@ModelAttribute("stockDtosProdID") StockDtosProdID stockDtosProdID) {
-        int idProd = stockDtosProdID.getIdProducto();
-        System.out.println(idProd);
         Producto producto = productoRepository.findByIdProducto(stockDtosProdID.getIdProducto());
         StockDtos stockDtos = new StockDtos();
         stockDtos.setProducto(producto);
         stockDtos.setCantidad(stockDtosProdID.getCantidad());
+        if(Objects.equals(producto.getFormaVenta().getNombre(), "Por peso")){
+            stockDtos.setCantidadKg((int) (producto.getPesoNeto() * stockDtos.getCantidad()));
+            stockDtos.setCantidadRestante(stockDtos.getCantidadKg());
+        }else{
+            stockDtos.setCantidadKg(0);
+            stockDtos.setCantidadRestante(0);
+        }
         boolean registrado = stockService.save(stockDtos);
         if (registrado == true){
             stockService.save(stockDtos);
@@ -172,6 +178,12 @@ public class StockController {
         stockExiste.setIdStock(stock.getIdStock());
         stockExiste.setProducto(stockExiste.getProducto());
         stockExiste.setCantidad(stock.getCantidad());
+        stockExiste.setCantidadKg(stock.getCantidadKg());
+        stockExiste.setCantidadRestante(stock.getCantidadRestante());
+        if(Objects.equals(stockExiste.getProducto().getFormaVenta().getNombre(), "Por peso")){
+            stockExiste.setCantidadKg((int) (stockExiste.getProducto().getPesoNeto() * stockExiste.getCantidad()));
+            stockExiste.setCantidadRestante(stockExiste.getCantidadKg());
+        }
         stockService.update(stockExiste);
 
         return "redirect:/stocks/update/{idStock}?exito";

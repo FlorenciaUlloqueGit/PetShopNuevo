@@ -14,6 +14,7 @@ public interface ProductoService {
     List<ProductoDto> findAllProductos();
 
     List<Producto>listAllByName(String nombre);
+    List<Producto>listAllByNameXKG(String nombre);
     List<Producto>listAllByCodBarras(long codBarras);
 
     boolean save(ProductoDtos productoDtos);

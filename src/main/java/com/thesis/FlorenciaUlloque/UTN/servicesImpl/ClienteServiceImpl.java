@@ -43,7 +43,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente updateCliente( ClienteRegistroDto clienteRegistroDto) {
+    public Cliente updateCliente(Cliente clienteRegistroDto) {
 
         String email = clienteRegistroDto.getEmail();
         Cliente returnValue;
@@ -55,7 +55,6 @@ public class ClienteServiceImpl implements ClienteService {
             clienteForUpdate.setApellido(clienteRegistroDto.getApellido());
             clienteForUpdate.setNombre(clienteRegistroDto.getNombre());
             clienteForUpdate.setTelefono(clienteRegistroDto.getTelefono());
-            clienteForUpdate.setPass(clienteRegistroDto.getPass());
             clienteForUpdate.setDireccion(clienteRegistroDto.getDireccion());
 
             returnValue = repository.save(clienteForUpdate);
@@ -107,7 +106,7 @@ public class ClienteServiceImpl implements ClienteService {
 
             clienteRegistroDto.setRol(new Rol(1, "cliente"));
 
-            Cliente  newCliente = new Cliente(clienteRegistroDto.getEmail(), clienteRegistroDto.getPass(),
+            Cliente  newCliente = new Cliente(clienteRegistroDto.getEmail(),
                     clienteRegistroDto.getNombre(), clienteRegistroDto.getApellido(), clienteRegistroDto.getTelefono(),
                     clienteRegistroDto.getDireccion(), clienteRegistroDto.getRol());
             repository.save(newCliente);

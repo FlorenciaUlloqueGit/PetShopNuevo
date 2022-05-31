@@ -1,9 +1,19 @@
 package com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos;
 
+import com.thesis.FlorenciaUlloque.UTN.entiities.FormaVenta;
+
 public class ProductoStock {
     private int idProducto;
     private String nombre;
     private long codBarras;
+    private FormaVenta formaVenta;
+
+    public ProductoStock(int idProducto, String nombre, long codBarras, FormaVenta formaVenta) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.codBarras = codBarras;
+        this.formaVenta = formaVenta;
+    }
 
     public ProductoStock(int idProducto, String nombre, long codBarras) {
         this.idProducto = idProducto;
@@ -12,6 +22,14 @@ public class ProductoStock {
     }
 
     public ProductoStock() {
+    }
+
+    public FormaVenta getFormaVenta() {
+        return formaVenta;
+    }
+
+    public void setFormaVenta(FormaVenta formaVenta) {
+        this.formaVenta = formaVenta;
     }
 
     public ProductoStock(int idProducto) {

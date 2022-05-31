@@ -27,5 +27,17 @@ public interface IngresoProductosRepository extends PagingAndSortingRepository<I
     IngresoProductos findByIdIngreso(int idIngreso);
     IngresoProductos findByTotal(double total);
 
+    @Query(value = "select *  from ingreso_productos i join proveedores p \n" +
+            "on p.id_proveedor = i.id_proveedor\n" +
+            "where Month(i.fecha) = month(curdate())\n" +
+            "group by p.nombre order by i.fecha asc", nativeQuery = true)
+
+    List<IngresoProductos> findIngresosbyMoth();
+
+    @Query(value = "select sum(total) 'total' , p.nombre 'proveedor' from ingreso_productos i join proveedores p\n" +
+            "    on p.id_proveedor = i.id_proveedor\n" +
+            "    where Month(i.fecha) = month(curdate()) and p.id_proveedor = :idProveedor\n" +
+            "    group by p.nombre", nativeQuery = true)
+    double sumarTotalPorProveedor(@Param("idProveedor") int idProveedor);
 
 }

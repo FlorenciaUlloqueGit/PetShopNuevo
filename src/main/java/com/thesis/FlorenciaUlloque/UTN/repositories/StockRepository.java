@@ -20,4 +20,6 @@ public interface StockRepository extends PagingAndSortingRepository<Stock,Intege
     List<Stock> findByProductoMarcaNombre(String nombre);
     Stock findByProductoMarcaIdMarca(int idMarca);
 
+
+
 }

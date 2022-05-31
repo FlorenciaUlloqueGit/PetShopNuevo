@@ -3,6 +3,7 @@ package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDetalleVenta;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDetalleVentaParaDetalle;
 import com.thesis.FlorenciaUlloque.UTN.entiities.DetalleEgreso;
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Producto;
@@ -76,7 +77,8 @@ public class DetalleEgresoServiceImpl implements DetalleEgresoService {
             productoDetalle.setNombre(producto.getNombre());
             productoDetalle.setCodBarras(producto.getCodBarras());
             productoDetalle.setCategoria(producto.getCategoria());
-            productoDetalle.setPrecioVenta(producto.getPrecioVenta());
+            double precioVenta = producto.getPrecioVenta();
+            productoDetalle.setPrecioVenta(precioVenta);
             listaDto.add(productoDetalle);
         }
 
@@ -102,4 +104,23 @@ public class DetalleEgresoServiceImpl implements DetalleEgresoService {
         return listaDto;
     }
 
+
+    @Override
+    public List<ProductoDetalleVentaParaDetalle> getDetalleByNombreProductoYTipoVenta(String nombre) {
+        List <Producto>listaReal  =  productoService.listAllByNameXKG(nombre);
+        List<ProductoDetalleVentaParaDetalle> listaDto = new ArrayList<>();
+
+        ProductoDetalleVentaParaDetalle productoDetalle ;
+        for (Producto producto : listaReal) {
+            productoDetalle = new ProductoDetalleVentaParaDetalle();
+            productoDetalle.setIdProducto(producto.getIdProducto());
+            productoDetalle.setNombre(producto.getNombre());
+            productoDetalle.setCategoria(producto.getCategoria());
+            double precioVenta = producto.getPrecioVenta();
+            productoDetalle.setPrecioVenta(precioVenta);
+            listaDto.add(productoDetalle);
+        }
+
+        return listaDto;
+    }
 }

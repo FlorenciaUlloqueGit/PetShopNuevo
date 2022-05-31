@@ -23,15 +23,15 @@ public class LoginController {
         this.vendedoRepository = vendedoRepository;
         this.administradorRepository = administradorRepository;
     }
+/*
 
-
-    @RequestMapping(value="/loginNuevo", method = RequestMethod.GET)
+    @RequestMapping(value="/index", method = RequestMethod.GET)
     public String getLoginCliente(){
-        return "loginNuevo";
+        return "index";
     }
     //cheching login credentials
 
-    @RequestMapping(value="/loginNuevo", method = RequestMethod.POST)
+    @RequestMapping(value="/index", method = RequestMethod.POST)
     public String loginCliente (@ModelAttribute(name = "cliente") Cliente cliente, Model model){
 
         String email = cliente.getEmail();
@@ -53,11 +53,19 @@ public class LoginController {
 
     }
 
+ */
+
 
 
     @RequestMapping(value="/loginAdmin", method = RequestMethod.GET)
     public String getLoginAdmin(){
         return "loginAdmin";
+    }
+    //cheching login credentials
+
+    @RequestMapping(value="/homeAdmin", method = RequestMethod.GET)
+    public String getHomeAdmin(){
+        return "homeAdmin";
     }
     //cheching login credentials
 
@@ -82,13 +90,13 @@ public class LoginController {
     }
 
 
-    @RequestMapping(value="/loginVendedor", method = RequestMethod.GET)
+    @RequestMapping(value="/index", method = RequestMethod.GET)
     public String getLoginVendedor(){
-        return "loginVendedor";
+        return "index";
     }
     //cheching login credentials
 
-    @RequestMapping(value="/loginVendedor", method = RequestMethod.POST)
+    @RequestMapping(value="/index", method = RequestMethod.POST)
     public String loginVendedor (@ModelAttribute(name = "vendedor") Vendedor vendedor, Model model){
 
         String usuario = vendedor.getUsuario();
@@ -103,7 +111,7 @@ public class LoginController {
         } else {
             model.addAttribute("invalidCredentials", true);
             //returnin again a login page
-            return "redirect:/loginVendedor?error";
+            return "redirect:/index?error";
         }
 
     }

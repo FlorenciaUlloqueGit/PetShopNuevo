@@ -30,11 +30,25 @@ public class RegistroController {
 
     @PostMapping //registra el usuario y redirige.
     public String registrarUsuario(@ModelAttribute("cliente") ClienteRegistroDto clienteRegistroDto){
-            clienteService.saveRegistro(clienteRegistroDto);
+
             boolean registrado = clienteService.saveRegistro(clienteRegistroDto);
-            if (registrado == true){
-                return "redirect:/registro?error";
+            long tel = clienteRegistroDto.getTelefono();
+            String telefono = String.valueOf(tel);
+           int tamTel =  telefono.length();
+
+            if(tel == 0) {
+                return "redirect:/registro?errorTelefono0";
+            }
+        if(tamTel < 6 || tamTel >= 12) {
+            return "redirect:/registro?errorTelefonoLenght";
+        }
+
+
+
+        if (registrado == true){
+                return "redirect:/registro?errorTelefonoLenght";
             }else {
+                clienteService.saveRegistro(clienteRegistroDto);
                 return "redirect:/registro?exito";
             }
 

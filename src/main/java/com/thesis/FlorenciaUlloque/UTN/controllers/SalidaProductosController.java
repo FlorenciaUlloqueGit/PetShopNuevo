@@ -6,6 +6,7 @@ import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.EgresoIdTotal;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.DetalleEgresoDtoIdEgreso;
 import com.thesis.FlorenciaUlloque.UTN.entiities.*;
 import com.thesis.FlorenciaUlloque.UTN.repositories.*;
+import com.thesis.FlorenciaUlloque.UTN.services.DetalleEgresoService;
 import com.thesis.FlorenciaUlloque.UTN.services.SalidaProductosService;
 import com.thesis.FlorenciaUlloque.UTN.services.StockService;
 import org.springframework.stereotype.Controller;
@@ -26,15 +27,17 @@ public class SalidaProductosController {
     private final DetalleEgresoRepository detalleEgresoRepository;
     private final StockRepository stockRepository;
     private final StockService stockService;
+    private final DetalleEgresoService detalleEgresoService;
 
     public SalidaProductosController(SalidaProductosService salidaProductosService, SalidaProductosRepository repository,
                                      DetalleEgresoRepository detalleEgresoRepository, StockRepository stockRepository,
-                                     StockService stockService) {
+                                     StockService stockService, DetalleEgresoService detalleEgresoService) {
         this.salidaProductosService = salidaProductosService;
         this.repository = repository;
         this.detalleEgresoRepository = detalleEgresoRepository;
         this.stockRepository = stockRepository;
         this.stockService = stockService;
+        this.detalleEgresoService = detalleEgresoService;
     }
 
 
@@ -125,7 +128,8 @@ public class SalidaProductosController {
         SalidaProducto egreso = repository.findByIdEgreso((idEgres));
 
         double total = repository.calcularTotalEgreso(idEgres);
-        egreso.setTotal(total);
+        double totalRedondeado = Math.round(total*100.0/100.0);
+        egreso.setTotal(totalRedondeado);
         salidaProductosService.updateEgreso(egreso);
 
         List<DetalleEgreso> listaDetalles = detalleEgresoRepository.findAllBySalidaProductoIdEgreso(idEgres);
@@ -167,16 +171,16 @@ public class SalidaProductosController {
 
     int idEgreso;
 
-    @GetMapping("/update/{idIngreso}")
-    public String mostrarformUpdate(@PathVariable int idEgr, Model model) {
+    @GetMapping("/update/{idEgreso}")
+    public String mostrarformUpdate(@PathVariable int idEgreso, Model model) {
 
         //   IngresoProductos ingreso = repository.findByIdIngreso(idIngreso);
         List<Cliente> clientes = salidaProductosService.listaClientes();
         List<FormaPago> formaPagos = salidaProductosService.listaFormasPagos();
 
-        idEgreso = idEgr;
+       // idEgreso = idEgresos;
 
-        model.addAttribute("egreso", repository.findByIdEgreso(idEgr));
+        model.addAttribute("egreso", repository.findByIdEgreso(idEgreso));
         model.addAttribute("clientes", clientes);
         model.addAttribute("formaPagos", formaPagos);
         return "UpdateEgreso";
@@ -184,11 +188,11 @@ public class SalidaProductosController {
 
 
     @PostMapping("/updateEgreso/{idEgreso}")
-    public String updatearVendedor(@ModelAttribute("ingreso") EgresoDto egresoDto,
-                                   @PathVariable int idEgr) {
+    public String updatearVendedor(@ModelAttribute("egreso") EgresoDto egresoDto,
+                                   @PathVariable int idEgreso) {
 
-        idEgreso = idEgr;
-        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgr);
+       // idEgreso = this.idEgr;
+        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgreso);
         egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
         egresoExiste.setFecha(egresoDto.getFecha());
         egresoExiste.setCliente(egresoDto.getCliente());
@@ -232,12 +236,21 @@ public class SalidaProductosController {
         List<DetalleEgreso> detalleIngresoList = detalleEgresoRepository.findAllBySalidaProductoIdEgreso(idEgreso);
         for (DetalleEgreso detalleEgreso : detalleIngresoList) {
             Producto producto = detalleEgreso.getProducto();
-            int cant = detalleEgreso.getCantidad();
+            int cant = (int) detalleEgreso.getCantidad();
             Stock stock = stockRepository.findByProductoIdProducto(producto.getIdProducto());
-            stock.setCantidad(stock.getCantidad() + cant);
+            if(stock.getProducto().getFormaVenta().getIdFormaVenta() == 2){
+                float cantRestante = stock.getCantidadRestante() + detalleEgreso.getCantidad();
+                stock.setCantidadRestante(cantRestante);
+                int cantidadBolsas = (int) Math.ceil(cantRestante/stock.getProducto().getPesoNeto());
+                stock.setCantidad(cantidadBolsas);
+            }else{
+                stock.setCantidad(stock.getCantidad() + cant);
+            }
+
             stockService.update(stock);
-            salidaProductosService.deleteEgreso(idEgreso);
+            detalleEgresoService.delete(detalleEgreso.getIdDetalleEgreso());
         }
+        salidaProductosService.deleteEgreso(idEgreso);
         return "redirect:/ventas/listar?exito";
 
     }

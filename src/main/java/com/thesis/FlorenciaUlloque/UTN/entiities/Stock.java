@@ -10,6 +10,8 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idStock;
     private int cantidad;
+    private int cantidadKg;
+    private float cantidadRestante;
 
     @JoinColumn(name = "idProducto")
     @OneToOne (fetch =FetchType.LAZY)
@@ -18,6 +20,22 @@ public class Stock {
     public Stock(Producto producto, int cantidad) {
         this.producto = producto;
         this.cantidad = cantidad;
+    }
+
+    public int getCantidadKg() {
+        return cantidadKg;
+    }
+
+    public void setCantidadKg(int cantidadKg) {
+        this.cantidadKg = cantidadKg;
+    }
+
+    public float getCantidadRestante() {
+        return cantidadRestante;
+    }
+
+    public void setCantidadRestante(float cantidadRestante) {
+        this.cantidadRestante = cantidadRestante;
     }
 
     public int getIdStock() {
@@ -47,6 +65,21 @@ public class Stock {
     public Stock(int idStock, int cantidad, Producto producto) {
         this.idStock = idStock;
         this.cantidad = cantidad;
+        this.producto = producto;
+    }
+
+    public Stock(int idStock, int cantidad, int cantidadKg, float cantidadRestante, Producto producto) {
+        this.idStock = idStock;
+        this.cantidad = cantidad;
+        this.cantidadKg = cantidadKg;
+        this.cantidadRestante = cantidadRestante;
+        this.producto = producto;
+    }
+
+    public Stock(int cantidad, int cantidadKg, float cantidadRestante, Producto producto) {
+        this.cantidad = cantidad;
+        this.cantidadKg = cantidadKg;
+        this.cantidadRestante = cantidadRestante;
         this.producto = producto;
     }
 

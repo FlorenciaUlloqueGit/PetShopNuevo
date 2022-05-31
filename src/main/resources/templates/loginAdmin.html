@@ -6,7 +6,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
 </head>
 <body style="background-color: rgb(250, 237, 202)">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
@@ -25,18 +25,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/login}">Login</a>
-                </li>
+
             </ul>
         </div>
     </div>
@@ -113,33 +102,28 @@
 
                 <br>
                 <div class="form-group" align="left">
-					<span>Si sos cliente registrado <a th:href="@{/loginNuevo}">apretà
-							aqui</a></span>
-                    <br>
-                    <span>Si sos vendedor <a th:href="@{/loginVendedor}">ingresá
+                    <span>Si sos vendedor <a th:href="@{/index}">ingresá
                          aquí</a></span> <br>
                 </div>
             </div>
             <div class="col-md-8 banner-sec">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                    </ol>
-                    <div class="carousel-inner" role="listbox">
-                        <div class="carousel-item active">
-                            <img class="d-block img-fluid" src="https://www.purina-latam.com/sites/g/files/auxxlc391/files/styles/kraken_generic_max_width_960/public/purina-perros-y-gatos-pueden-ser-amigos.png?itok=h-Ls857q" alt="First slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block img-fluid" src="https://fotografias.antena3.com/clipping/cmsimages01/2021/08/03/FBA37CA8-72F1-4DE1-A359-9A0EBDED7AAB/98.jpg?crop=1920,1080,x0,y99&width=1900&height=1069&optimize=low&format=webply" alt="First slide">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                        <img class="d-block img-fluid" src="https://fotografias.antena3.com/clipping/cmsimages01/2021/08/03/FBA37CA8-72F1-4DE1-A359-9A0EBDED7AAB/98.jpg?crop=1920,1080,x0,y99&width=1900&height=1069&optimize=low&format=webply" alt="First slide">
 
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block img-fluid" src="https://www.zooplus.es/magazine/wp-content/uploads/2021/04/Acaros-en-conejos.jpeg" alt="First slide">
-                        </div>
                     </div>
-
+                    <div class="carousel-item ">
+                        <img class="d-block img-fluid" src="https://p4.wallpaperbetter.com/wallpaper/687/810/371/animals-babies-cats-cute-wallpaper-preview.jpg" alt="First slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block img-fluid" src="https://www.zooplus.es/magazine/wp-content/uploads/2021/04/Acaros-en-conejos.jpeg" alt="First slide">
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

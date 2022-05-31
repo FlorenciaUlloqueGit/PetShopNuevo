@@ -1,7 +1,6 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.*;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.*;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.*;
 import com.thesis.FlorenciaUlloque.UTN.entiities.*;
 import com.thesis.FlorenciaUlloque.UTN.repositories.*;
@@ -106,6 +105,20 @@ public class DetalleEgresosController {
 
         return "redirect:/detalleEgresos/"+idEgresos;
     }
+    @GetMapping("/buscarNombreVentaGramo")
+    public String buscarNombreVentaGramo(@ModelAttribute("productoSoloNombre") ProductoSoloNombre productoSoloNombre) {
+
+        nombre = productoSoloNombre.getNombre();
+        List<ProductoDetalleVentaParaDetalle> listaProductos = detalleEgresoService.getDetalleByNombreProductoYTipoVenta(nombre);
+
+        if(listaProductos.size() < 1){
+            return "redirect:/detalleEgresos/crearDetalleKG/"+idEgresos+"?errorNombre";
+        }
+
+        return "redirect:/detalleEgresos/crearDetalleKG/"+idEgresos;
+    }
+
+
     @GetMapping("/buscarNombreDetalleEspecifico")
     public String buscarNombre2(@ModelAttribute("productoSoloNombre") ProductoSoloNombre productoSoloNombre) {
 
@@ -118,6 +131,19 @@ public class DetalleEgresosController {
 
         return "redirect:/detalleEgresos/crear/"+idEgresos;
     }
+    @GetMapping("/buscarNombreDetalleEspecificoGramo")
+    public String buscarNombre3(@ModelAttribute("productoSoloNombre") ProductoSoloNombre productoSoloNombre) {
+
+        nombre = productoSoloNombre.getNombre();
+        List<ProductoDetalleVentaParaDetalle> listaProductos = detalleEgresoService.getDetalleByNombreProductoYTipoVenta(nombre);
+
+        if(listaProductos.size() < 1){
+            return "redirect:/detalleEgresos/crearEgresoKG/"+idEgresos+"?errorNombre";
+        }
+
+        return "redirect:/detalleEgresos/crearEgresoKG/"+idEgresos;
+    }
+
 
 
     long codBarras;
@@ -147,6 +173,20 @@ public class DetalleEgresosController {
         return new DetalleEgreso();
     }
 
+    //mostrarFormCrearDetalleKG
+    @GetMapping("crearDetalleKG/{idEgreso}")
+    public String mostrarFormularioConIDKG(Model model, @PathVariable int idEgreso) {
+
+        idEgresos = idEgreso;
+
+        List<ProductoDetalleVentaParaDetalle> listaProductos = detalleEgresoService.getDetalleByNombreProductoYTipoVenta(nombre);
+
+
+        DetalleIEgresoDtos detalle = new DetalleIEgresoDtos();
+        model.addAttribute("detalleDtos", detalle);
+        model.addAttribute("productoDetalleVentaParaDetalle", listaProductos);
+        return "crearDetalleEgresoXKg";
+    }
     @GetMapping("{idEgreso}")
     public String mostrarFormularioConID(Model model, @PathVariable int idEgreso) {
 
@@ -157,7 +197,7 @@ public class DetalleEgresosController {
 
         if(codBarras != 0){
             List<ProductoDetalleVenta> listaProductos2 = detalleEgresoService.getDetalleByCodBarrasProducto(codBarras);
-            model.addAttribute("ProductoDetalleVenta", listaProductos2);
+            model.addAttribute("productoDetalleVenta", listaProductos2);
             model.addAttribute("salidaProducto",salidaProducto);
             return "crearDetalleEgreso";
         }
@@ -165,7 +205,7 @@ public class DetalleEgresosController {
 
         DetalleIEgresoDtos detalle = new DetalleIEgresoDtos();
         model.addAttribute("detalleDtos", detalle);
-        model.addAttribute("ProductoDetalleVenta", listaProductos);
+        model.addAttribute("productoDetalleVenta", listaProductos);
         return "crearDetalleEgreso";
     }
 
@@ -218,7 +258,7 @@ public class DetalleEgresosController {
 
         productoService.update(productoExiste);
 
-        return "redirect:/detalleIngresos/"+idEgresos;
+        return "redirect:/detalleEgresos/"+idEgresos;
 
     }
 
@@ -236,7 +276,7 @@ public class DetalleEgresosController {
 
         if(codBarras != 0){
             List<ProductoDetalleVenta> listaProductos2 = detalleEgresoService.getDetalleByCodBarrasProducto(codBarras);
-            model.addAttribute("ProductoDetalleVenta", listaProductos2);
+            model.addAttribute("productoDetalleVenta", listaProductos2);
             model.addAttribute("ingresoIdTotal",salidaProducto );
             return "crearDetalleEgreso";
         }
@@ -244,7 +284,7 @@ public class DetalleEgresosController {
 
         DetalleIEgresoDtos detalle = new DetalleIEgresoDtos();
         model.addAttribute("detalleDtos", detalle);
-        model.addAttribute("ProductoDetalleVenta", listaProductos);
+        model.addAttribute("productoDetalleVenta", listaProductos);
         return "crearDetalleEgreso";
     }
 
@@ -258,23 +298,61 @@ public class DetalleEgresosController {
         DetalleEgreso detalleEgreso = new DetalleEgreso();
         detalleEgreso.setSalidaProducto(salidaProductosRepository.findByIdEgreso(idEgreso));
         detalleEgreso.setProducto(producto);
-        detalleEgreso.setCantidad(detalleEgresoDtoCrear.getCantidad());
+        detalleEgreso.setCantidad((int) detalleEgresoDtoCrear.getCantidad());
         SalidaProducto salidaProducto = salidaProductosRepository.findByIdEgreso(detalleEgresoDtoCrear.getIdEgreso());
         detalleEgreso.setSalidaProducto(salidaProducto);
-        double subtotal = detalleEgresoDtoCrear.getPrecioVenta() * detalleEgresoDtoCrear.getCantidad();
+        double subtotal = producto.getPrecioVenta() * detalleEgresoDtoCrear.getCantidad();
         detalleEgreso.setPrecio(subtotal);
 
-        int cantidadIngresada = detalleEgreso.getCantidad();
+        float cantidadIngresada = detalleEgreso.getCantidad();
 
         Stock stock = stockRepository.findByProductoIdProducto(detalleEgreso.getProducto().getIdProducto());
-        int cantidadFinal = stock.getCantidad() - detalleEgreso.getCantidad();
+        float cantidadFinal = stock.getCantidad() - detalleEgreso.getCantidad();
 
         if(detalleEgreso.getCantidad()<= 0){
             return "redirect:/detalleEgresos/"+ salidaProducto.getIdEgreso() + "?errorCantidadNegativa";
         }else if(cantidadIngresada> stock.getCantidad()){
             return "redirect:/detalleEgresos/"+ salidaProducto.getIdEgreso() + "?errorCantidad";
         }else{
-            stock.setCantidad(cantidadFinal);
+            stock.setCantidad((int) cantidadFinal);
+            stockService.update(stock);
+
+            detalleEgresoService.save(detalleEgreso);
+            return "redirect:/ventas/agregarDetalle";
+        }
+    }
+    @RequestMapping( value = "crearDetalleXKg/{idEgreso}")
+    public String createVentaKg(@ModelAttribute("detalleEgresoDtoCrear") DetalleEgresoDtoCrear detalleEgresoDtoCrear,
+                         @PathVariable int idEgreso) {
+
+        int idProd = detalleEgresoDtoCrear.getIdProducto();
+        Producto producto = productoRepository.findByIdProducto(idProd);
+
+        DetalleEgreso detalleEgreso = new DetalleEgreso();
+        detalleEgreso.setProducto(producto);
+        SalidaProducto salidaProducto = salidaProductosRepository.findByIdEgreso(detalleEgresoDtoCrear.getIdEgreso());
+        detalleEgreso.setSalidaProducto(salidaProducto);
+        detalleEgreso.setCantidad(detalleEgresoDtoCrear.getCantidad());
+        double subtotal = producto.getPrecioVenta() * detalleEgresoDtoCrear.getCantidad();
+        double subtotalRedondeado = Math.round(subtotal*100.0/100.0);
+        detalleEgreso.setPrecio(subtotalRedondeado);
+
+        float cantidadIngresada = detalleEgreso.getCantidad();
+
+        Stock stock = stockRepository.findByProductoIdProducto(detalleEgreso.getProducto().getIdProducto());
+        float cantidadRestante = stock.getCantidadRestante() -detalleEgreso.getCantidad();
+
+        if(detalleEgreso.getCantidad()<= 0){
+            return "redirect:/detalleEgresos/crearDetalleXKg/"+ salidaProducto.getIdEgreso() + "?errorCantidadNegativa";
+        }else if(cantidadIngresada> stock.getCantidadRestante()){
+            return "redirect:/detalleEgresos/crearDetalleXKg/"+ salidaProducto.getIdEgreso() + "?errorCantidad";
+        }else{
+            stock.setCantidadKg(stock.getCantidadKg());
+            stock.setCantidad(stock.getCantidad());
+            int cantidadBolsas = (int) Math.ceil(cantidadRestante/producto.getPesoNeto());
+                stock.setCantidad(cantidadBolsas);
+
+            stock.setCantidadRestante(cantidadRestante);
             stockService.update(stock);
 
             detalleEgresoService.save(detalleEgreso);
@@ -290,7 +368,7 @@ public class DetalleEgresosController {
         DetalleEgresoDtoUpdate dto = new DetalleEgresoDtoUpdate();
         dto.setIdDetalleEgreso(detalle.getIdDetalleEgreso());
         dto.setIdEgreso(detalle.getSalidaProducto().getIdEgreso());
-        dto.setCantidad(detalle.getCantidad());
+        dto.setCantidad((int) detalle.getCantidad());
         dto.setProducto(detalle.getProducto());
 
         model.addAttribute("detalleEgresoDtoUpdate", dto);
@@ -303,20 +381,21 @@ public class DetalleEgresosController {
     public String updatearVendedor(@ModelAttribute("detalleEgresoDtoUpdate")DetalleEgresoDtoUpdate detalleEgreso,
                                    @PathVariable int idDetalleEgreso){
 
-        DetalleEgreso ingresoExiste = repository.findByIdDetalleEgreso(idDetalleEgreso);
+        DetalleEgreso egresoExiste = repository.findByIdDetalleEgreso(idDetalleEgreso);
 
-        SalidaProducto salidaProducto = salidaProductosRepository.findByIdEgreso(ingresoExiste.getSalidaProducto().
+        SalidaProducto salidaProducto = salidaProductosRepository.findByIdEgreso(egresoExiste.getSalidaProducto().
                 getIdEgreso());
-        ingresoExiste.setIdDetalleEgreso(idDetalleEgreso);
-        ingresoExiste.setSalidaProducto(salidaProducto);
-        ingresoExiste.setProducto(detalleEgreso.getProducto());
+        egresoExiste.setIdDetalleEgreso(idDetalleEgreso);
+        egresoExiste.setSalidaProducto(salidaProducto);
+        egresoExiste.setProducto(detalleEgreso.getProducto());
 
-        int cantVieja = ingresoExiste.getCantidad();
-        int cantNueva = detalleEgreso.getCantidad();
-        int totalASumar = 0;
-        int totalARestar = 0;
+        float cantVieja = egresoExiste.getCantidad();
+        float cantNueva = detalleEgreso.getCantidad();
+        float totalASumar = 0;
+        float totalARestar = 0;
         boolean esSuma = false;
-        Stock stock = stockRepository.findByProductoIdProducto(ingresoExiste.getProducto().getIdProducto());
+        Stock stock = stockRepository.findByProductoIdProducto(egresoExiste.getProducto().getIdProducto());
+        float cantidadRestante;
         if(cantVieja> cantNueva){
             totalARestar = cantVieja - cantNueva;
             esSuma = false;
@@ -325,19 +404,39 @@ public class DetalleEgresosController {
             esSuma = true;
         } else if(cantVieja == cantNueva){
             stock.setCantidad(stock.getCantidad());
+            stock.setCantidadRestante(stock.getCantidadRestante());
+            stock.setCantidadKg(stock.getCantidadKg());
         }
-        ingresoExiste.setCantidad(detalleEgreso.getCantidad());
-        double precio = ingresoExiste.getProducto().getPrecioCompra() * ingresoExiste.getCantidad();
-        ingresoExiste.setPrecio(precio);
-        detalleEgresoService.update(ingresoExiste);
+        egresoExiste.setCantidad(detalleEgreso.getCantidad());
+        double precio = egresoExiste.getProducto().getPrecioVenta() * egresoExiste.getCantidad();
+        double precioRedondeado = Math.round((precio*100.0) /100.0);
+        egresoExiste.setPrecio(precioRedondeado);
+        detalleEgresoService.update(egresoExiste);
 
         int cantFinal;
         if(esSuma == true){
-            cantFinal = stock.getCantidad() - totalASumar;
-            stock.setCantidad(cantFinal);
+            if(stock.getProducto().getFormaVenta().getIdFormaVenta() == 2){
+                cantidadRestante = stock.getCantidadRestante() - totalASumar;
+                stock.setCantidadRestante(cantidadRestante);
+                int cantidadBolsas = (int) Math.ceil(cantidadRestante/stock.getProducto().getPesoNeto());
+                stock.setCantidad(cantidadBolsas);
+            } else{
+
+                cantFinal = (int) (stock.getCantidad() - totalASumar);
+                stock.setCantidad(cantFinal);
+            }
+
         }else{
-            cantFinal = stock.getCantidad() + totalARestar;
-            stock.setCantidad(cantFinal);
+            if(stock.getProducto().getFormaVenta().getIdFormaVenta() == 2){
+                cantidadRestante = stock.getCantidadRestante() + totalARestar;
+                stock.setCantidadRestante(cantidadRestante);
+                int cantidadBolsas = (int) Math.ceil(cantidadRestante/stock.getProducto().getPesoNeto());
+                stock.setCantidad(cantidadBolsas);
+            } else{
+
+                cantFinal = (int) (stock.getCantidad() + totalARestar);
+                stock.setCantidad(cantFinal);
+            }
         }
         stockService.update(stock);
         double total = salidaProductosRepository.calcularTotalEgreso(salidaProducto.getIdEgreso());
@@ -380,6 +479,16 @@ public class DetalleEgresosController {
         detalleSoloIdEgreso.setIdEgreso(idEgreso);
         return "redirect:/detalleEgresos/crear/"+idEgreso;
     }
+    @GetMapping("/mostrarIdEgresoGramo/{idEgreso}")
+    public String verIdIngresoGRamo(@ModelAttribute("detalleSoloIdEgreso") DetalleSoloIdEgreso detalleSoloIdEgreso,
+                               @PathVariable int idEgreso) {
+
+        int idEgress = idEgreso;
+        idEgreso = idEgr;
+        detalleSoloIdEgreso.setIdEgreso(idEgreso);
+        return "redirect:/detalleEgresos/crearEgresoKG/"+idEgreso;
+    }
+
 
     @GetMapping("/crear/{idEgreso}")
     public String mostrarFormularioConID2(Model model, @PathVariable int idEgreso) {
@@ -399,8 +508,22 @@ public class DetalleEgresosController {
 
         DetalleIEgresoDtos detalle = new DetalleIEgresoDtos();
         model.addAttribute("detalleDtos", detalle);
-        model.addAttribute("ProductoDetalleVenta", listaProductos);
+        model.addAttribute("productoDetalleVenta", listaProductos);
         return "crearDetalleEgresoEspecifico";
+    }
+
+    @GetMapping("/crearEgresoKG/{idEgreso}")
+    public String mostrarFormularioConID3(Model model, @PathVariable int idEgreso) {
+
+        idEgreso = idEgr;
+
+        List<ProductoDetalleVentaParaDetalle> listaProductos = detalleEgresoService.getDetalleByNombreProductoYTipoVenta(nombre);
+
+
+        DetalleIEgresoDtos detalle = new DetalleIEgresoDtos();
+        model.addAttribute("detalleDtos", detalle);
+        model.addAttribute("productoDetalleVentaParaDetalle", listaProductos);
+        return "crearDetalleEgresoEspecifico2";
     }
 
     @PostMapping("/crearDetalleDesdeLista/{idEgreso}")
@@ -415,18 +538,53 @@ public class DetalleEgresosController {
         detalleEgreso.setSalidaProducto(salidaProductosRepository.findByIdEgreso(idEgreso));
         detalleEgreso.setProducto(producto);
         detalleEgreso.setCantidad(detalleEgresoDtoCrear.getCantidad());
-        SalidaProducto salidaProducto = salidaProductosRepository.findByIdEgreso(detalleEgresoDtoCrear.getIdEgreso());
-        detalleEgreso.setSalidaProducto(salidaProducto);
-        double subtotal = detalleEgresoDtoCrear.getPrecioVenta() * detalleEgresoDtoCrear.getCantidad();
+        double subtotal = producto.getPrecioVenta() * detalleEgresoDtoCrear.getCantidad();
         detalleEgreso.setPrecio(subtotal);
 
         Stock stock = stockRepository.findByProductoIdProducto(detalleEgreso.getProducto().getIdProducto());
-        int cantidadFinal = stock.getCantidad() - detalleEgreso.getCantidad();
+        int cantidadFinal = (int) (stock.getCantidad() - detalleEgreso.getCantidad());
         stock.setCantidad(cantidadFinal);
         stockService.update(stock);
 
         detalleEgresoService.save(detalleEgreso);
         double totalIngreso = salidaProductosRepository.calcularTotalEgreso(idEgreso);
+        SalidaProducto salidaProducto = detalleEgreso.getSalidaProducto();
+        salidaProducto.setTotal(totalIngreso);
+        salidaProductosService.updateEgreso(salidaProducto);
+
+
+        return "redirect:/detalleEgresos/listar/"+idEgreso;
+    }
+    @PostMapping("/crearDetalleDesdeListaGramo/{idEgreso}")
+    public String createSinceLista2(@ModelAttribute("detalleEgresoDtoCrear") DetalleEgresoDtoCrear detalleEgresoDtoCrear,
+                                   @PathVariable int idEgreso) {
+
+        idEgreso = idEgr;
+        int idProd = detalleEgresoDtoCrear.getIdProducto();
+        Producto producto = productoRepository.findByIdProducto(idProd);
+
+        DetalleEgreso detalleEgreso = new DetalleEgreso();
+        detalleEgreso.setSalidaProducto(salidaProductosRepository.findByIdEgreso(idEgreso));
+        detalleEgreso.setProducto(producto);
+        detalleEgreso.setCantidad(detalleEgresoDtoCrear.getCantidad());
+        double subtotal = producto.getPrecioVenta() * detalleEgresoDtoCrear.getCantidad();
+        detalleEgreso.setPrecio(subtotal);
+
+        Stock stock = stockRepository.findByProductoIdProducto(detalleEgreso.getProducto().getIdProducto());
+        int cantidadFinal = (int) (stock.getCantidad() - detalleEgreso.getCantidad());
+        stock.setCantidad(cantidadFinal);
+        if(stock.getProducto().getFormaVenta().getIdFormaVenta() == 2){
+            float cantidadRestante = stock.getCantidadRestante() - detalleEgreso.getCantidad();
+            stock.setCantidadRestante(cantidadRestante);
+            int cantidadBolsas = (int) Math.ceil(cantidadRestante/stock.getProducto().getPesoNeto());
+            stock.setCantidad(cantidadBolsas);
+        }
+
+        stockService.update(stock);
+
+        detalleEgresoService.save(detalleEgreso);
+        double totalIngreso = salidaProductosRepository.calcularTotalEgreso(idEgreso);
+        SalidaProducto salidaProducto = detalleEgreso.getSalidaProducto();
         salidaProducto.setTotal(totalIngreso);
         salidaProductosService.updateEgreso(salidaProducto);
 
@@ -442,8 +600,16 @@ public class DetalleEgresosController {
         DetalleEgreso detalleEgreso = repository.findByIdDetalleEgreso(idDetalleEgreso);
 
         Stock stock = stockRepository.findByProductoIdProducto(detalleEgreso.getProducto().getIdProducto());
-        int cantidadFinal = stock.getCantidad() + detalleEgreso.getCantidad();
-        stock.setCantidad(cantidadFinal);
+        int cantidadFinal = (int) (stock.getCantidad() + detalleEgreso.getCantidad());
+        if(stock.getProducto().getFormaVenta().getIdFormaVenta() == 2){
+            float cantRestante = stock.getCantidadRestante() + detalleEgreso.getCantidad();
+            stock.setCantidadRestante(cantRestante);
+            int cantidadBolsas = (int) Math.ceil(cantRestante/stock.getProducto().getPesoNeto());
+            stock.setCantidad(cantidadBolsas);
+
+        }else{
+            stock.setCantidad(cantidadFinal);
+        }
         stockService.update(stock);
 
         idEgreso = detalleEgreso.getSalidaProducto().getIdEgreso();

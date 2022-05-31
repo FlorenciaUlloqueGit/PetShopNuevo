@@ -6,7 +6,7 @@ public class DetalleEgresoDtoUpdate {
     private int idDetalleEgreso;
     private int idEgreso;
     private Producto producto;
-    private int cantidad;
+    private float cantidad;
 
     public int getIdDetalleEgreso() {
         return idDetalleEgreso;
@@ -32,11 +32,11 @@ public class DetalleEgresoDtoUpdate {
         this.producto = producto;
     }
 
-    public int getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(float cantidad) {
         this.cantidad = cantidad;
     }
 }

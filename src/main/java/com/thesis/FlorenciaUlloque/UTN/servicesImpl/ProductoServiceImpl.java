@@ -110,6 +110,11 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public List<Producto> listAllByNameXKG(String nombre) {
+        return repository.findAllProductosByNameXGramo(nombre);
+    }
+
+    @Override
     public List<Producto> listAllByCodBarras(long codBarras) {
         return repository.findAllByCodBarras(codBarras);
     }

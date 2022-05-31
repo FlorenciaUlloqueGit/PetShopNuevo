@@ -37,6 +37,8 @@ public class StockServiceImpl implements StockService {
         stockForUpdate.setIdStock(stock.getIdStock());
         stockForUpdate.setCantidad(stock.getCantidad());
         stockForUpdate.setProducto(stock.getProducto());
+        stockForUpdate.setCantidadKg(stock.getCantidadKg());
+        stockForUpdate.setCantidadRestante(stock.getCantidadRestante());
 
         returnValue = repository.save(stockForUpdate);
         return returnValue;
@@ -64,6 +66,8 @@ public class StockServiceImpl implements StockService {
             stockDto.setIdStock(stock.getIdStock());
             stockDto.setCantidad(stock.getCantidad());
             stockDto.setProducto(stock.getProducto());
+            stockDto.setCantidadKg(stock.getCantidadKg());
+            stockDto.setCantidadRestante(stock.getCantidadRestante());
             listaDto.add(stockDto);
         }
 
@@ -75,9 +79,11 @@ public class StockServiceImpl implements StockService {
         boolean registrado;
         if (repository.findByProductoIdProducto(stockDtos.getProducto().getIdProducto()) != null) {
             registrado = true;
+
         } else{
             registrado = false;
-            Stock newStock = new Stock(stockDtos.getProducto(), stockDtos.getCantidad());
+            Stock newStock = new Stock(stockDtos.getCantidad(), stockDtos.getCantidadKg(),
+                    stockDtos.getCantidadRestante(),stockDtos.getProducto());
 
             repository.save(newStock);
         }
@@ -95,6 +101,7 @@ public class StockServiceImpl implements StockService {
             productoStock.setIdProducto(producto.getIdProducto());
             productoStock.setNombre(producto.getNombre());
             productoStock.setCodBarras(producto.getCodBarras());
+            productoStock.setFormaVenta(producto.getFormaVenta());
             listaDto.add(productoStock);
         }
 
@@ -112,6 +119,7 @@ public class StockServiceImpl implements StockService {
             productoStock.setIdProducto(producto.getIdProducto());
             productoStock.setNombre(producto.getNombre());
             productoStock.setCodBarras(producto.getCodBarras());
+            productoStock.setFormaVenta(producto.getFormaVenta());
             listaDto.add(productoStock);
         }
 

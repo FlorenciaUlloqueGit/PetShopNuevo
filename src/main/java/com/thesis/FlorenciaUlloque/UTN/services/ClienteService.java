@@ -10,7 +10,7 @@ import java.util.List;
 public interface ClienteService {
 
     List<Cliente> getAllCliente(int page, int limit);
-    Cliente updateCliente(ClienteRegistroDto clienteRegistroDto);
+    Cliente updateCliente(Cliente clienteRegistroDto);
     void deleteCliente(int id);
 
     boolean saveRegistro(ClienteRegistroDto clienteRegistroDto);

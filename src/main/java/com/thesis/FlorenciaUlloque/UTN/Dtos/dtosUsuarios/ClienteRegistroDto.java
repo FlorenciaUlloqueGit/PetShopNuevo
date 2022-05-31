@@ -6,7 +6,6 @@ public class ClienteRegistroDto {
 
     private int idCliente ;
     private String email;
-    private String pass;
     private String nombre;
     private String apellido;
     private long telefono;
@@ -45,13 +44,6 @@ public class ClienteRegistroDto {
         this.email = email;
     }
 
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
 
     public String getNombre() {
         return nombre;
@@ -77,10 +69,9 @@ public class ClienteRegistroDto {
         this.telefono = telefono;
     }
 
-    public ClienteRegistroDto(int idCliente, String email, String pass, String nombre, String apellido, long telefono, String direccion, Rol rol) {
+    public ClienteRegistroDto(int idCliente, String email, String nombre, String apellido, long telefono, String direccion, Rol rol) {
         this.idCliente = idCliente;
         this.email = email;
-        this.pass = pass;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
@@ -91,9 +82,8 @@ public class ClienteRegistroDto {
     public ClienteRegistroDto() {
     }
 
-    public ClienteRegistroDto(String email, String pass, String nombre, String apellido, long telefono, String direccion, Rol rol) {
+    public ClienteRegistroDto(String email, String nombre, String apellido, long telefono, String direccion, Rol rol) {
         this.email = email;
-        this.pass = pass;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;

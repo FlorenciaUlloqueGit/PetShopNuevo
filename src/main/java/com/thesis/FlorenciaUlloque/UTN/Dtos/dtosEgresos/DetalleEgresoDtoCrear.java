@@ -2,7 +2,7 @@ package com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos;
 
 public class DetalleEgresoDtoCrear {
     private int idEgreso;
-    private int cantidad;
+    private float cantidad;
     private int  idProducto;
     private double precioVenta;
 
@@ -14,11 +14,11 @@ public class DetalleEgresoDtoCrear {
         this.idEgreso = idEgreso;
     }
 
-    public int getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(float cantidad) {
         this.cantidad = cantidad;
     }
 

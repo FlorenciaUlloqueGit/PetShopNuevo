@@ -247,6 +247,19 @@ public class ProductoController {
         return "UpdateProductoForDetalleIngreso";
     }
 
+    @GetMapping("/updateProductoDetalleEgreso/{idProducto}")
+    public String mostrarformUpdateProductoDetalle2(@PathVariable int idProducto, Model model){
+
+        Producto producto = repository.findByIdProducto(idProducto);
+        ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
+        productoDtoDetalle.setIdProducto(idProducto);
+        productoDtoDetalle.setCodBarras(producto.getCodBarras());
+        productoDtoDetalle.setNombre(producto.getNombre());
+        productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
+        productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
+        model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
+        return "UpdateProductoForDetalleEgreso";
+    }
 
     @GetMapping({"/listar", "/"})
     public String listar(Model model){

@@ -89,8 +89,9 @@
         <BR>
         <div class="container">
             <a th:href="@{/detalleEgresos/{idEgreso}(idEgreso=${egresoIdTotal.idEgreso})}"
-               class="btn btn-info"> Agregar productos vendidos</a>
-
+               class="btn btn-info"> Agregar productos vendidos por bolsa o unidad</a>
+            <a th:href="@{/detalleEgresos/crearDetalleKG/{idEgreso}(idEgreso=${egresoIdTotal.idEgreso})}"
+               class="btn btn-success"> Agregar productos vendidos por gramo</a>
             <!--
             <a th:href="@{/ingresos/update/{idIngreso}(idIngreso=${ingresoIdTotal.idIngreso})}}"
                class="btn btn-secondary">
@@ -127,7 +128,7 @@
                        class="btn btn-danger">
                     Eliminar</a></td>
                 <td>
-                    <input type="number" class="form-control" th:value="${detalleEgreso.egreso.idEgreso}" disabled>
+                    <input type="number"step=".01" class="form-control" th:value="${detalleEgreso.egreso.idEgreso}" disabled>
                 </td>
             </tr>
             </tbody>
