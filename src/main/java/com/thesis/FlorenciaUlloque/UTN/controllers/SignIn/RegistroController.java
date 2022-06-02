@@ -46,7 +46,7 @@ public class RegistroController {
 
 
         if (registrado == true){
-                return "redirect:/registro?errorTelefonoLenght";
+                return "redirect:/registro?error";
             }else {
                 clienteService.saveRegistro(clienteRegistroDto);
                 return "redirect:/registro?exito";
@@ -54,6 +54,37 @@ public class RegistroController {
 
         }
 
+    //para  el registro
+    @GetMapping ("/nuevo") //muestra el formulario
+    public String mostrarFormularioDeRegistro2(){
+        return "registroClienteVendedor";
+    }
+
+    @PostMapping("/registrar") //registra el usuario y redirige.
+    public String registrarUsuario2(@ModelAttribute("cliente") ClienteRegistroDto clienteRegistroDto){
+
+        boolean registrado = clienteService.saveRegistro(clienteRegistroDto);
+        long tel = clienteRegistroDto.getTelefono();
+        String telefono = String.valueOf(tel);
+        int tamTel =  telefono.length();
+
+        if(tel == 0) {
+            return "redirect:/registro/nuevo?errorTelefono0";
+        }
+        if(tamTel < 6 || tamTel >= 12) {
+            return "redirect:/registro/nuevo?errorTelefonoLenght";
+        }
+
+
+
+        if (registrado == true){
+            return "redirect:/registro/nuevo?error";
+        }else {
+            clienteService.saveRegistro(clienteRegistroDto);
+            return "redirect:/registro/nuevo?exito";
+        }
+
+    }
 
 
 }

@@ -55,8 +55,6 @@ public class LoginController {
 
  */
 
-
-
     @RequestMapping(value="/loginAdmin", method = RequestMethod.GET)
     public String getLoginAdmin(){
         return "loginAdmin";
@@ -66,6 +64,11 @@ public class LoginController {
     @RequestMapping(value="/homeAdmin", method = RequestMethod.GET)
     public String getHomeAdmin(){
         return "homeAdmin";
+    }
+
+    @RequestMapping(value="/homeVendedor", method = RequestMethod.GET)
+    public String getHomeVendedor(){
+        return "homeVendedor";
     }
     //cheching login credentials
 
@@ -93,6 +96,16 @@ public class LoginController {
     @RequestMapping(value="/index", method = RequestMethod.GET)
     public String getLoginVendedor(){
         return "index";
+    }
+    //cheching login credentials
+
+    @RequestMapping(value="/terminosCondiciones", method = RequestMethod.GET)
+    public String getLoginVendedor2(){
+        return "TerminosCondiciones";
+    }
+    @RequestMapping(value="/terminosYCondiciones", method = RequestMethod.GET)
+    public String getLoginVendedor3(){
+        return "TerminosCondicionesVendedor";
     }
     //cheching login credentials
 

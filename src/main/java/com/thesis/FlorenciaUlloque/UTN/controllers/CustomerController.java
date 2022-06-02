@@ -102,10 +102,71 @@ public class CustomerController {
         return "listadoClientesAdmin";
     }
 
+    @GetMapping("/listarClientesPetShop")
+    public String listarClientes4(Model model){
+        List<ClienteDto> clienteList = clienteService.findAllClientes();
+        List<ClienteDto> clienteArray= new ArrayList<>();
+
+        for (ClienteDto clienteDto: clienteList) {
+            if(clienteDto.getIdCliente() != 2){
+                ClienteDto dto = clienteDto;
+                clienteArray.add(dto);
+            }
+
+        }
+        model.addAttribute("customer", clienteArray);
+        return "listadoClientesVendedor2";
+    }
+
     @GetMapping("/delete/{idCliente}")
-    public String deleteVendedor( @PathVariable int idCliente){
+    public String deleteVendedor2( @PathVariable int idCliente){
         clienteService.deleteCliente(idCliente);
         return "redirect:/customer/listarClientesAdmin?exito";
+
+    }
+    @GetMapping("/listarClientesVendedor")
+    public String listarClientes3(Model model){
+        List<ClienteDto> clienteList = clienteService.findAllClientes();
+        List<ClienteDto> clienteArray= new ArrayList<>();
+
+        for (ClienteDto clienteDto: clienteList) {
+            if(clienteDto.getIdCliente() != 2){
+                ClienteDto dto = clienteDto;
+                clienteArray.add(dto);
+            }
+
+        }
+        model.addAttribute("customer", clienteArray);
+        return "listadoClientesVendedor";
+    }
+
+
+    @GetMapping("/updateFromVendedor/{idCliente}") //update cliente
+    public String mostrarformUpdateCliente2(@PathVariable int idCliente, Model model){{
+        model.addAttribute("cliente", repository.findByIdCliente(idCliente));
+    }
+        return "updateClienteFromVendedor";
+    }
+
+
+    @PostMapping("/updateClienteFromVendedor/{idCliente}")
+    public String updatearCliente2(@ModelAttribute("cliente") ClienteRegistroDto clienteRegistroDto,
+                                  @PathVariable int idCliente){
+        Cliente clienteExiste = repository.findByIdCliente(idCliente);
+        clienteExiste.setDireccion(clienteRegistroDto.getDireccion());
+        clienteExiste.setNombre(clienteRegistroDto.getNombre());
+        clienteExiste.setPass("");
+        clienteExiste.setApellido(clienteRegistroDto.getApellido());
+        clienteExiste.setTelefono(clienteRegistroDto.getTelefono());
+        clienteExiste.setEmail(clienteRegistroDto.getEmail());
+        clienteService.updateCliente(clienteExiste);
+        Cliente clienteTest = clienteService.updateCliente(clienteExiste);
+        if(clienteTest == null){
+            return "redirect:/customer/updateFromVendedor/{idCliente}?error";
+        } else {
+            clienteService.updateCliente(clienteExiste);
+            return "redirect:/customer/updateFromVendedor/{idCliente}?exito";
+        }
 
     }
 

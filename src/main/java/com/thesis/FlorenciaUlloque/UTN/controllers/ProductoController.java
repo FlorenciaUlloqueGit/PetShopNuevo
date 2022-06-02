@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Clock;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -36,13 +38,14 @@ public class ProductoController {
 
     @GetMapping("/listadoConCostos") //FUNCIONA!!!!!!!!!!!!!!!
     public List<String> getAllProductosWithAllCost(@RequestParam(value = "page", defaultValue = "0") int page,
-                                        @RequestParam(value = "limit", defaultValue = "25") int limit) {
-        return repository.findAllProductosWithAllCost(page,limit); //agregar limite de pagina
+                                                   @RequestParam(value = "limit", defaultValue = "25") int limit) {
+        return repository.findAllProductosWithAllCost(page, limit); //agregar limite de pagina
     }
+
     @GetMapping("/listadoConCostoVenta") //funcionaaaaaaa!!!!
     public List<String> getAllProductoListWithSellCost(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                 @RequestParam(value = "limit", defaultValue = "25") int limit) {
-        return repository.findAllProductosWithSellCost(page,limit); //agregar limite de pagina
+                                                       @RequestParam(value = "limit", defaultValue = "25") int limit) {
+        return repository.findAllProductosWithSellCost(page, limit); //agregar limite de pagina
     }
 
 
@@ -57,6 +60,7 @@ public class ProductoController {
     public Producto getProductosByFechaVencimiento(@PathVariable Date fecha) {
         return repository.findByFechaVencimiento(fecha);
     }
+
     @GetMapping("/codBarras/{codBarras}") //funcionan todos los atributos!!
     public Producto getProductoByCodBarras(@PathVariable long codBarras) {
         return repository.findByCodBarras(codBarras);
@@ -78,7 +82,6 @@ public class ProductoController {
     public ProductoDtoDetalle mapeardtodetalle() {
         return new ProductoDtoDetalle();
     }
-
 
 
     @ModelAttribute("productoDtoExtras")
@@ -125,7 +128,7 @@ public class ProductoController {
         model.addAttribute("edades", edades);
         model.addAttribute("tipoAnimales", tipoAnimales);
         model.addAttribute("tamanos", tamanos);
-        model.addAttribute("unidadesMedidas",  unidadMedidas);
+        model.addAttribute("unidadesMedidas", unidadMedidas);
 
         return "crearProducto";
     }
@@ -136,7 +139,8 @@ public class ProductoController {
 
         LocalDate fechaVencimiento = producto.getFechaVencimiento();
         ProductoDtos productoDtos = new ProductoDtos();
-        if(producto.getCodBarras() == 0){
+        LocalDate fechaDeHoy = null;
+        if (producto.getCodBarras() == 0) {
             productoDtos.setNombre(producto.getNombre());
             productoDtos.setMarca(producto.getMarca());
             productoDtos.setFechaVencimiento(fechaVencimiento);
@@ -149,7 +153,7 @@ public class ProductoController {
             productoDtos.setEdad(producto.getEdad());
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
-        } else{
+        } else {
             productoDtos.setCodBarras(producto.getCodBarras());
             productoDtos.setNombre(producto.getNombre());
             productoDtos.setMarca(producto.getMarca());
@@ -164,21 +168,41 @@ public class ProductoController {
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
 
+            Clock c1 = Clock.systemUTC();
+            fechaDeHoy = LocalDate.now(c1);
+
+        }
+
+        if (productoDtos.getPesoNeto() <= 0) {
+            return "redirect:/productos?errorPeso";
+        }
+        if (productoDtos.getFechaVencimiento().isBefore(LocalDate.now())) {
+            return "redirect:/productos?errorProductoVencido";
+        }
+        if (productoDtos.getPrecioCompra() == 0 || productoDtos.getPrecioVenta() == 0) {
+            return "redirect:/productos?errorProductoPrecio0";
+        }
+        if (productoDtos.getPrecioCompra() < 0 || productoDtos.getPrecioVenta() < 0) {
+            return "redirect:/productos?errorProductoPrecioNegativo";
+        }
+
+        if (productoDtos.getFechaVencimiento() == null && productoDtos.getCategoria().getIdCategoria() != 2) {
+            return "redirect:/productos?errorFechaVencimiento";
         }
 
         //CASTEARRRR
         boolean registrado = productoService.save(productoDtos);
-        if (registrado == true){
+        if (registrado == true) {
             productoService.save(productoDtos);
             return "redirect:/productos?error";
-        }else {
+        } else {
             return "redirect:/productos?exito";
         }
     }
 
 
     @GetMapping("/update/{idProducto}")
-    public String mostrarformUpdate(@PathVariable int idProducto, Model model){
+    public String mostrarformUpdate(@PathVariable int idProducto, Model model) {
 
 
         List<Marca> marcas = productoService.listadoMarcas();
@@ -201,14 +225,13 @@ public class ProductoController {
         model.addAttribute("unidadesMedidas", unidadMedidas);
 
 
-
         return "UpdateProducto";
     }
 
 
     @PostMapping("/updateProducto/{idProducto}")
-    public String updatearVendedor(@ModelAttribute("productoReal")Producto producto,
-                                   @PathVariable int idProducto){
+    public String updatearVendedor(@ModelAttribute("productoReal") Producto producto,
+                                   @PathVariable int idProducto) {
 
         Producto productoExiste = repository.findByIdProducto(idProducto);
 
@@ -227,14 +250,27 @@ public class ProductoController {
         productoExiste.setPesoNeto(producto.getPesoNeto());
         productoExiste.setUnidadMedida(producto.getUnidadMedida());
 
-        productoService.update(productoExiste);
+        if (productoExiste.getPesoNeto() <= 0) {
+            return "redirect:/productos/update?errorPeso";
+        }
+        if (productoExiste.getPrecioCompra() == 0 || productoExiste.getPrecioVenta() == 0) {
+            return "redirect:/productos/update?errorProductoPrecio0";
+        }
+        if (productoExiste.getPrecioCompra() < 0 || productoExiste.getPrecioVenta() < 0) {
+            return "redirect:/productos/update?errorProductoPrecioNegativo";
+        }
 
+        if (productoExiste.getFechaVencimiento() == null && productoExiste.getCategoria().getIdCategoria() != 2) {
+            return "redirect:/productos/update?errorFechaVencimiento";
+        }
+
+        productoService.update(productoExiste);
         return "redirect:/productos/update/{idProducto}?exito";
 
     }
 
     @GetMapping("/updateProductoDetalle/{idProducto}")
-    public String mostrarformUpdateProductoDetalle(@PathVariable int idProducto, Model model){
+    public String mostrarformUpdateProductoDetalle(@PathVariable int idProducto, Model model) {
 
         Producto producto = repository.findByIdProducto(idProducto);
         ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
@@ -243,12 +279,12 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
-        model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
+        model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleIngreso";
     }
 
     @GetMapping("/updateProductoDetalleEgreso/{idProducto}")
-    public String mostrarformUpdateProductoDetalle2(@PathVariable int idProducto, Model model){
+    public String mostrarformUpdateProductoDetalle2(@PathVariable int idProducto, Model model) {
 
         Producto producto = repository.findByIdProducto(idProducto);
         ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
@@ -257,21 +293,223 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
-        model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
+        model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleEgreso";
     }
 
     @GetMapping({"/listar", "/"})
-    public String listar(Model model){
+    public String listar(Model model) {
         model.addAttribute("productoReal", productoService.findAllProductos());
         return "listadoProductos";
     }
 
 
     @GetMapping("/delete/{idProducto}")
-    public String deleteVendedor( @PathVariable int idProducto){
+    public String deleteVendedor(@PathVariable int idProducto) {
         productoService.delete(idProducto);
         return "redirect:/productos/listar?exito";
 
     }
+
+    // ---------------------------Para vendedor--------------------------------------------------------
+    @GetMapping("/mostrarForm")
+    public String mostrarFormulario2(Model model) {
+
+        ProductoDtos productoDtos = new ProductoDtos();
+
+
+        List<Marca> marcas = productoService.listadoMarcas();
+        List<FormaVenta> formasVentas = productoService.listaFormaVenta();
+        List<Categoria> categorias = productoService.listaCategoria();
+        List<Edad> edades = productoService.listaEdadAnimal();
+        List<TipoAnimal> tipoAnimales = productoService.listTipoAnimal();
+        List<Tamano> tamanos = productoService.listaTamano();
+        List<UnidadMedida> unidadMedidas = productoService.listaUnidadMedida();
+
+        // mapeo del producto
+        model.addAttribute("marcaDtos", productoDtos);
+
+
+        //mapeo de los combos
+        model.addAttribute("marcas", marcas);
+        model.addAttribute("formasVentas", formasVentas);
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("edades", edades);
+        model.addAttribute("tipoAnimales", tipoAnimales);
+        model.addAttribute("tamanos", tamanos);
+        model.addAttribute("unidadesMedidas", unidadMedidas);
+
+        return "crearProductoVendedor";
+    }
+
+
+    @PostMapping("/nuevo")
+    public String create2(@ModelAttribute("productoDtos") ProductoDtos producto) {
+
+        LocalDate fechaDeHoy = null;
+        LocalDate fechaVencimiento = producto.getFechaVencimiento();
+        ProductoDtos productoDtos = new ProductoDtos();
+        if (producto.getCodBarras() == 0) {
+            productoDtos.setNombre(producto.getNombre());
+            productoDtos.setMarca(producto.getMarca());
+            productoDtos.setFechaVencimiento(fechaVencimiento);
+            productoDtos.setPrecioCompra(producto.getPrecioCompra());
+            productoDtos.setPrecioVenta(producto.getPrecioVenta());
+            productoDtos.setUnidadMedida(producto.getUnidadMedida());
+            productoDtos.setPesoNeto(producto.getPesoNeto());
+            productoDtos.setCategoria(producto.getCategoria());
+            productoDtos.setFormaVenta(producto.getFormaVenta());
+            productoDtos.setEdad(producto.getEdad());
+            productoDtos.setTamano(producto.getTamano());
+            productoDtos.setTipoAnimal(producto.getTipoAnimal());
+        } else {
+            productoDtos.setCodBarras(producto.getCodBarras());
+            productoDtos.setNombre(producto.getNombre());
+            productoDtos.setMarca(producto.getMarca());
+            productoDtos.setFechaVencimiento(fechaVencimiento);
+            productoDtos.setPrecioCompra(producto.getPrecioCompra());
+            productoDtos.setPrecioVenta(producto.getPrecioVenta());
+            productoDtos.setUnidadMedida(producto.getUnidadMedida());
+            productoDtos.setPesoNeto(producto.getPesoNeto());
+            productoDtos.setCategoria(producto.getCategoria());
+            productoDtos.setFormaVenta(producto.getFormaVenta());
+            productoDtos.setEdad(producto.getEdad());
+            productoDtos.setTamano(producto.getTamano());
+            productoDtos.setTipoAnimal(producto.getTipoAnimal());
+            Clock c1 = Clock.systemUTC();
+            fechaDeHoy = LocalDate.now(c1);
+
+        }
+        if (productoDtos.getPesoNeto() <= 0) {
+            return "redirect:/productos/mostrarForm?errorPeso";
+        }
+        if (productoDtos.getFechaVencimiento() != null && productoDtos.getFechaVencimiento().isBefore(LocalDate.now())) {
+            return "redirect:/productos/mostrarForm?errorProductoVencido";
+        }
+        if (productoDtos.getPrecioCompra() == 0 || productoDtos.getPrecioVenta() == 0) {
+            return "redirect:/productos/mostrarForm?errorProductoPrecio0";
+        }
+        if (productoDtos.getPrecioCompra() < 0 || productoDtos.getPrecioVenta() < 0) {
+            return "redirect:/productos/mostrarForm?errorProductoPrecioNegativo";
+        }
+
+        if (productoDtos.getFechaVencimiento() == null && productoDtos.getCategoria().getIdCategoria() != 2) {
+            return "redirect:/productos/mostrarForm?errorFechaVencimiento";
+        }
+        //CASTEARRRR
+        boolean registrado = productoService.save(productoDtos);
+        if (registrado == true) {
+            productoService.save(productoDtos);
+            return "redirect:/productos/mostrarForm?error";
+        } else {
+            return "redirect:/productos/mostrarForm?exito";
+        }
+    }
+
+
+    @GetMapping("/updateProducto/{idProducto}")
+    public String mostrarformUpdate2(@PathVariable int idProducto, Model model) {
+
+
+        List<Marca> marcas = productoService.listadoMarcas();
+        List<FormaVenta> formasVentas = productoService.listaFormaVenta();
+        List<Categoria> categorias = productoService.listaCategoria();
+        List<Edad> edades = productoService.listaEdadAnimal();
+        List<TipoAnimal> tipoAnimales = productoService.listTipoAnimal();
+        List<Tamano> tamanos = productoService.listaTamano();
+        List<UnidadMedida> unidadMedidas = productoService.listaUnidadMedida();
+
+        model.addAttribute("producto", repository.findByIdProducto(idProducto));
+
+        model.addAttribute("marcas", marcas);
+        model.addAttribute("formasVentas", formasVentas);
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("edades", edades);
+        model.addAttribute("tipoAnimales", tipoAnimales);
+        model.addAttribute("tamanos", tamanos);
+        model.addAttribute("unidadesMedidas", unidadMedidas);
+
+
+        return "UpdateProductoVendedor";
+    }
+
+
+    @PostMapping("/updateProductoEspecifico/{idProducto}")
+    public String updatearVendedor2(@ModelAttribute("productoReal") Producto producto,
+                                    @PathVariable int idProducto) {
+
+        Producto productoExiste = repository.findByIdProducto(idProducto);
+
+        productoExiste.setIdProducto(producto.getIdProducto());
+        productoExiste.setCodBarras(producto.getCodBarras());
+        productoExiste.setNombre(producto.getNombre());
+        productoExiste.setFechaVencimiento(producto.getFechaVencimiento());
+        productoExiste.setPrecioCompra(producto.getPrecioCompra());
+        productoExiste.setPrecioVenta(producto.getPrecioVenta());
+        productoExiste.setMarca(producto.getMarca());
+        productoExiste.setFormaVenta(producto.getFormaVenta());
+        productoExiste.setCategoria(producto.getCategoria());
+        productoExiste.setEdad(producto.getEdad());
+        productoExiste.setTamano(producto.getTamano());
+        productoExiste.setTipoAnimal(producto.getTipoAnimal());
+        productoExiste.setPesoNeto(producto.getPesoNeto());
+        productoExiste.setUnidadMedida(producto.getUnidadMedida());
+
+        if (productoExiste.getPesoNeto() <= 0) {
+            return "redirect:/productos/updateProducto/{idProducto}?errorPeso";
+        }
+        if (productoExiste.getPrecioCompra() == 0 || productoExiste.getPrecioVenta() == 0) {
+        return "redirect:/productos/updateProducto/{idProducto}?errorProductoPrecio0";
+    }
+        if (productoExiste.getPrecioCompra() < 0 || productoExiste.getPrecioVenta() < 0) {
+        return "redirect:/productos/updateProducto/{idProducto}?errorProductoPrecioNegativo";
+    }
+
+        if (productoExiste.getFechaVencimiento() == null && productoExiste.getCategoria().getIdCategoria() != 2) {
+        return "redirect:/productos/updateProducto/{idProducto}?errorFechaVencimiento";
+    }
+        productoService.update(productoExiste);
+
+
+        return "redirect:/productos/updateProducto/{idProducto}?exito";
+
+    }
+
+    @GetMapping("/updateProductoDetalleVendedor/{idProducto}")
+    public String mostrarformUpdateProductoDetalle23(@PathVariable int idProducto, Model model){
+
+        Producto producto = repository.findByIdProducto(idProducto);
+        ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
+        productoDtoDetalle.setIdProducto(idProducto);
+        productoDtoDetalle.setCodBarras(producto.getCodBarras());
+        productoDtoDetalle.setNombre(producto.getNombre());
+        productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
+        productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
+        model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
+        return "UpdateProductoForDetalleIngresoVendedor";
+    }
+
+    @GetMapping("/updateProductoDetalleEgresoVendedor/{idProducto}")
+    public String mostrarformUpdateProductoDetalle3(@PathVariable int idProducto, Model model){
+
+        Producto producto = repository.findByIdProducto(idProducto);
+        ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
+        productoDtoDetalle.setIdProducto(idProducto);
+        productoDtoDetalle.setCodBarras(producto.getCodBarras());
+        productoDtoDetalle.setNombre(producto.getNombre());
+        productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
+        productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
+        model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
+        return "UpdateProductoForDetalleEgresoVendedor";
+    }
+
+
+
+    @GetMapping("/listarProductos")
+    public String listar2(Model model) {
+        model.addAttribute("productoReal", productoService.findAllProductos());
+        return "listadoProductosVendedor";
+    }
+
 }

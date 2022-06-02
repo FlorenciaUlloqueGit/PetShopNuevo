@@ -95,14 +95,36 @@ public class ReporteController {
             productoFaltantes.setUnidadMedida(producto.getUnidadMedida());
             productoFaltantesList.add(productoFaltantes);
         }
-        if (productoFaltantesList.size() < 1) {
-            return "redirect:/reportes/faltantes?error";
-        } else {
+
             model.addAttribute("productoFaltantes", productoFaltantesList);
             return "ReporteListadoFaltantes";
         }
 
-    }
+
+    @GetMapping("/faltantesProductos")
+    public String mostrarFormularioListadoFaltantes2(Model model) {
+
+        List<Producto> productos = productoRepository.findAllProductosByStockCERO();
+        List<ProductoFaltantes> productoFaltantesList = new ArrayList<>();
+        for (Producto producto : productos) {
+            ProductoFaltantes productoFaltantes = new ProductoFaltantes();
+            productoFaltantes.setIdProducto(producto.getIdProducto());
+            productoFaltantes.setCodBarras(producto.getCodBarras());
+            productoFaltantes.setNombre(producto.getNombre());
+            productoFaltantes.setCategoria(producto.getCategoria());
+            productoFaltantes.setFormaVenta(producto.getFormaVenta());
+            productoFaltantes.setMarca(producto.getMarca());
+            productoFaltantes.setPesoNeto(producto.getPesoNeto());
+            productoFaltantes.setUnidadMedida(producto.getUnidadMedida());
+            productoFaltantesList.add(productoFaltantes);
+        }
+
+            model.addAttribute("productoFaltantes", productoFaltantesList);
+            return "ReporteListadoFaltantesVendedor";
+        }
+
+
+
 
     @GetMapping("/productosDiarios")
     public String mostrarFormularioProductosVendidosHoy(Model model) {
@@ -170,6 +192,72 @@ public class ReporteController {
     }
 
 
+
+    @GetMapping("/productosVendidosDiarios")
+    public String mostrarFormularioProductosVendidosHoy2(Model model) {
+        ProductoReporte2 productoReporte2;
+        List<ProductoReporte2> reporte2List = new ArrayList<>();
+        List<String> listado = productoRepository.findAllProductosVendidosHoy();
+
+        List<ArrayList> listadoFormateado = new ArrayList<>();
+
+        for (int i = 0; i < listado.size(); i++) {
+            String cadenaLarga = listado.get(i);
+            cadenaLarga = cadenaLarga + ",";
+            ArrayList list = new ArrayList();
+            int posicionCadena = 1;
+
+            for (int j = 0; j < 6; j++) {
+                posicionCadena = cadenaLarga.indexOf(',');
+                String dato = cadenaLarga.substring(0, posicionCadena);
+                list.add(dato);
+
+                cadenaLarga = cadenaLarga.substring(posicionCadena + 1, cadenaLarga.length());
+
+            }
+            listadoFormateado.add(list);
+        }
+
+        double acumTotales = 0;
+        for (int i = 0; i < listadoFormateado.size(); i++) {
+            productoReporte2 = new ProductoReporte2();
+            for (int j = 0; j < 6; j++) {
+                ArrayList array = listadoFormateado.get(i);
+                if (j == 0) {
+                    productoReporte2.setNombre((String) array.get(j));
+                }
+                if (j == 1) {
+                    productoReporte2.setCategoria((String) array.get(j));
+                }
+                if (j == 2) {
+                    productoReporte2.setFormaVenta((String) array.get(j));
+                }
+
+                if (j == 3) {
+                    String precioVenta = (String) array.get(j);
+
+                    productoReporte2.setPrecioVenta(Float.parseFloat(precioVenta));
+                }
+                if (j == 4) {
+                    String cant = (String) array.get(j);
+                    productoReporte2.setCantidad(Float.parseFloat(cant));
+                }
+
+                if (j == 5) {
+                    String total = (String) array.get(j);
+                    productoReporte2.setTotal(Float.parseFloat(total));
+                    acumTotales += productoReporte2.getTotal();
+                }
+
+            }
+            reporte2List.add(productoReporte2);
+        }
+
+        model.addAttribute("productoReporte2", reporte2List);
+        model.addAttribute("acumTotales", acumTotales);
+        return "ReporteListadoVentasHoyVendedor";
+    }
+
     @GetMapping("/homeAdmin")
     public String mostrarHomeAdmin() {
         return "homeAdmin";
@@ -187,6 +275,17 @@ public class ReporteController {
 
     }
 
+    @GetMapping("/ListadoVencimientos")
+    public String mostrarFormularioProductosPorVencer2(Model model) {
+
+        List<Producto> productosPorVencer = productoRepository.findProductosPorVencer();
+        List<Producto> productosVencidos = productoRepository.findProductosVencidos();
+
+        model.addAttribute("productoPorVencer", productosPorVencer);
+        model.addAttribute("productosVencidos", productosVencidos);
+        return "ReporteListadoVencimientosVendedor";
+
+    }
     @GetMapping("/ingresosPorVentas")
     public String mostrarFormularioVentasMensuales(Model model) {
 

@@ -28,19 +28,19 @@
                     <a class="nav-link active" aria-current="page"  th:href="@{/homeAdmin}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/reportes/listadoReportes}">Reportes</a>
+                    <a class="nav-link" th:href="@{/productos/listarProductos}">Productos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/vendedores/}">Administrar vendedores</a>
+                    <a class="nav-link" th:href="@{marcas/listarMarcas}">Marcas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/proveedores/listar}">Administrar Proveedores</a>
+                    <a class="nav-link" th:href="@{/proveedores/listarProveedores}">Proveedores </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"th:href="@{/ventas/listar}">Modificar ventas</a>
+                    <a class="nav-link" th:href="@{ventas/listarVentas}">Ventas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/stocks/}">Administrar stock</a>
+                    <a class="nav-link"th:href="@{/ingresos/listarIngresos}">Ingresos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/logout}">Logout</a>
@@ -49,6 +49,7 @@
         </div>
     </div>
 </nav>
+
 
 
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
@@ -74,14 +75,14 @@
     <div th:if=${param.exito}>
         <div class="alert alert-info">Felicitaciones! Se ha registrado el producto exitosamente.</div>
     </div>
-    <div th:if=${param.errorPeso}>
-        <div class="alert alert-danger">El peso del producto no puede ser menor o igual a cero</div>
-    </div>
     <div th:if=${param.error}>
         <div class="alert alert-danger">El producto ingresado ya existe</div>
     </div>
     <div th:if=${param.errorFechaVencimiento}>
         <div class="alert alert-danger">El tipo de producto ingresado requiere fecha de vencimiento</div>
+    </div>
+    <div th:if=${param.errorPeso}>
+        <div class="alert alert-danger">El peso del producto no puede ser menor o igual a cero</div>
     </div>
     <div th:if=${param.errorProductoVencido}>
         <div class="alert alert-danger">No se pueden registrar productos vencidos</div>
@@ -93,7 +94,7 @@
         <div class="alert alert-danger">El precio de compra o venta no acepta números negativos</div>
     </div>
 
-      <form th:action="@{/productos/nuevo}" method="post" th:object="${productoDtos}" >
+    <form th:action="@{/productos/nuevo}" method="post" th:object="${productoDtos}" >
 
           <div class="form-group">
               <label for="codBarras">Ingrese el código de barras (si es que corresponde)</label>
@@ -201,7 +202,7 @@
 
                <div>
               <button type="submit" class="btn btn-success">Registrar</button>
-                   <td><a th:href="@{/productos/}" class="btn btn-danger">
+                   <td><a th:href="@{/productos/listarProductos}" class="btn btn-danger">
                        Volver al listado</a></td>
               </div>
           </form>

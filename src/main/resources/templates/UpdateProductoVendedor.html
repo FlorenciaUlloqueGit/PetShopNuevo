@@ -28,19 +28,19 @@
                     <a class="nav-link active" aria-current="page"  th:href="@{/homeAdmin}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/reportes/listadoReportes}">Reportes</a>
+                    <a class="nav-link" th:href="@{/productos/listarProductos}">Productos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/vendedores/}">Administrar vendedores</a>
+                    <a class="nav-link" th:href="@{marcas/listarMarcas}">Marcas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/proveedores/listar}">Administrar Proveedores</a>
+                    <a class="nav-link" th:href="@{/proveedores/listarProveedores}">Proveedores </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"th:href="@{/ventas/listar}">Modificar ventas</a>
+                    <a class="nav-link" th:href="@{ventas/listarVentas}">Ventas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/stocks/}">Administrar stock</a>
+                    <a class="nav-link"th:href="@{/ingresos/listarIngresos}">Ingresos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/logout}">Logout</a>
@@ -54,14 +54,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Alta de Productos
+        Productos
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Formulario de nuevos productos</h2>
+    <h2 style="text-align: center">Modificación de productos</h2>
     <br>
 
 </div>
@@ -71,58 +71,50 @@
 <br>
 
 <div class="container">
-    <div th:if=${param.exito}>
-        <div class="alert alert-info">Felicitaciones! Se ha registrado el producto exitosamente.</div>
-    </div>
     <div th:if=${param.errorPeso}>
         <div class="alert alert-danger">El peso del producto no puede ser menor o igual a cero</div>
     </div>
-    <div th:if=${param.error}>
-        <div class="alert alert-danger">El producto ingresado ya existe</div>
+    <div th:if=${param.exito}>
+        <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
+    </div>
+    <div th:if=${param.errorProductoPrecio0}>
+        <div class="alert alert-danger">El precio de compra o venta del producto no puede ser cero</div>
+    </div>
+    <div th:if=${param.errorProductoPrecioNegativo}>
+        <div class="alert alert-danger">El precio de compra o precio de venta no acepta números negativos</div>
     </div>
     <div th:if=${param.errorFechaVencimiento}>
         <div class="alert alert-danger">El tipo de producto ingresado requiere fecha de vencimiento</div>
     </div>
-    <div th:if=${param.errorProductoVencido}>
-        <div class="alert alert-danger">No se pueden registrar productos vencidos</div>
-    </div>
-    <div th:if=${param.errorProductoPrecio0}>
-        <div class="alert alert-danger">El precio de compra y venta no puede ser igual a cero</div>
-    </div>
-    <div th:if=${param.errorProductoPrecioNegativo}>
-        <div class="alert alert-danger">El precio de compra o venta no acepta números negativos</div>
-    </div>
 
-      <form th:action="@{/productos/nuevo}" method="post" th:object="${productoDtos}" >
+      <form th:action="@{/productos/updateProductoEspecifico/{idProducto}(idProducto=${producto.idProducto})}" method="post" th:object="${productoDtos}" >
 
           <div class="form-group">
-              <label for="codBarras">Ingrese el código de barras (si es que corresponde)</label>
-              <input type="number" class="form-control" id="codBarras" th:field="*{codBarras}"
-                     placeholder="0515496666660">
+              <label for="codBarras">Código de barras</label>
+              <input type="number" class="form-control" id="codBarras" th:field="*{codBarras}">
           </div>
 
           <div class="form-group">
-              <label for="nombre">Ingrese el nombre del producto</label>
+              <label for="nombre">Nombre producto</label>
               <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
-                     required autofocus="autofocus"  placeholder="Oreja Comestible">
+                     required autofocus="autofocus">
           </div>
 
-
           <div class="form-group">
-              <label for="fechaVencimiento">Ingrese la fecha de vencimiento (si es que el producto es perecedero)</label>
+              <label for="fechaVencimiento">Fecha de vencimiento</label>
               <input type="date" class="form-control" id="fechaVencimiento" th:field="*{fechaVencimiento}">
           </div>
 
 
           <div class="form-group">
-              <label for="pesoNeto">Ingrese el Peso del producto (en caso de no contar con el peso, ingrese aproximado)</label>
+              <label for="pesoNeto">Peso del producto   (en caso de no contar con el peso, ingrese aproximado) </label>
               <input type="number" class="form-control" id="pesoNeto" th:field="*{pesoNeto}"
                      required autofocus="autofocus" >
           </div>
 
 
           <div class="form-group">
-              <label for="unidadMedida">Determine la unidad de medida del producto</label>
+              <label for="unidadMedida">Unidad de medida</label>
               <select  th:field="*{unidadMedida}" class="form-control form-control" id="unidadMedida">
                   <option th:each="unidadMedida:${unidadesMedidas}"
                           th:value="${unidadMedida.idUnidadMedida}"
@@ -131,29 +123,19 @@
           </div>
 
           <div class="form-group">
-              <label for="precioCompra">Ingrese el precio de compra</label>
+              <label for="precioCompra">Precio de compra</label>
               <input type="number" class="form-control" id="precioCompra" th:field="*{precioCompra}"
                      required autofocus="autofocus" >
           </div>
 
           <div class="form-group">
-              <label for="precioVenta">Ingrese el precio de venta</label>
+              <label for="precioVenta">Precio de venta</label>
               <input type="number" class="form-control" id="precioVenta" th:field="*{precioVenta}"
                      required autofocus="autofocus" >
           </div>
 
-
           <div class="form-group">
-              <label for="formaVenta">Seleccione una forma de venta</label>
-              <select  th:field="*{formaVenta}" class="form-control form-control" id="formaVenta">
-                  <option th:each="formaVenta:${formasVentas}"
-                          th:value="${formaVenta.idFormaVenta}"
-                          th:text="${formaVenta.nombre}" />
-              </select>
-          </div>
-
-          <div class="form-group">
-              <label for="marca">Determine una marca</label>
+              <label for="marca">Marca</label>
               <select  th:field="*{marca}" class="form-control form-control" id="marca">
                   <option th:each="marca:${marcas}"
                           th:value="${marca.idMarca}"
@@ -162,7 +144,7 @@
           </div>
 
           <div class="form-group">
-              <label for="categoria">Seleccione una categoría de producto</label>
+              <label for="categoria">Categoría de producto</label>
               <select  th:field="*{categoria}" class="form-control form-control" id="categoria" name="categoria">
                   <option th:each="categoria:${categorias}"
                           th:value="${categoria.idCategoria}"
@@ -197,30 +179,31 @@
                           th:text="${tamano.nombre}" />
               </select>
           </div>
-                <BR>
 
-               <div>
-              <button type="submit" class="btn btn-success">Registrar</button>
-                   <td><a th:href="@{/productos/}" class="btn btn-danger">
-                       Volver al listado</a></td>
-              </div>
+          <div class="form-group">
+              <label for="formaVenta">Forma de venta</label>
+              <select  th:field="*{formaVenta}" class="form-control form-control" id="formaVenta">
+                  <option th:each="formaVenta:${formasVentas}"
+                          th:value="${formaVenta.idFormaVenta}"
+                          th:text="${formaVenta.nombre}" />
+              </select>
+          </div>
+
+                <BR>
+              <button type="submit" class="btn btn-success">Modificar</button>
+          <td><a th:href="@{/productos/listarProductos}" class="btn btn-info"> Volver al listado</a></td>
           </form>
 
     </div>
 
+</div>
 
 
 <!-- Latest compiled and minified JavaScript -->
 <script
         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></select>
-        </script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
-
+        crossorigin="anonymous"></script>
 </body>
 </html>
 

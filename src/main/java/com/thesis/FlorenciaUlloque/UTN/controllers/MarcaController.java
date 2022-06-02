@@ -54,6 +54,16 @@ public class MarcaController {
         return new Marca();
     }
 
+    @GetMapping("/MarcaForm")
+    public String mostrarFormulario2(Model model) {
+
+        MarcaDtos marca = new MarcaDtos();
+        List<Proveedor> proveedores = marcaService.listaProveedores();
+
+        model.addAttribute("proveedores", proveedores);
+        model.addAttribute("marcaDtos", marca);
+        return "crearMarcaVendedor";
+    }
     @GetMapping
     public String mostrarFormulario(Model model) {
 
@@ -76,6 +86,16 @@ public class MarcaController {
         }
     }
 
+    @PostMapping("/nuevo")
+    public String create2(@ModelAttribute("marcaDtos") MarcaDtos marcaDtos) {
+        boolean registrado = marcaService.saveMarca(marcaDtos);
+        if (registrado == true){
+            marcaService.saveMarca(marcaDtos);
+            return "redirect:/marcas/MarcaForm?error";
+        }else {
+            return "redirect:/marcas/MarcaForm?exito";
+        }
+    }
 
     @GetMapping("/update/{idMarca}")
     public String mostrarformUpdate(@PathVariable int idMarca, Model model){
@@ -103,6 +123,31 @@ public class MarcaController {
 
     }
 
+    @GetMapping("/updateMarca/{idMarca}")
+    public String mostrarformUpdate2(@PathVariable int idMarca, Model model){
+
+        List<Proveedor> proveedores = marcaService.listaProveedores();
+
+        model.addAttribute("marca", repository.findByIdMarca(idMarca));
+        model.addAttribute("proveedores", proveedores);
+        return "UpdateMarcaFromVendedor";
+    }
+
+
+    @PostMapping("/updateSpecificMarca/{idMarca}")
+    public String updatearVendedor2(@ModelAttribute("marcaReal")Marca marca,
+                                   @PathVariable int idMarca){
+
+        Marca marcaExiste = repository.findByIdMarca(idMarca);
+
+        marcaExiste.setIdMarca(marca.getIdMarca());
+        marcaExiste.setNombre(marca.getNombre());
+        marcaExiste.setProveedor(marca.getProveedor());
+        marcaService.updateMarca(marcaExiste);
+
+        return "redirect:/marcas/updateMarca/{idMarca}?exito";
+
+    }
 
 
 
@@ -110,6 +155,11 @@ public class MarcaController {
     public String listar(Model model){
         model.addAttribute("marcaReal", marcaService.findAllMarcas());
         return "listadoMarcas";
+    }
+    @GetMapping("/listarMarcas")
+    public String listar2(Model model){
+        model.addAttribute("marcaReal", marcaService.findAllMarcas());
+        return "listadoMarcasFromVendedor";
     }
 
 

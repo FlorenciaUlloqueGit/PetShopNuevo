@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body style="background-color: rgb(250, 237, 202)">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Almacén de Mascotas</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
+    <h1 style="text-align: center">
+        <br><br>
+        Términos y Condiciones del Software
+        <br><br><br>
+    </h1>
+</div>
+<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
+
+    <br>
+    <h2 style="text-align: center"> Por favor, lea atentamente</h2>
+    <br>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<section class="login-block">
+    <div class="container">
+                <h2 class="text-center"> <b>Condiciones de uso</b></h2>
+
+                <div class="container">
+                    <p>
+                        Al momento de utilizar el software se considera que el usuario está de acuerdo con
+                        los términos y condiciones aquí declarados. Acepta que los derechos de propiedad
+                        intelectual sobre el software son exclusivos de su autor, Córdoba Software.
+                        El usuario posee el derecho de usar la aplicación libremente, exceptuando lo siguiente:
+                        la licencia de su uso no implica la sesión del derecho de propiedad del producto,
+                        por lo que no podrá redistribuir, vender o modificar el programa. Esta es exclusiva,
+                        no es transferible a terceros y su posesión no incluye la obligación del autor de
+                        actualizarlo a versiones posteriores del programa. En caso de no respetarse los términos
+                        y condiciones del producto, automáticamente el usuario pierde el derecho sobre la el uso
+                        del producto adquirido, pudiéndose revocársele sin notificación expresa de Córdoba
+                        Softwar, quitándosele de esta forma, el derecho a reclamar alguna devolución o
+                        compensación económica. Córdoba Software se responsabiliza por el buen funcionamiento
+                        del software, pero no lo hará en el caso de incorrecto uso de este. En caso de
+                        que la aplicación contenga algún error, el propietario se compromete a resolverlo en
+                        la mayor brevedad de tiempos posibles, pero no se responsabilizará de los daños directos
+                        o indirectos, consecuencia de la utilización de este o imposibilidad de hacerlo.
+                        Para prevenir dicha situación, el usuario tendrás siempre la posibilidad de utilizar el
+                        software a modo de demostración por un periodo de tiempo acordado, minimizándose así
+                        los riesgos de encontrarse fallas o disconformidades por parte del cliente. En ningún
+                        caso se realizarán reintegros de dinero al usuario por motivo de inconformidad, debido
+                        a que este posee la posibilidad de probar el sistema antes de adquirirlo y de realizar
+                        todas las consultas que considere necesarias. A su vez, tampoco se realizarán
+                        devoluciones de dinero por errores de interpretación o por mal uso de la aplicación
+                        por parte del cliente. Finalmente, Córdoba Software se reserva el derecho a modificar
+                        en futuras versiones del programa cualquiera
+                        de sus características y prestaciones, sin necesidad de previo aviso.
+                     </p>
+                    <a th:href="@{/index}" class="btn btn-warning">
+                        Aceptar</a>
+
+                </div>
+            </div>
+
+
+<br>
+
+
+</body>
+</html>

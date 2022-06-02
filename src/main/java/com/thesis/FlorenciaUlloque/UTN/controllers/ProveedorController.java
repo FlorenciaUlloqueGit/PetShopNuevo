@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/proveedores")
 public class ProveedorController  {
@@ -81,7 +84,14 @@ public class ProveedorController  {
 
     @GetMapping({"/listar", "/"})
     public String listar(Model model){
-        model.addAttribute("proveedorReal", proveedorService.findAllProveedor());
+        List<Proveedor> proveedorSinVarios = new ArrayList<>();
+        for (Proveedor proveedor: proveedorService.findAllProveedor()) {
+            if(proveedor.getIdProveedor() != 4){
+                proveedorSinVarios.add(proveedor);
+            }
+
+        }
+        model.addAttribute("proveedorReal", proveedorSinVarios);
         return "listadoProveedores";
     }
 
@@ -92,4 +102,62 @@ public class ProveedorController  {
         return "redirect:/proveedores/listar?exito";
 
     }
+
+
+    // ------------------------------- para vendedores -------------------------------
+
+    @GetMapping("/formNuevo")
+    public String mostrarFormularioCrearProv2() {
+        return "crearProveedorVendedor";
+    }
+
+    @PostMapping("/nuevo")
+    public String create2(@ModelAttribute("proveedor") ProveedorDto proveedorDto) {
+
+        boolean registrado = proveedorService.saveProveedor(proveedorDto);
+        if (registrado == true){
+            proveedorService.saveProveedor(proveedorDto);
+            return "redirect:/proveedores/formNuevo?error";
+        }else {
+            return "redirect:/proveedores/formNuevo?exito";
+        }
+    }
+
+
+    @GetMapping("/updateProveedor/{idProveedor}")
+    public String mostrarformUpdate2(@PathVariable int idProveedor, Model model){
+        model.addAttribute("proveedor", repository.findById(idProveedor));
+        return "UpdateProveedorVendedor";
+    }
+
+
+    @PostMapping("/updateProveedorVendedor/{idProveedor}")
+    public String updatear2(@ModelAttribute("proveedorReal")Proveedor proveedor,
+                           @PathVariable int idProveedor){
+
+        Proveedor proveedorExiste = repository.findById(idProveedor);
+
+        proveedorExiste.setNombre(proveedor.getNombre());
+        proveedorExiste.setTelefono(proveedor.getTelefono());
+        proveedorService.updateProveedor(proveedorExiste);
+
+        return "redirect:/proveedores/updateProveedor/{idProveedor}?exito";
+
+    }
+
+
+    @GetMapping("/listarProveedores")
+    public String listar2(Model model){
+        List<Proveedor> proveedorSinVarios = new ArrayList<>();
+        for (Proveedor proveedor: proveedorService.findAllProveedor()) {
+            if(proveedor.getIdProveedor() != 4){
+                proveedorSinVarios.add(proveedor);
+            }
+
+        }
+
+        model.addAttribute("proveedorReal", proveedorSinVarios);
+        return "listadoProveedoresFromVendedor";
+    }
+
 }

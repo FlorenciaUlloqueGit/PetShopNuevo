@@ -74,6 +74,18 @@
     <div th:if=${param.exito}>
         <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
     </div>
+    <div th:if=${param.errorProductoPrecio0}>
+        <div class="alert alert-danger">El precio de compra o venta del producto no puede ser cero</div>
+    </div>
+    <div th:if=${param.errorPeso}>
+        <div class="alert alert-danger">El peso del producto no puede ser menor o igual a cero</div>
+    </div>
+    <div th:if=${param.errorProductoPrecioNegativo}>
+        <div class="alert alert-danger">El precio de compra o precio de venta no acepta números negativos</div>
+    </div>
+    <div th:if=${param.errorFechaVencimiento}>
+        <div class="alert alert-danger">El tipo de producto ingresado requiere fecha de vencimiento</div>
+    </div>
 
       <form th:action="@{/productos/updateProducto/{idProducto}(idProducto=${producto.idProducto})}" method="post" th:object="${productoDtos}" >
 
