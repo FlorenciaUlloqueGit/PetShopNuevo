@@ -40,4 +40,14 @@ public interface IngresoProductosRepository extends PagingAndSortingRepository<I
             "    group by p.nombre", nativeQuery = true)
     double sumarTotalPorProveedor(@Param("idProveedor") int idProveedor);
 
+
+    @Query(value = "select sum(e.total) from ingreso_productos e where Month(e.fecha) = month(:fecha);", nativeQuery = true)
+    Float findVentasMesAcual(@Param("fecha") String fecha);
+
+    @Query(value = "select sum(e.total) from ingreso_productos e where Month(e.fecha) = month(:fecha)-1;", nativeQuery = true)
+    Float findVentasMesAnterior(@Param("fecha") String fecha);
+
+    @Query(value = "select sum(e.total) from ingreso_productos e where Month(e.fecha) = month(:fecha)-2;", nativeQuery = true)
+    Float findVentasMesAnteAnterior(@Param("fecha") String fecha);
+
 }

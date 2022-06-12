@@ -2,6 +2,7 @@ package com.thesis.FlorenciaUlloque.UTN.repositories;
 
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.IngresoProductos;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Producto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.SalidaProducto;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -35,5 +36,16 @@ public interface SalidaProductosRepository extends PagingAndSortingRepository<Sa
 
     @Query(value = "select SUM(e.total) 'total' from egreso_productos e where Month(e.fecha) = month(curdate())", nativeQuery = true)
     float findTotalSumaEgresosByMonth();
+
+    @Query(value = " select sum(e.total) from egreso_productos e where Month(e.fecha) = month(:fecha);", nativeQuery = true)
+    Float findIngresosMesActual(@Param("fecha") String fecha);
+
+    @Query(value = "  select sum(e.total) from egreso_productos e where Month(e.fecha) = month(:fecha)-1;", nativeQuery = true)
+    Float findIngresosMesAnterior(@Param("fecha") String fecha);
+
+    @Query(value = "select sum(e.total) from egreso_productos e where Month(e.fecha) = month(:fecha)-2;", nativeQuery = true)
+    Float findIngresosMesAnteriorX2(@Param("fecha") String fecha);
+
+
 
 }

@@ -9,9 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class PetShopProjectApplication implements WebMvcConfigurer {
 
-	public void addViewController(ViewControllerRegistry registry){
-		registry.addViewController("index2").setViewName("index2");
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetShopProjectApplication.class, args);

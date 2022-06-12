@@ -50,17 +50,18 @@
     </div>
 </nav>
 
+
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Productos vendidos hoy
+        Gráfico del movimiento económico por compras
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Productos vendidos </h2>
+    <h2 style="text-align: center">Movimiento económico de los últimos 3 meses</h2>
     <br>
 
 </div>
@@ -68,58 +69,69 @@
 <br>
 <br>
 <br>
-
-
-<div class="container" th:if=${param.error}>
-    <div class="alert alert-info">No hay productos en falta en este momento</div>
-</div>
 <div class="container">
-    <td><a th:href="@{/reportes/ventasDelDia/export}" class="btn btn-info">
-        Descargar PDF </a></td>
+    <h2 align="center">Gráfico ilustrativo</h2>
+
+    <div id="container"
+         style="width:600px; height: 550px; margin: 0 auto"></div>
 </div>
-<div class="container">
-    <table class="table table-striped">
-        <thead>
-        <tr>
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-            <th scope="col">Producto</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Forma de venta</th>
-            <th scope="col">Precio de venta</th>
-            <th scope="col">Cantidad vendida</th>
-            <th colspan="2" scope="col">Subtotal</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="producto: ${productoReporte2}">
-            <td th:text="${producto.nombre}"></td>
-            <td th:text="${producto.categoria}"></td>
-            <td th:text="${producto.formaVenta}"></td>
-            <td th:text="${producto.precioVenta}"></td>
-            <td style="text-align:left" th:text="${producto.cantidad}"></td>
-            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.total}"></td></td>
-        </tbody>
-    </table>
-
+<script th:inline="javascript">
+    $(function(){
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Total de gastos mensuales por compras a proveedores'
+        },
+        subtitle: {
+            text: 'Detalle de los últimos tres meses'
+        },
+        xAxis: {
+            categories: [[${keySet}]],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            max:600000,
+            title: {
+                text: 'Monto'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Name',
+            data: [[${values}]]
+        }]
+      });
+    });
+</script>
 <br>
-    <div class="container">
-        <label for="acumTotales">Total en AR$</label>
-        <input class="form-control" type="text"
-               th:value="${acumTotales}" id="acumTotales" name="acumTotales" disabled/>
-    </div>
-
-    <div>
-
-    </div>
-    <br>
-        <td><a th:href="@{/graficos/reporteTotalVentaHoy}" class="btn btn-success">
-            Ver gráfico de ventas según categoría de producto </a></td>
-    <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
-        Volver al menú </a></td>
+<div class="container" align="center">
+   <a th:href="@{/reportes/GastosMensualesProveedores}" class="btn btn-warning" align="center">
+        Volver</a>
 </div>
-<br>
-<br>
-<br>
+
 </body>
 </html>

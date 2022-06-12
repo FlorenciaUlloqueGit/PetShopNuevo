@@ -50,17 +50,18 @@
     </div>
 </nav>
 
+
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Productos vendidos hoy
+        Gráfico de productos vendidos hoy según su categoría
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Productos vendidos </h2>
+    <h2 style="text-align: center">Productos vendidos el día de hoy </h2>
     <br>
 
 </div>
@@ -68,58 +69,58 @@
 <br>
 <br>
 <br>
-
-
-<div class="container" th:if=${param.error}>
-    <div class="alert alert-info">No hay productos en falta en este momento</div>
-</div>
 <div class="container">
-    <td><a th:href="@{/reportes/ventasDelDia/export}" class="btn btn-info">
-        Descargar PDF </a></td>
+    <h2 align="center">Gráfico ilustrativo</h2>
+
+    <div id="container"
+         style="width:600px; height: 550px; margin: 0 auto"></div>
 </div>
-<div class="container">
-    <table class="table table-striped">
-        <thead>
-        <tr>
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-            <th scope="col">Producto</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Forma de venta</th>
-            <th scope="col">Precio de venta</th>
-            <th scope="col">Cantidad vendida</th>
-            <th colspan="2" scope="col">Subtotal</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="producto: ${productoReporte2}">
-            <td th:text="${producto.nombre}"></td>
-            <td th:text="${producto.categoria}"></td>
-            <td th:text="${producto.formaVenta}"></td>
-            <td th:text="${producto.precioVenta}"></td>
-            <td style="text-align:left" th:text="${producto.cantidad}"></td>
-            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.total}"></td></td>
-        </tbody>
-    </table>
-
+<script th:inline="javascript">
+		Highcharts.chart('container', {
+			chart : {
+				type : 'pie',
+				options3d : {
+					enabled : true,
+					alpha : 50,
+					beta : 0
+				}
+			},
+			title : {
+				text : 'Gráfico de torta que demuestra el porcentaje de ventas por bolsa cerrada y por kg suelto, según cantidad vendida'
+			},
+			tooltip : {
+				pointFormat : '{series.name}: <b>{point.percentage:.1f}%</b>'
+			},
+			plotOptions : {
+				pie : {
+					allowPointSelect : true,
+					cursor : 'pointer',
+					depth : 35,
+					dataLabels : {
+						enabled : true,
+						format : '{point.name}'
+					}
+				}
+			},
+			series : [ {
+				type : 'pie',
+				name : 'Ratio',
+				data : [ [ 'Ventas por bolsa cerrada', [[${bolsa}]] ], [ 'Ventas por Kg', [[${kg}]] ]  ]
+			} ]
+		});
+	</script>
 <br>
-    <div class="container">
-        <label for="acumTotales">Total en AR$</label>
-        <input class="form-control" type="text"
-               th:value="${acumTotales}" id="acumTotales" name="acumTotales" disabled/>
-    </div>
-
-    <div>
-
-    </div>
-    <br>
-        <td><a th:href="@{/graficos/reporteTotalVentaHoy}" class="btn btn-success">
-            Ver gráfico de ventas según categoría de producto </a></td>
-    <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
-        Volver al menú </a></td>
+<div class="container" align="center">
+   <a th:href="@{/reportes/ventasPorKg}" class="btn btn-warning" align="center">
+        Volver</a>
 </div>
-<br>
-<br>
-<br>
+
 </body>
 </html>
