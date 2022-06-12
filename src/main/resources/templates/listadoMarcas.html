@@ -95,7 +95,7 @@
         </thead>
         <tbody>
         <tr th:each="marca : ${marcaReal}">
-            <td th:text="${marca.idMarca}"></td>
+            <td style="text-align:left" th:text="${marca.idMarca}"></td>
             <td th:text="${marca.nombre}"></td>
             <td th:text="${marca.proveedor.nombre}"></td>
             <td><a th:href="@{/marcas/update/{idMarca}(idMarca=${marca.idMarca})}" class="btn btn-info">

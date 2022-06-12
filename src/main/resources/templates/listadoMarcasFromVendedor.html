@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script type="text/javascript" src="Scripts/jquery-2.1.1.min.js"></script>
-        <title>Home</title>
+        <title>Almacén de Mascotas</title>
     </head>
 <body style="background-color: rgb(250, 237, 202)">
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page"  th:href="@{/homeAdmin}">Home</a>
+                    <a class="nav-link active" aria-current="page"  th:href="@{/homeVendedor}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/productos/listarProductos}">Productos</a>
@@ -37,13 +37,16 @@
                     <a class="nav-link" th:href="@{/proveedores/listarProveedores}">Proveedores </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{ventas/listarVentas}">Ventas</a>
+                    <a class="nav-link" th:href="@{/ventasCliente}">Ventas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"th:href="@{/ingresos/listarIngresos}">Ingresos</a>
+                    <a class="nav-link"th:href="@{/ingresosProveedor}">Ingresos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    <a class="nav-link"th:href="@{/preguntasFrecuentesVendedor}">Preguntas frecuentes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logoutVendedor}">Logout</a>
                 </li>
             </ul>
         </div>
@@ -95,7 +98,7 @@
         </thead>
         <tbody>
         <tr th:each="marca : ${marcaReal}">
-            <td th:text="${marca.idMarca}"></td>
+            <td  style="text-align:left" th:text="${marca.idMarca}"></td>
             <td th:text="${marca.nombre}"></td>
             <td th:text="${marca.proveedor.nombre}"></td>
             <td><a th:href="@{/marcas/updateMarca/{idMarca}(idMarca=${marca.idMarca})}" class="btn btn-info">

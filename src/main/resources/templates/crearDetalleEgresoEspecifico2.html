@@ -130,7 +130,7 @@
                 <th scope="col" hidden>Identificador único</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Categoría</th>
-                <th scope="col">Precio Kilogramo</th>
+                <th colspan="2" scope="col">Precio Kilogramo</th>
                 <th scope="col">Cantidad (Expresada en KG)</th>
                 <th scope="col">Registrar venta</th>
                 <th scope="col">Modificar producto</th>
@@ -144,8 +144,8 @@
                 <td th:text="${producto.idProducto}" hidden></td>
                 <td th:text="${producto.nombre}"></td>
                 <td th:text="${producto.categoria.nombre}"></td>
-                <td th:text="${producto.precioVenta}"></td>
-                <td><input type="number" step=".01" class="form-control" id="cantidad" th:field="*{cantidad}"
+                <td style="text-align:right">AR$ <td style="text-align=left" th:text="${producto.precioVenta}"></td></td>
+                <td><input type="number" style="text-align=left" step=".01" class="form-control" id="cantidad" th:field="*{cantidad}"
                            required autofocus="autofocus"/>
                 </td>
                 <td>

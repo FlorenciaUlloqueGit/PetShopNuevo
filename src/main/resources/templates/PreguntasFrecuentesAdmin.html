@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script type="text/javascript" src="Scripts/jquery-2.1.1.min.js"></script>
+        <title>Home</title>
+    </head>
+<body style="background-color: rgb(250, 237, 202)">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Almacén de Mascotas</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"  th:href="@{/homeAdmin}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reportes/listadoReportes}">Reportes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/vendedores/}">Administrar vendedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/proveedores/listar}">Administrar Proveedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"th:href="@{/ventas/listar}">Modificar ventas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/stocks/}">Administrar stock</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
+    <h1 style="text-align: center">
+        <br><br>
+        Términos y Condiciones del Software
+        <br><br><br>
+    </h1>
+</div>
+<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
+
+    <br>
+    <h2 style="text-align: center"> Por favor, lea atentamente</h2>
+    <br>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<section class="login-block">
+    <div class="container">
+                <h2 class="text-center"> <b>Preguntas frecuentes</b></h2>
+<br>
+        <br>
+                <div class="container">
+                    <h4 class="text-lenght"> ¿Qué pasa si olvidé mi usuario y contraseña?</h4>
+                    <p>
+                        ¿Qué pasa si olvidé mi usuario y contraseña?
+                        Si usted tiene un usuario con rol de administrador, deberá enviar un mail a la siguiente dirección para recuperar su cuenta: cordobasoftware@soporte.com. En el caso de que usted posea otro rol deberá comunicarse con algún superior suyo que sea el administrador del sistema, el cual le podrá proporcionar sus credenciales y modificarlas en caso de que lo desee.
+
+                        ¿Cuáles son los diferentes motivos por los cuales no podría estar iniciando sesión?
+
+                        Los diferentes motivos podrían ser que usted está ingresando sus credenciales de forma incorrecta o que está intentando loguearse desde una vista no competente para su rol dentro de la empresa. Verifique que esté en la vista de logueo de administradores y no de vendedores. Si usted se encuentra en la vista de login de vendedores, deberá apretar el enlace dentro de la vista idéntico a este: “Si sos administrador ingresá aquí”. En el caso de que sus credenciales sean incorrectas, un mensaje con dicha información se lo hará saber.
+
+                        </p>
+                    <h4 class="text-lenght">    ¿Dónde chequeo los términos y condiciones del uso del software?</h4>
+                    <p>
+                        En la ventana de Login, usted encontrará un enlace idéntico a este: “Ver términos y condiciones ingresá aquí”. Recuerde que si usted usa el sistema ya está aceptando los términos y condiciones de este.
+
+
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo ver los clientes del sistema?</h4>
+                    <p>
+                        Si usted desea ver los clientes del sistema deberá apretar en el menú de inicio el enlace “Gestionar clientes”. Este lo redirigirá automáticamente al listado de todos los clientes existentes.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo ingreso un nuevo cliente al sistema?</h4>
+                    <p>
+                        En el menú de inicio apriete “Gestionar clientes”, luego, antes de ver el listado de todos los clientes verá que aparece un botón que dice “Agregar nuevo cliente”. Haga click sobre el botón y llene el formulario. Recuerde que sólo se permite insertar nuevos clientes mientras el email que se esté registrando no se encuentre en uso por otro usuario. Para finalizar esta operación, presione el botón “Registrar”.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo edito los datos de un cliente ya registrado?/h4>
+                    <p>
+                        En el menú de inicio apriete “Gestionar clientes”, luego, antes de ver el listado de todos los clientes verá que aparece un botón que dice “Agregar nuevo cliente”. Haga click sobre el botón y llene el formulario. Recuerde que sólo se permite insertar nuevos clientes mientras el email que se esté registrando no se encuentre en uso por otro usuario. Para finalizar esta operación, presione el botón “Registrar”.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo elimino un cliente de la base de datos?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón “Gestionar clientes”, posteriormente tendrá que buscar en la lista el cliente a eliminar y apretar el botón eliminar. Si no encuentra el cliente a eliminar significa que nunca se registró o ya fue eliminado con anterioridad.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo ver los clientes del sistema?</h4>
+                    <p>
+                        Si usted desea ver los clientes del sistema deberá apretar en el menú de inicio el enlace “Gestionar clientes”. Este lo redirigirá automáticamente al listado de todos los clientes existentes.
+                    </p>
+                    <h4 class="text-lenght"> ¿Cómo ver los vendedores del sistema?</h4>
+                    <p>
+                        Si usted desea ver los vendedores del sistema deberá apretar en el menú de inicio el enlace “Administrar vendedores”. Este lo redirigirá automáticamente al listado de todos los vendedores existentes.
+                    </p>
+                    <h4 class="text-lenght"> ¿Cómo ingreso un nuevo vendedor al sistema?</h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar vendedores”, luego, antes de ver el listado de todos los vendedores verá que hay un botón que dice “Crear nuevo”. Haga click sobre este y llene el formulario. Recuerde que sólo se permite insertar nuevos clientes mientras el nombre de usuario que se esté registrando no se encuentre en uso por otro usuario. Para finalizar esta operación, presione el botón “Registrar”.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo edito los datos de un vendedor ya registrado?</h4>
+                    <p>
+                        En el menú de inicio apriete“Administrar vendedores”, luego, busque el vendedor a editar en la lista. Si no lo encuentra, es que el vendedor no se encuentra registrado. Una vez que logró visualizar el usuario, haga click sobre el botón “Editar” y llene el formulario. No podrá modificar el nombre de usuario del vendedor.. Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo elimino un vendedor de la base de datos?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón “Administrar vendedores”, posteriormente tendrá que buscar en la lista el vendedor a eliminar y apretar el botón “Eliminar”. Si no encuentra el cliente a eliminar significa que nunca se registró o ya fue eliminado con anterioridad. Si la transacción se registró correctamente, aparecerá un mensaje indicándolo.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo ver los proveedores registrados en el sistema? </h4>
+                    <p>
+                        Si usted desea ver los proveedores registrados en el sistema deberá apretar en el menú de inicio el enlace “Gestionar proveedores”. Este lo redirigirá automáticamente al listado de todos los proveedores existentes.
+                    </p>
+                    <h4 class="text-lenght">    ¿Cómo ingreso un nuevo proveedor al sistema?</h4>
+                    <p>
+                        En el menú de inicio apriete “Gestionar proveedores”, luego, antes de ver el listado de todos los proveedores verá que hay un botón que dice “Crear nuevo”. Haga click sobre este y llene el formulario. Recuerde que sólo se permite insertar nuevos proveedores mientras el nombre  que se esté registrando no se encuentre en uso por otro proveedor. Para finalizar esta operación, presione el botón “Registrar”.
+                    </p>
+
+                    <h4 class="text-lenght">    ¿Cómo edito los datos de un proveedor ya registrado?</h4>
+                    <p>
+                        En el menú de inicio apriete“Gestionar proveedores”. Este enlace aparece en la sección de gestiones o sino en la barra de menú principal de la aplicación. Una vez seleccionado, busque el proveedor a editar en la lista. Si no lo encuentra, es que el proveedor no se encuentra registrado. Una vez que logró visualizar el proveedor , haga click sobre el botón “Editar” y llene el formulario. No podrá modificar el nombre de usuario del proveedor . Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo elimino un proveedor de la base de datos?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón “Gestionar proveedores”, posteriormente tendrá que buscar en la lista el proveedor a eliminar y apretar el botón “Eliminar”. Si no encuentra el proveedor a eliminar significa que nunca se registró o ya fue eliminado con anterioridad. Si la transacción se registró correctamente, aparecerá un mensaje indicándolo.
+                    </p>
+
+                    <h4 class="text-lenght"> ¿Cómo ver las marcas registradas en el sistema? </h4>
+                    <p>
+                        Si usted desea ver las marcas registradas en el sistema deberá apretar en el menú de inicio el enlace “Administrar marcas”. Este lo redirigirá automáticamente al listado de todas las marcas existentes.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo ingreso una nueva marca al sistema? </h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar marcas”, luego, antes de ver el listado de todos los proveedores verá que hay un botón que dice “Crear nuevo”. Haga click sobre este y llene el formulario. Recuerde que sólo se permite insertar nuevos proveedores mientras el nombre  que se esté registrando no se encuentre en uso por otro proveedor. Para finalizar esta operación, presione el botón “Registrar”.
+                    </p>
+                    <h4 class="text-lenght">    ¿Cómo edito los datos de una marca ya registrada?</h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar marcas”. Este enlace aparece en la sección de gestiones o en la barra de menú principal de la aplicación. Una vez seleccionado, busque la marca a editar en la lista. Si no la encuentra significa que la marca no se encuentra registrada. Una vez que logró visualizar la marca, haga click sobre el botón “Editar” y llene el formulario. Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+
+                    <h4 class="text-lenght">   ¿Cómo elimino una marca de la base de datos?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón “Administrar marcas”, posteriormente tendrá que buscar en la lista la marca a eliminar y apretar el botón “Eliminar”. Si no la encuentra significa que nunca se registró o ya fue eliminada con anterioridad. Si la transacción se registró correctamente, aparecerá un mensaje indicándolo.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo ver los productos registrados?</h4>
+                    <p>
+                        Si usted desea ver los productos registrados en el sistema deberá apretar en el menú de inicio el enlace “Gestionar productos”. Este lo redirigirá automáticamente al listado de todos los productos existentes.
+                    </p>
+                    <h4 class="text-lenght">    ¿Cómo agrego un nuevo producto al sistema?</h4>
+                    <p>
+                        En el menú de inicio apriete  “Gestionar productos”, luego, antes de ver el listado de todos los productos, verá que hay un botón que dice “Crear nuevo”. Haga click sobre este y llene el formulario. Si el producto no posee código de barra, como es el caso de productos con código que al venderse fraccionados ya se consideraría que son otro producto, perdiendo así el atributo código de barras, deberá dejar en el formulario el código de barra como 0. En los casos en que los productos no sean perecederos, tal es el caso de los accesorios, no será necesario ingresar fecha de vencimiento. Por otro lado, si no se posee la cantidad de gramos del producto, puede ingresar un aproximado (se recomienda pesar el producto en la balanza si se puede e ingresar el número que figure).En el caso de que el producto no tenga marca, seleccione en marcas “varios”, y en el caso de que el producto no especifique la edad específica del animal que usará el producto o su tamaño, seleccione indeterminado. Para finalizar esta operación, presione el botón “Registrar”.
+                    </p>
+                    <h4 class="text-lenght">    ¿Cómo elimino un producto de la base de datos?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón “Gestionar productos”, posteriormente tendrá que buscar en la lista el producto a eliminar y apretar el botón “Eliminar”. Si no la encuentra significa que nunca se registró o ya fue eliminado con anterioridad. Si la transacción se registró correctamente, aparecerá un mensaje indicándolo.
+                    </p>
+                    <h4 class="text-lenght">¿Cómo ver el stock actual de los productos?</h4>
+                    <p>
+                        Si usted desea conocer el stock de los productos registrados en el sistema deberá apretar en el menú de inicio el enlace “Administrar stock”. Este lo redirigirá automáticamente al listado del stock existente por producto.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo creo un nuevo stock?</h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar stock”, luego, antes de ver el listado de todos los proveedores verá que hay un botón que dice “Crear nuevo stock”. Haga click sobre este para ser redirigido a la página de alta de stock. Usted puede filtrar los productos por nombre, ingresando parte o totalmente el nombre del producto a buscar y apretando el botón “Buscar por nombre” o puede buscar el producto por código de barra, si es que el producto lo posee, ingresando el código de barras del producto y apretando “Buscar por código”. Si la búsqueda no arroja resultados, logrará ver un mensaje explicitando dicha situación, caso contrario, verá los posibles productos compatibles a lo que ha buscado. Si el producto que busca se encuentra en la lista, ingrese  la cantidad total ingresante y seleccione “Registrar”. Recuerde que no se podrá crear un nuevo stock de productos cuyo stock registrado sea mayor a 0, ya que en ese caso, el sistema ya cuenta con un stock existente de dicho producto, por lo que deberá ir a la sección editar stock si desea realizar un cambio.
+                    </p>
+                    <h4 class="text-lenght"> ¿Cómo edito el stock de un producto?</h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar stock”. Este enlace aparece en la sección de gestiones o en la barra de menú principal de la aplicación. Una vez seleccionado, busque el stock a editar en la lista. Si no lo encuentra, es que el stock de el producto buscado no se encuentra registrado. Una vez que logró visualizar el proveedor , haga click sobre el botón “Editar” y ingrese la cantidad total de producto disponible. No podrá modificar el nombre de usuario del proveedor . Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo elimino un stock de la base de datos?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón  “Administrar stock”, posteriormente tendrá que buscar en la lista el stock a eliminar y apretar el botón “Eliminar”. Si no encuentra el stock significa que nunca se registró o ya fue eliminado con anterioridad. Si la transacción se registró correctamente, aparecerá un mensaje indicándolo.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo ver el los ingresos de mercadería por parte de los proveedores?</h4>
+                    <p>
+                        Si usted desea ver los ingresos de mercadería registrados deberá apretar en el menú de inicio el enlace “Gestionar mercadería entrante”. Este lo redirigirá automáticamente al listado de ingresos existentes. Si desea ver los productos ingresados en un determinado ingreso debe seleccionar “Ver productos”.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo creo un nuevo ingreso de mercadería?</h4>
+                    <p>
+                        En el menú de inicio apriete “Gestionar mercadería entrante”, luego, antes de ver el listado de todos los ingresos verá que hay un botón que dice “Crear nuevo ingreso”, el cual deberá clickear y posteriormente llenar el formulario. La casilla “Total” aparecerá deshabilitada, ya que se llenará automáticamente a medida que se le agreguen productos ingresados al ingreso. Apriete crear ingreso. Luego de esto, deberá ingresar los productos que fueron comprados junto con sus cantidades. Para realizar dicha acción, primero deberá apretar el botón “Agregar productos”. Tiene la posibilidad de buscar los productos según el nombre, caso determinante cuando el producto no tiene código de barras, o puede buscar un producto ingresando el código de barras. Si logrpó obtener el producto a través del filtrado mencionado, deberá especificar la cantidad ingresante y luego, registrar. En el caso de que el precio unitario de compra sea diferente al que figura en la tabla, puede editar el producto seleccionado “Editar producto”, modificar los datos de este y continuar con el registro del ingreso. Finalmente, presione el botón “Registrar”. Puede seguir sumando productos al ingreso presionando nuevamente “Agregar productos” y si desea completar la carga de productos al ingreso, clickee el botón “Finalizar carga”.
+                    </p>
+                    <h4 class="text-lenght">    ¿Cómo edito los datos de un ingreso?</h4>
+                    <p>
+                        En el menú de inicio apriete “Gestionar mercadería entrante”. Este enlace aparece en la sección de gestiones o en la barra de menú principal de la aplicación. Una vez seleccionado, busque el ingreso a editar en la lista. Una vez que logró visualizar el ingreso, haga click sobre el botón “Editar” y rellene el formulario con los datos correctos. Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+
+                    <h4 class="text-lenght">  ¿Cómo edito los productos registrados de un ingreso?</h4>
+                    <p>
+                        En el menú de inicio apriete “Gestionar mercadería entrante”. Este enlace aparece en la sección de gestiones o en la barra de menú principal de la aplicación. Una vez seleccionado, busque el ingreso a editar en la lista. Una vez que logró visualizar el ingreso, haga click sobre el botón “Ver productos”. Verá un listado de los productos ingresados junto con la cantidad y el subtotal. Elija el producto a modificar y presione “Editar”. Rellene el formulario con los datos correctos. Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo elimino un ingreso de la base de datos?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón  “Gestionar mercadería entrante”, posteriormente tendrá que buscar en la lista el ingreso a eliminar y apretar el botón “Eliminar”. Si la transacción se registró correctamente, aparecerá un mensaje indicándolo.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo elimino un producto de un ingreso?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón  “Gestionar mercadería entrante”, posteriormente tendrá que buscar en la lista el ingreso   Una vez que logró visualizar el ingreso, haga click sobre el botón “Ver productos”.Localice el producto ingresado a eliminar y apretar el botón “Eliminar”.Si la transacción se registró correctamente, aparecerá un mensaje indicándolo. El total del ingreso se modificará automáticamente tras esto.
+                    </p>
+                    <h4 class="text-lenght"> ¿Cómo ver las ventas realizadas? </h4>
+                    <p>
+                        Si usted desea ver las ventas de mercadería registradas deberá apretar en el menú de inicio el enlace “Administrar ventas”. Este lo redirigirá automáticamente al listado de ventas existentes. Si desea ver los productos vendidos en una determinada venta debe seleccionar “Ver productos vendidos”.
+                    </p>
+                    <h4 class="text-lenght">¿Cómo registro una venta? </h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar ventas”, luego, antes de ver el listado de todas las ventas verá que hay un botón que dice “Registrar nueva venta”, el cual deberá clickear y posteriormente llenar el formulario. La casilla “Total” aparecerá deshabilitada, ya que se llenará automáticamente a medida que se le agreguen productos vendidos. Apriete el botón “Registrar”. Luego de esto, deberá ingresar los productos que fueron vendidos junto con sus cantidades En caso de que se vaya a ingresar en el sistema un producto vendido cuya forma de venta es por unidad o por peso, seleccione el botón celeste “Agregar productos vendidos por bolsa o unidad”. Por el contrario, si la forma de venta del producto egresante es por peso, seleccione el botón “Agregar productos vendidos por gramo” Tiene la posibilidad de buscar los productos según el nombre, caso determinante cuando el producto no tiene código de barras, o puede buscar un producto ingresando el código de barras. Si logró obtener el producto a través del filtrado mencionado, deberá especificar la cantidad ingresante y luego, registrar. En el caso de que el precio unitario de compra sea diferente al que figura en la tabla, puede editar el producto seleccionado “Editar producto”, modificar los datos de este y continuar con el registro de venta. Finalmente, presione el botón “Registrar”. Puede seguir sumando productos al ingreso presionando nuevamente “Agregar productos” y si desea completar la carga de productos al ingreso, clickee el botón “Finalizar carga”.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo edito los datos de una venta? </h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar ventas”. Este enlace aparece en la sección de gestiones o en la barra de menú principal de la aplicación. Una vez seleccionado, busque la venta a editar en la lista. Una vez que logró visualizar la venta, haga click sobre el botón “Editar” y rellene el formulario con los datos correctos. Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo edito los productos registrados de un ingreso? </h4>
+                    <p>
+                        En el menú de inicio apriete “Administrar ventas”. Este enlace aparece en la sección de gestiones o en la barra de menú principal de la aplicación. Una vez seleccionado, busque la venta a editar en la lista. Una vez que logró visualizar la venta, haga click sobre el botón “Ver productos vendidos”. Verá un listado de los productos ingresados junto con la cantidad y el subtotal. Elija el producto a modificar y presione “Editar”. Rellene el formulario con los datos correctos. Para finalizar esta operación, presione el botón “Modificar”.
+                    </p>
+
+                    <h4 class="text-lenght">  ¿Cómo elimino un ingreso de la base de datos? ></h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón  “Administrar ventas”, posteriormente tendrá que buscar en la lista la venta a eliminar y apretar el botón “Eliminar”. Si la transacción se registró correctamente, aparecerá un mensaje indicándolo.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo elimino un producto de un ingreso?</h4>
+                    <p>
+                        En el menú principal, en la sección de gestiones, deberá apretar el botón  “Administrar ventas”, posteriormente tendrá que buscar en la lista la venta  Una vez que logró visualizar la venta, haga click sobre el botón “Ver productos vendidos”.Localice el producto ingresado a eliminar y apriete el botón “Eliminar”.Si la transacción se registró correctamente, aparecerá un mensaje indicándolo. El total del ingreso se modificará automáticamente tras esto.
+                    </p>
+                    <h4 class="text-lenght">   ¿El sistema automáticamente detecta si soy administrador?</h4>
+                    <p>
+                        Si. El sistema detecta automáticamente cuando un usuario inicia sesión el rol al que pertenece.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo saber las credenciales de un vendedor?
+                    </b></h4>
+                    <p>
+                        Para saber las credenciales de un vendedor (usuario y contraseña), en el menú principal, seleccione “Administrar vendedores”, en dicho lugar tendrá un listado de los vendedores del sistema, junto con sus credenciales, las cuáles podrá modificar seleccionando el botón “Editar”. Esta información es competente en el caso de que un vendedor le solicite que le recuerde sus credenciales por haberlas olvidado.
+                    </p>
+                    <h4 class="text-lenght"> ¿Si modifico una venta estoy modificando el detalle de la venta (detalle de los productos vendidos)? ?
+                    </b></h4>
+                    <p>
+                        No, si desea modificar el detalle de los productos vendidos debe apretar en el menú principal “administrar ventas”, luego “ver productos” y encontrará un listado de los productos vendidos con cantidades en la venta seleccionada. En cada producto encontrará un botón específico para editar ese detalle. Si desea editarlo, debe presionar “Editar”, llenar el formulario  y apretar el botón “modificar”. En caso de que la modificación se haya realizado exitosamente, aparecerá un cartel celeste indicando el éxito de su acción.
+                    </p>
+                    <h4 class="text-lenght">   ¿Cómo visualizar un listado de clientes?</h4>
+                    <p>
+                        Puede ver un listado de todos los clientes registrados en el sistema seleccionando el botón “Listado de clientes”, ubicado en la sección reportes del menú principal.
+                    </p>
+                    <h4 class="text-lenght">¿Cómo saber que productos están en falta?</h4>
+                    <p>
+                        Puede ver un listado de todos los productos cuyo stock es igual a cero seleccionando el botón “Listado de faltantes”, ubicado en la sección reportes del menú principal.
+                    </p>
+                    <h4 class="text-lenght"> ¿Cómo saber qué productos están vencidos o próximos a vencer?</h4>
+                    <p>
+                        Si usted aprieta el botón “Listado de productos próximos a vencer”, ubicado en la sección reportes del menú principal, logrará ver dos listados diferentes: el primero muestra un listado de los productos próximos a vencer (los cuales tienen como fecha de vencimiento una cercana a la fecha actual de hasta 3 meses de proximidad), mientras que el segundo listado muestra los productos en stock (comercializándose) ya  vencidos. Se recomienda descartar los productos vencidos y eliminarlos del stock.
+                    </p>
+                    <h4 class="text-lenght">  ¿Cómo ver los montos y movimientos económicos por ventas del mes?</h4>
+                    <p>
+                        Puede ver un listado de todas las ventas del mes seleccionando el botón “Movimiento económico del mes por ventas (Movimiento positivo)”, ubicado en la sección reportes del menú principal.
+                    </p>
+                    <h4 class="text-lenght"> ¿Cómo ver los montos y movimientos económicos por compras a proveedores del mes?</h4>
+                    <p>
+                        Puede ver un listado de todas las ventas del mes seleccionando el botón “Movimiento económico del mes por compras a proveedores(Movimiento negativo)”, ubicado en la sección reportes del menú principal.
+                    </p>
+                    <h4 class="text-lenght"> ¿Puedo saber la cantidad de bolsas cerradas vendidas por producto y cantidad en el mes?</h4>
+                    <p>
+                        Si,puede ver un listado de todas las ventas de bolsas cerradas del mes seleccionando el botón “Detalle mensual de venta de productos por bolsa por cerrada”, ubicado en la sección reportes del menú principal.
+                    </p>
+                    <h4 class="text-lenght">   ¿Puedo saber la cantidad de kilogramos sueltos vendidos por producto en el mes?</h4>
+                    <p>r
+                        Si,puede ver un listado de todas las ventas de producto vendido por kilogramo  del mes seleccionando el botón “Detalle mensual de producto vendido por peso”, ubicado en la sección reportes del menú principal.
+                    </p>
+                    <h4 class="text-lenght"> ¿Cómo se qué productos fueron vendidos en el día, qué cantidad y de cuánto fue el total final del día?</h4>
+                    <p>
+                        Para visualizar esta información,apriete el botón “Ventas del día”, ubicado en la sección reportes del menú principal.
+                    </p>
+
+                    <br>
+                    <a th:href="@{/homeAdmin}" class="btn btn-warning">
+                       Volver</a>
+
+                </div>
+            </div>
+
+
+<br>
+
+
+</body>
+</html>

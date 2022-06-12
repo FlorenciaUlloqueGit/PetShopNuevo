@@ -95,9 +95,9 @@
         </thead>
         <tbody>
         <tr th:each="stock : ${stockReal}">
-            <td th:text="${stock.idStock}"></td>
-            <td th:text="${stock.producto.nombre}"></td>
-            <td th:text="${stock.cantidad}"></td>
+            <td style="text-align:left"  th:text="${stock.idStock}"></td>
+            <td  th:text="${stock.producto.nombre}"></td>
+            <td style="text-align:left" th:text="${stock.cantidad}"></td>
 
             <td><a th:href="@{/stocks/update/{idStock}(idStock=${stock.idStock})}" class="btn btn-info">
                 Editar</a></td>

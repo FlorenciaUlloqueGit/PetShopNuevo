@@ -116,7 +116,7 @@
 
           <div class="form-group">
               <label for="pesoNeto">Ingrese el Peso del producto (en caso de no contar con el peso, ingrese aproximado)</label>
-              <input type="number" class="form-control" id="pesoNeto" th:field="*{pesoNeto}"
+              <input type="number" class="form-control" id="pesoNeto" th:field="*{pesoNeto}" style="text-align=left"
                      required autofocus="autofocus" >
           </div>
 
@@ -131,13 +131,13 @@
           </div>
 
           <div class="form-group">
-              <label for="precioCompra">Ingrese el precio de compra</label>
+              <label for="precioCompra">Ingrese el precio de compra en peso argentino</label>
               <input type="number" class="form-control" id="precioCompra" th:field="*{precioCompra}"
                      required autofocus="autofocus" >
           </div>
 
           <div class="form-group">
-              <label for="precioVenta">Ingrese el precio de venta</label>
+              <label for="precioVenta">Ingrese el precio de venta en peso argentino</label>
               <input type="number" class="form-control" id="precioVenta" th:field="*{precioVenta}"
                      required autofocus="autofocus" >
           </div>

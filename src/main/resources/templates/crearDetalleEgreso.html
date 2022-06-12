@@ -159,7 +159,7 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Código de barras</th>
                 <th scope="col">Categoría</th>
-                <th scope="col">Precio unitario</th>
+                <th colspan="2" scope="col">Precio unitario</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Registrar venta</th>
                 <th scope="col">Modificar producto</th>
@@ -174,9 +174,9 @@
                 <td th:text="${producto.nombre}"></td>
                 <td th:text="${producto.codBarras}"></td>
                 <td th:text="${producto.categoria.nombre}"></td>
-                <td th:text="${producto.precioVenta}"></td>
+                <td style="text-align:right">AR$<td th:text="${producto.precioVenta}"></td> </td>
                 <td><input type="number" class="form-control" id="cantidad" th:field="*{cantidad}"
-                           required autofocus="autofocus"/>
+                          style="text-align=left" required autofocus="autofocus"/>
                 </td>
                 <td>
                     <button type="submit" class="btn btn-success">Registrar</button>
@@ -185,8 +185,8 @@
                 <td><a th:href="@{/productos/updateProductoDetalleEgreso/{idProducto}(idProducto=${producto.idProducto})}"
                        class="btn btn-info">
                     Editar producto</a></td>
-                <td>
-                    <input class="form-control" type="text"
+             <td>
+                    <input class="form-control" type="text" style="text-align=left"
                            th:value="${producto.precioVenta}" id="precioVenta" name="precioVenta
 " hidden/></td>
                 <td>

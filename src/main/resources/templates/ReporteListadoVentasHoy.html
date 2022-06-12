@@ -60,7 +60,7 @@
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Productos sin stock</h2>
+    <h2 style="text-align: center">Productos vendidos </h2>
     <br>
 
 </div>
@@ -73,7 +73,10 @@
 <div class="container" th:if=${param.error}>
     <div class="alert alert-info">No hay productos en falta en este momento</div>
 </div>
-
+<div class="container">
+    <td><a th:href="@{/reportes/ventasDelDia/export}" class="btn btn-info">
+        Descargar PDF </a></td>
+</div>
 <div class="container">
     <table class="table table-striped">
         <thead>
@@ -84,7 +87,7 @@
             <th scope="col">Forma de venta</th>
             <th scope="col">Precio de venta</th>
             <th scope="col">Cantidad vendida</th>
-            <th scope="col">Subtotal</th>
+            <th colspan="2" scope="col">Subtotal</th>
 
         </tr>
         </thead>
@@ -94,14 +97,14 @@
             <td th:text="${producto.categoria}"></td>
             <td th:text="${producto.formaVenta}"></td>
             <td th:text="${producto.precioVenta}"></td>
-            <td th:text="${producto.cantidad}"></td>
-            <td th:text="${producto.total}"></td>
+            <td style="text-align:left" th:text="${producto.cantidad}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.total}"></td></td>
         </tbody>
     </table>
 
 <br>
     <div class="container">
-        <label for="acumTotales">Total</label>
+        <label for="acumTotales">Total en AR$</label>
         <input class="form-control" type="text"
                th:value="${acumTotales}" id="acumTotales" name="acumTotales" disabled/>
     </div>

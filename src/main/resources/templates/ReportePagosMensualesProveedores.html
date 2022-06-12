@@ -54,14 +54,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Listado mensual de bolsas cerradas de balanceado vendidas
+        Listado mensual de movimiento económico por ingreso de mercadería
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Detalle de venta por bolsa cerrada</h2>
+    <h2 style="text-align: center">Detalle de ingresos</h2>
     <br>
 
 </div>
@@ -76,13 +76,18 @@
 </div>
 
 <div class="container">
+    <td><a th:href="@{/reportes/ingresosMensuales/export}" class="btn btn-info">
+        Descargar PDF </a></td>
+</div>
+
+<div class="container">
     <table class="table table-striped">
         <thead>
         <tr>
             <th scope="col">Fecha</th>
             <th scope="col">Proveedor</th>
             <th scope="col">Forma de pago efectuada</th>
-            <th scope="col">Total</th>
+            <th colspan="2" scope="col">Total</th>
         </tr>
         </thead>
         <tbody>
@@ -90,7 +95,7 @@
             <td th:text="${ingreso.fecha}"></td>
             <td th:text="${ingreso.proveedor.nombre}"></td>
             <td th:text="${ingreso.formaPago.nombre}"></td>
-            <td th:text="${ingreso.total}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${ingreso.total}"></td>
         </tbody>
     </table>
     <br>

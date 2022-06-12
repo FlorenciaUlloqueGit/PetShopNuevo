@@ -150,11 +150,11 @@
                 <tbody>
                 <tr th:each="producto: ${productoStock}" >
 
-                    <td th:text="${producto.idProducto}" ></td>
+                    <td style="text-align=left" th:text="${producto.idProducto}" ></td>
                     <td th:text="${producto.nombre}"></td>
-                    <td th:text="${producto.codBarras}"></td>
+                    <td style="text-align=left" th:text="${producto.codBarras}"></td>
                     <td th:text="${producto.formaVenta.nombre}"></td>
-                    <td><input type="number" class="form-control" id="cantidad" th:field="*{cantidad}"
+                    <td style="text-align=left"><input type="number" style="text-align=left" class="form-control" id="cantidad" th:field="*{cantidad}"
                                required autofocus="autofocus"/></td>
                     <td>
                         <input class="form-control" type="text"

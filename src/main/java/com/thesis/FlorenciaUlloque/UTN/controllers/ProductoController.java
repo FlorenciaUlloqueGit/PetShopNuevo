@@ -490,8 +490,9 @@ public class ProductoController {
         return "UpdateProductoForDetalleIngresoVendedor";
     }
 
+
     @GetMapping("/updateProductoDetalleEgresoVendedor/{idProducto}")
-    public String mostrarformUpdateProductoDetalle3(@PathVariable int idProducto, Model model){
+    public String mostrarformUpdateProductoDetalle4(@PathVariable int idProducto, Model model){
 
         Producto producto = repository.findByIdProducto(idProducto);
         ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
@@ -503,7 +504,6 @@ public class ProductoController {
         model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
         return "UpdateProductoForDetalleEgresoVendedor";
     }
-
 
 
     @GetMapping("/listarProductos")

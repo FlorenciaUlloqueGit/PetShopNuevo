@@ -74,8 +74,15 @@
 <div class="container" th:if=${param.exito}>
     <div class="alert alert-info">El cliente se ha eliminado exitosamente.</div>
 </div>
+<div class="container">
+    <td><a th:href="@{/customer/listarClientesPetShop/export}" class="btn btn-info">
+        Descargar PDF </a></td> <br>
+</div>
+
+</div>
 
 <div class="container">
+
 
     <table class="table table-striped">
         <thead>
@@ -90,11 +97,11 @@
         </thead>
         <tbody>
         <tr th:each="cliente: ${customer}">
-            <td th:text="${cliente.idCliente}"></td>
+            <td style="text-align=left" th:text="${cliente.idCliente}"></td>
             <td th:text="${cliente.nombre}"></td>
             <td th:text="${cliente.apellido}"></td>
             <td th:text="${cliente.email}"></td>
-            <td th:text="${cliente.telefono}"></td>
+            <td style="text-align=left" th:text="${cliente.telefono}"></td>
             <td th:text="${cliente.direccion}"></td>
         </tbody>
     </table>

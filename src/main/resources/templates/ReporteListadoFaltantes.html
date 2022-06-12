@@ -73,7 +73,10 @@
 <div class="container" th:if=${param.error}>
     <div class="alert alert-info">No hay productos en falta en este momento</div>
 </div>
-
+<div class="container">
+    <td><a th:href="@{/reportes/listarFaltantes/export}" class="btn btn-info">
+        Descargar PDF </a></td>
+</div>
 <div class="container">
     <table class="table table-striped">
         <thead>
@@ -89,12 +92,12 @@
         </thead>
         <tbody>
         <tr th:each="producto: ${productoFaltantes}">
-            <td th:text="${producto.idProducto}"></td>
+            <td style="text-align:left" th:text="${producto.idProducto}"></td>
             <td th:text="${producto.nombre}"></td>
-            <td th:text="${producto.codBarras}"></td>
+            <td style="text-align:left" th:text="${producto.codBarras}"></td>
             <td th:text="${producto.categoria.nombre}"></td>
             <td th:text="${producto.marca.nombre}"></td>
-            <td th:text="${producto.pesoNeto}"></td>
+            <td style="text-align:left" th:text="${producto.pesoNeto}"></td>
             <td th:text="${producto.unidadMedida.nombre}"></td>
         </tbody>
     </table>

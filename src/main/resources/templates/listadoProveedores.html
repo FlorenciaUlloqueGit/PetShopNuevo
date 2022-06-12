@@ -95,9 +95,9 @@
         </thead>
         <tbody>
         <tr th:each="proveedor: ${proveedorReal}">
-            <td th:text="${proveedor.idProveedor}"></td>
+            <td style="text-align:left" th:text="${proveedor.idProveedor}"></td>
             <td th:text="${proveedor.nombre}"></td>
-            <td th:text="${proveedor.telefono}"></td>
+            <td style="text-align:left" th:text="${proveedor.telefono}"></td>
             <td><a th:href="@{/proveedores/update/{idProveedor}(idProveedor=${proveedor.idProveedor})}" class="btn btn-info">
                 Editar</a></td>
             <td><a th:href="@{/proveedores/delete/{idProveedor}(idProveedor=${proveedor.idProveedor})}" class="btn btn-danger">

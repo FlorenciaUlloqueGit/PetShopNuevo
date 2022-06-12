@@ -1,8 +1,10 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
+import com.lowagie.text.DocumentException;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteDto;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteDtos;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteRegistroDto;
+import com.thesis.FlorenciaUlloque.UTN.Util.UsersPDfExporterListadoClientes;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
 import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.ClienteRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ClienteService;
@@ -10,7 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -169,5 +176,25 @@ public class CustomerController {
         }
 
     }
+
+    @GetMapping("/listarClientesPetShop/export")
+    public void exportToPDFListaClientes(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users.pdf";
+
+        response.setHeader(headerKey, headerValue);
+
+        List<ClienteDto> listUsers = clienteService.findAllClientes();
+        UsersPDfExporterListadoClientes exporter = new UsersPDfExporterListadoClientes(listUsers);
+        exporter.export(response);
+
+
+    }
+
 
 }

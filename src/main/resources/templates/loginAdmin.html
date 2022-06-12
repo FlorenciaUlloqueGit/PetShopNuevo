@@ -30,7 +30,6 @@
         </div>
     </div>
 </nav>
-
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
@@ -38,21 +37,28 @@
         <br><br><br>
     </h1>
 </div>
-<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
-    <br>
-    <h2 style="text-align: center"> Ingreso exclusivo de Administradores</h2>
-    <br>
 
+<br>
+<br>
+<br>
+
+<div th:if=${param.logoutAdmin}>
+    <div class="alert alert-info" align="center">Se ha cerrado la sesión exitósamente.
+        Si desea ingresar al sistema nuevamente ingrese sus credenciales.
+    </div>
 </div>
-
-<br>
-<br>
-<br>
-
+<div th:if=${param.logoutAdminError}>
+    <div class="alert alert-info" align="center">No puede cerrar una sesión que no inició
+    </div>
+</div>
 <div th:if=${param.exito}>
     <div class="alert alert-info" align="center">Inicio de sesión exitoso
     </div>
+</div>
+<div th:if=${param.error}>
+    <div class="alert alert-danger" align="center">Usuario o contraseña
+        inválidos</div>
 </div>
 
 <section class="login-block">
@@ -60,12 +66,9 @@
         <div class="row">
             <div class="col-md-4 login-sec">
                 <h2 class="text-center">Inicio de sesión</h2>
-                <form th:action="@{/loginAdmin}" th:object="${administrador}" method="post">
+                <form th:action="@{/loginAdministrador}" th:object="${administrador}" method="post">
 
-                    <div th:if=${param.error}>
-                        <div class="alert alert-danger" align="center">Usuario o contraseña
-                            inválidos</div>
-                    </div>
+
 
                     <div th:if=${param.logout}>
                         <div class="alert alert-info"  align="center">Ha cerrado sesión exitosamente

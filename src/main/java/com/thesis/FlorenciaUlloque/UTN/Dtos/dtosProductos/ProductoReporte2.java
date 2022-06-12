@@ -1,6 +1,6 @@
 package com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos;
 
-import com.thesis.FlorenciaUlloque.UTN.entiities.Categoria;
+import com.lowagie.text.pdf.PdfPCell;
 
 public class ProductoReporte2
 {
@@ -55,7 +55,7 @@ public class ProductoReporte2
         this.cantidad = cantidad;
     }
 
-    public float getTotal() {
+    public double getTotal() {
         return total;
     }
 

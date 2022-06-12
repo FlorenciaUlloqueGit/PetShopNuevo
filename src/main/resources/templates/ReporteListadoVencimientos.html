@@ -73,7 +73,12 @@
 <div class="container" th:if=${param.error}>
     <div class="alert alert-info">No hay productos por vencer o vencidos actualmente</div>
 </div>
-
+<div class="container">
+    <td><a th:href="@{/reportes/listadoProductosVencidos/export}" class="btn btn-info">
+        Descargar PDF de productos vencidos </a></td>
+    <td><a th:href="@{/reportes/listadoProductosPorVencer/export}" class="btn btn-success">
+        Descargar PDF de productos por vencer </a></td>
+</div>
 <div class="container">
     <br>
     <H3> Listado de productos próximos a vencer</H3>
@@ -87,19 +92,23 @@
             <th scope="col">Forma de venta</th>
             <th scope="col">Animal</th>
             <th scope="col">Fecha de vencimiento</th>
+            <th scope="col">Peso</th>
+            <th scope="col">Unidad de medida</th>
             <th scope="col">Unidades en stock</th>
 
         </tr>
         </thead>
         <tbody>
         <tr th:each="producto: ${productoPorVencer}">
-            <td th:text="${producto.idProducto}"></td>
+            <td style="text-align:left" th:text="${producto.idProducto}"></td>
             <td th:text="${producto.nombre}"></td>
             <td th:text="${producto.categoria.nombre}"></td>
             <td th:text="${producto.formaVenta.nombre}"></td>
             <td th:text="${producto.tipoAnimal.nombre}"></td>
             <td th:text="${producto.fechaVencimiento}"></td>
-            <td th:text="${producto.stock.cantidad}"></td>
+            <td th:text="${producto.pesoNeto}"></td>
+            <td th:text="${producto.unidadMedida.nombre}"></td>
+            <td style="text-align:left" th:text="${producto.stock.cantidad}"></td>
         </tbody>
     </table>
 
@@ -119,19 +128,23 @@
             <th scope="col">Forma de venta</th>
             <th scope="col">Animal</th>
             <th scope="col">Fecha de vencimiento</th>
+            <th scope="col">Peso</th>
+            <th scope="col">Unidad de medida</th>
             <th scope="col">Unidades en stock</th>
 
         </tr>
         </thead>
         <tbody>
         <tr th:each="producto: ${productosVencidos}">
-            <td th:text="${producto.idProducto}"></td>
+            <td style="text-align:left" th:text="${producto.idProducto}"></td>
             <td th:text="${producto.nombre}"></td>
             <td th:text="${producto.categoria.nombre}"></td>
             <td th:text="${producto.formaVenta.nombre}"></td>
             <td th:text="${producto.tipoAnimal.nombre}"></td>
             <td th:text="${producto.fechaVencimiento}"></td>
-            <td th:text="${producto.stock.cantidad}"></td>
+            <td th:text="${producto.pesoNeto}"></td>
+            <td th:text="${producto.unidadMedida.nombre}"></td>
+            <td style="text-align:left" th:text="${producto.stock.cantidad}"></td>
         </tbody>
     </table>
     <br>

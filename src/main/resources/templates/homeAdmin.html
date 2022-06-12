@@ -43,6 +43,9 @@
                     <a class="nav-link" th:href="@{/stocks/}">Administrar stock</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" th:href="@{/stocks/}">Administrar stock</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" th:href="@{/logout}">Logout</a>
                 </li>
             </ul>
@@ -99,7 +102,7 @@
         <a class="nav-link"  style="color: black" id="v-pills-settings-tab" data-toggle="pill" th:href="@{/reportes/ingresosPorVentas}"role="tab" aria-controls="v-pills-settings" aria-selected="false">Movimiento económico del mes por ventas (Movimiento positivo)</a>
         <a class="nav-link active " style="background-color: rgb(299, 99, 50)" id="v-pills-settings-tab" data-toggle="pill" th:href="@{/reportes/GastosMensualesProveedores}" role="tab" aria-controls="v-pills-home" aria-selected="false">Movimiento económico del mes por compras a proveedores (Movimiento negativo)</a>
         <a class="nav-link "  style="color: black" id="v-pills-settings-tab" data-toggle="pill" th:href="@{/reportes/ventasPorBolsa}" aria-controls="v-pills-home" aria-selected="false">Detalle mensual de venta de productos por bolsa cerrada</a>
-        <a class="nav-link active"   style="background-color: rgb(299, 99, 50)" id="v-pills-settings-tab" data-toggle="pill" th:href="@{/reportes/ventasPorKg}" aria-controls="v-pills-home" aria-selected="false">Detalle mensual de producto vendido por peso</a>
+        <a class="nav-link active"   style="background-color: rgb(299, 99, 50)" id="v-pills-settings-tab" data-toggle="pill" th:href="@{/reportes/ventasPorKg}" aria-controls="v-pills-home" aria-selected="false">Detalle mensual de productos vendidos por peso</a>
         <a class="nav-link"  style="color: black" id="v-pills-settings-tab" data-toggle="pill" th:href="@{/reportes/productosDiarios}" role="tab" aria-controls="v-pills-settings" aria-selected="false">Ventas del día</a>
     </div>
 
@@ -108,5 +111,15 @@
 <br> <br>
 <br>
 
+<div class="container">
+    <h2>Uso del sistema</h2>
+    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link active"  style="background-color: rgb(299, 99, 50)"id="v-pills-home-tab" data-toggle="pill" th:href="@{/preguntasFrecuentesAdmin}" role="tab" aria-controls="v-pills-home" aria-selected="false"> Ver preguntas frecuentes</a>
+    </div>
+
+</div>
+
+<br> <br>
+<br>
 </body>
 </html>

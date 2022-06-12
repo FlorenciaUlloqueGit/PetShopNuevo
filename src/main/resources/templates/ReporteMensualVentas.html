@@ -76,6 +76,10 @@
 </div>
 
 <div class="container">
+    <td><a th:href="@{/reportes/ventasMensuales/export}" class="btn btn-info">
+        Descargar PDF </a></td>
+</div>
+<div class="container">
     <table class="table table-striped">
         <thead>
         <tr>
@@ -83,22 +87,22 @@
             <th scope="col">Fecha</th>
             <th scope="col">Forma de pago</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Subtotal</th>
+            <th colspan="2" scope="col">Subtotal</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="salida: ${salidaProducto}">
-            <td th:text="${salida.idEgreso}"></td>
+            <td style="text-align:left" th:text="${salida.idEgreso}"></td>
             <td th:text="${salida.fecha}"></td>
             <td th:text="${salida.formaPago.nombre}"></td>
             <td th:text="${salida.cliente.nombre}"></td>
-            <td th:text="${salida.total}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${salida.total}"></td>
         </tbody>
     </table>
 
     <br>
     <div class="container">
-        <label for="totalVentasRedondeado"> <b>Total</b></label>
+        <label for="totalVentasRedondeado"> <b>Total en AR$</b></label>
 
         <input class="form-control" type="text"
                th:value="${totalVentasRedondeado}" id="totalVentasRedondeado" name="totalVentasRedondeado" disabled/>

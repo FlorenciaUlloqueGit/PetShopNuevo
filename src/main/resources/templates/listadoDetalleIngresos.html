@@ -105,7 +105,7 @@
             <th scope="col">Peso</th>
             <th scope="col">Unidad de medida</th>
             <th scope="col">cantidad</th>
-            <th scope="col">subtotal</th>
+            <th colspan="2" scope="col">Subtotal</th>
             <th scope="col">Editar</th>
             <th scope="col">Eliminar</th>
         </tr>
@@ -116,10 +116,10 @@
             <td th:text="${detalle.idIngreso}" hidden></td>
             <td th:text="${detalle.producto.nombre}"></td>
             <td th:text="${detalle.producto.marca.nombre}"></td>
-            <td th:text="${detalle.producto.pesoNeto}"></td>
+            <td style="text-align:left" th:text="${detalle.producto.pesoNeto}"></td>
             <td th:text="${detalle.producto.unidadMedida.nombre}"></td>
-            <td th:text="${detalle.cantidad}"></td>
-            <td th:text="${detalle.total}"></td>
+            <td style="text-align:left" th:text="${detalle.cantidad}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${detalle.total}"></td></td>
             <td><a th:href="@{/detalleIngresos/update/{idDetalle}(idDetalle=${detalle.idDetalle})}" class="btn btn-info">
                 Editar</a></td>
             <td><a th:href="@{/detalleIngresos/delete/{idDetalle}(idDetalle=${detalle.idDetalle})}" class="btn btn-danger">

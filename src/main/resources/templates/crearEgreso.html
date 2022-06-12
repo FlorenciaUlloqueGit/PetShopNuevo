@@ -100,7 +100,7 @@
 
 
         <div class="form-group">
-            <label for="total">Total</label>
+            <label for="total">Total en AR$</label>
             <input type="text" class="form-control" id="total" th:value="${total}" disabled>
         </div>
 
@@ -141,10 +141,10 @@
             </thead>
             <tbody>
             <tr th:each="detalleEgreso : ${detalleEgresoReal}">
-                <td th:text="${detalleEgreso.idDetalleEgreso}"></td>
-                <td th:text="${detalleEgreso.idEgresp}"></td>
+                <td style="text-align=left" th:text="${detalleEgreso.idDetalleEgreso}"></td>
+                <td style="text-align=left" th:text="${detalleEgreso.idEgreso}"></td>
                 <td th:text="${detalleEgreso.producto.nombre}"></td>
-                <td th:text="${detalleEgreso.cantidad}"></td>
+                <td style="text-align=left" th:text="${detalleEgreso.cantidad}"></td>
                 <td><a th:href="@{/detalleEgresos/update/{idDetalleEgreso}(idDetalleEgreso=${detalleEgreso.idDetalleEgreso})}"
                        class="btn btn-info">
                     Editar</a></td>

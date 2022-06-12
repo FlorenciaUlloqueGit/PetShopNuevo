@@ -73,7 +73,10 @@
 <div class="container" th:if=${param.error}>
     <div class="alert alert-info">No hay bolsas cerradas vendidas en lo que va del mes</div>
 </div>
-
+<div class="container">
+    <td><a th:href="@{/reportes/ventasBolsas/export}" class="btn btn-info">
+        Descargar PDF </a></td>
+</div>
 <div class="container">
     <table class="table table-striped">
         <thead>
@@ -84,18 +87,18 @@
             <th scope="col">Marca</th>
             <th scope="col">Peso</th>
             <th scope="col">Unidad de medida</th>
-            <th scope="col">Cantidad de Kg vendidos</th>
+            <th scope="col">Cantidad de bolsas</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="producto: ${productoReporteBolsaCerrada}">
-            <td th:text="${producto.idProducto}"></td>
+            <td style="text-align:left" th:text="${producto.idProducto}"></td>
             <td th:text="${producto.nombre}"></td>
             <td th:text="${producto.categoria.nombre}"></td>
             <td th:text="${producto.marca.nombre}"></td>
-            <td th:text="${producto.pesoNeto}"></td>
+            <td style="text-align:left" th:text="${producto.pesoNeto}"></td>
             <td th:text="${producto.unidadMedida.nombre}"></td>
-            <td th:text="${producto.cantidad}"  > </td>
+            <td style="text-align:left" th:text="${producto.cantidad}" > </td>
         </tbody>
     </table>
     <br>

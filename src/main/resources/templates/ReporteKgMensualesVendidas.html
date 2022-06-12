@@ -53,14 +53,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Listado mensual de bolsas cerradas de balanceado vendidas
+        Listado mensual de productos vendidos por peso
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Detalle de venta por bolsa cerrada</h2>
+    <h2 style="text-align: center">Detalle productos vendidos por peso</h2>
     <br>
 
 </div>
@@ -72,6 +72,10 @@
 
 <div class="container" th:if=${param.error}>
     <div class="alert alert-info">No hay bolsas cerradas vendidas en lo que va del mes</div>
+</div>
+<div class="container">
+    <td><a th:href="@{/reportes/ventasKgs/export}" class="btn btn-info">
+        Descargar PDF </a></td>
 </div>
 
 <div class="container">
@@ -89,13 +93,13 @@
         </thead>
         <tbody>
         <tr th:each="producto: ${productoReporteBolsaCerrada}">
-            <td th:text="${producto.idProducto}"></td>
+            <td style="text-align:left" th:text="${producto.idProducto}"></td>
             <td th:text="${producto.nombre}"></td>
             <td th:text="${producto.categoria.nombre}"></td>
             <td th:text="${producto.marca.nombre}"></td>
-            <td th:text="${producto.pesoNeto}"></td>
+            <td style="text-align:left" th:text="${producto.pesoNeto}"></td>
             <td th:text="${producto.unidadMedida.nombre}"></td>
-            <td th:text="${producto.cantidad}"></td>
+            <td style="text-align:left" th:text="${producto.cantidad}" ></td>
         </tbody>
     </table>
     <br>

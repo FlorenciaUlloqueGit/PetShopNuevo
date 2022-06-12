@@ -88,7 +88,7 @@
         <tr>
             <th scope="col" hidden>Número de venta</th>
             <th scope="col">Fecha</th>
-            <th scope="col">Total Costo</th>
+            <th colspan="2" scope="col">Total Costo</th>
             <th scope="col">Forma de pago</th>
             <th scope="col">Email cliente</th>
             <th scope="col">Detalles</th>
@@ -100,7 +100,7 @@
         <tr th:each="egreso : ${egresoDto}">
             <td th:text="${egreso.idEgreso}" hidden></td>
             <td th:text="${egreso.fecha}"></td>
-            <td th:text="${egreso.total}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${egreso.total}"></td></td>
             <td th:text="${egreso.formaPago.nombre}"></td>
             <td th:text="${egreso.cliente.email}"></td>
             <td><a th:href="@{/detalleEgresos/listar/{idEgreso}(idEgreso=${egreso.idEgreso})}" class="btn btn-warning">

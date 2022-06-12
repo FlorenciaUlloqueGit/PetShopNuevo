@@ -93,11 +93,11 @@
         </thead>
         <tbody>
         <tr th:each="cliente: ${customer}">
-            <td th:text="${cliente.idCliente}"></td>
+            <td style="text-align=left" th:text="${cliente.idCliente}"></td>
             <td th:text="${cliente.nombre}"></td>
             <td th:text="${cliente.apellido}"></td>
             <td th:text="${cliente.email}"></td>
-            <td th:text="${cliente.telefono}"></td>
+            <td style="text-align=left" th:text="${cliente.telefono}"></td>
             <td th:text="${cliente.direccion}"></td>
             <td><a th:href="@{/customer/update/{idCliente}(idCliente=${cliente.idCliente})}" class="btn btn-info">
                 Editar</a></td>

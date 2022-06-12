@@ -149,7 +149,7 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Código de barras</th>
                 <th scope="col">Categoría</th>
-                <th scope="col">Precio unitario</th>
+                <th colspan="2" scope="col">Precio unitario</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Registrar ingreso</th>
                 <th scope="col">Modificar producto</th>
@@ -164,8 +164,8 @@
                 <td th:text="${producto.nombre}"></td>
                 <td th:text="${producto.codBarras}"></td>
                 <td th:text="${producto.categoria.nombre}"></td>
-                <td th:text="${producto.precioCompra}"></td>
-                <td><input type="number" class="form-control" id="cantidad" th:field="*{cantidad}"
+                <td style="text-align:right">AR$ <td style="text-align=left" th:text="${producto.precioCompra}"></td></td>
+                <td><input type="number" class="form-control" style="text-align=left" id="cantidad" th:field="*{cantidad}"
                            required autofocus="autofocus"/>
                 </td>
                 <td>

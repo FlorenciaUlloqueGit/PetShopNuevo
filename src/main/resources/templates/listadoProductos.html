@@ -83,7 +83,7 @@
 
 <div class="container">
 
-    <table class="table table-striped">
+    <table class="table table-striped" >
         <thead>
         <tr>
             <th scope="col">ID</th>
@@ -92,30 +92,26 @@
             <th scope="col">Fecha de vencimiento</th>
             <th scope="col">Peso</th>
             <th scope="col">Unidad de medida </th>
-            <th scope="col">Precio de compra </th>
-            <th scope="col">Precio de venta </th>
+            <th colspan="2" scope="col">Precio de compra </th>
+            <th colspan="2" scope="col">Precio de venta </th>
             <th scope="col">Forma de venta </th>
             <th scope="col">Marca </th>
             <th scope="col">Categoría </th>
             <th scope="col">Animal </th>
             <th scope="col">Edad animal </th>
             <th scope="col">Tamaño animal </th>
-
-
-
-
         </tr>
         </thead>
         <tbody>
         <tr th:each="producto : ${productoReal}">
-            <td th:text="${producto.idProducto}"></td>
-            <td th:text="${producto.codBarras}"></td>
+            <td  style="text-align:left" th:text="${producto.idProducto}"></td>
+            <td style="text-align:left" th:text="${producto.codBarras}"></td>
             <td th:text="${producto.nombre}"></td>
             <td th:text="${producto.fechaVencimiento}"></td>
-            <td th:text="${producto.pesoNeto}"></td>
+            <td style="text-align:left" th:text="${producto.pesoNeto}"></td>
             <td th:text="${producto.unidadMedida.nombre}"></td>
-            <td th:text="${producto.precioCompra}"></td>
-            <td th:text="${producto.precioVenta}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.precioCompra}"></td></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.precioVenta}"></td></td>
             <td th:text="${producto.formaVenta.nombre}"></td>
             <td th:text="${producto.marca.nombre}"></td>
             <td th:text="${producto.categoria.nombre}"></td>

@@ -54,15 +54,33 @@
     <div class="alert alert-info" align="center">Inicio de sesión exitoso
     </div>
 </div>
+<div th:if=${param.ErrorIniciarSesion}>
+    <div class="alert alert-info" align="center">Para navegar entre las páginas de la aplicación primero debe iniciar sesión.
+    </div>
+</div>
+
+<div th:if=${param.logoutVendedor}>
+    <div class="alert alert-info" align="center">Se ha cerrado sesión exitosamente. Si lo desea, ingrese sus credenciales para reingresar al sistema
+    </div>
+</div>
+<div th:if=${param.logoutErrorVendedor}>
+    <div class="alert alert-info" align="center">No se puede cerrar una sesión que nunca se inició.
+    </div>
+</div>
+<div th:if=${param.error}>
+    <div class="alert alert-danger" align="center">Usuario o contraseña incorrectos. Comuníquese con el administrador para recuperar su cuenta
+    </div>
+</div>
+
 
 <section class="login-block">
     <div class="container">
         <div class="row">
             <div class="col-md-4 login-sec">
                 <h2 class="text-center">Inicio de sesión</h2>
-                <form th:action="@{/loginVendedor}" th:object="${vendedor}" method="post">
+                <form th:action="@{/indexVendedor}" th:object="${vendedor}" method="post">
 
-                    <div th:if=${param.error}>
+                    <div th:if=${param.errorOtro}>
                         <div class="alert alert-danger" align="center">Usuario o contraseña
                             inválidos</div>
                     </div>

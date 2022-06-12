@@ -99,7 +99,7 @@
         </thead>
         <tbody>
         <tr th:each="vendedor: ${vendedors}">
-            <td th:text="${vendedor.idVendedor}"></td>
+            <td style="text-align:left" th:text="${vendedor.idVendedor}"></td>
             <td th:text="${vendedor.usuario}"></td>
             <td th:text="${vendedor.pass}"></td>
             <td><a th:href="@{/vendedores/update/{idVendedor}(idVendedor=${vendedor.idVendedor})}" class="btn btn-info">
