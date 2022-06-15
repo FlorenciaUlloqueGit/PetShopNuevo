@@ -5,21 +5,19 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoReporte2;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoReporteBolsaCerrada;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Stock;
 
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
-public class ReporteVentasHoyPDF {
-    private List<ProductoReporte2> reporte2List;
-    private LocalDate fechaDiaria;
+public class ReporteStockPDF {
+    private List<Stock> listaStocks;
 
-    public ReporteVentasHoyPDF(List<ProductoReporte2> reporte2List, LocalDate fechaDiaria) {
-        this.reporte2List = reporte2List;
-        this.fechaDiaria = fechaDiaria;
+    public ReporteStockPDF(List<Stock> listaStocks) {
+        this.listaStocks = listaStocks;
     }
 
     private void writeTableHeader(PdfPTable table){
@@ -33,13 +31,13 @@ public class ReporteVentasHoyPDF {
         table.addCell(cell);
         cell.setPhrase(new Phrase("Categoría", font));
         table.addCell(cell);
+        cell.setPhrase(new Phrase("Peso", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("Unidad de medida ", font));
+        table.addCell(cell);
         cell.setPhrase(new Phrase("Forma de venta", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Precio de venta", font));
-        table.addCell(cell);
-        cell.setPhrase(new Phrase("Cantidad vendida", font));
-        table.addCell(cell);
-        cell.setPhrase(new Phrase("Subtotal en AR$", font));
+        cell.setPhrase(new Phrase("Cantidad", font));
         table.addCell(cell);
 
 
@@ -48,13 +46,13 @@ public class ReporteVentasHoyPDF {
     }
     private void  writeTableData(PdfPTable table){
 
-        for(ProductoReporte2 producto: reporte2List ) {
-            table.addCell(producto.getNombre());
-            table.addCell(producto.getCategoria());
-            table.addCell(producto.getFormaVenta());
-            table.addCell(String.valueOf(producto.getPrecioVenta()));
-            table.addCell(String.valueOf(producto.getCantidad()));
-            table.addCell(String.valueOf(producto.getTotal()));
+        for(Stock stock: listaStocks ) {
+            table.addCell(stock.getProducto().getNombre());
+            table.addCell(stock.getProducto().getCategoria().getNombre());
+            table.addCell(String.valueOf(stock.getProducto().getPesoNeto()));
+            table.addCell(stock.getProducto().getUnidadMedida().getNombre());
+            table.addCell(stock.getProducto().getFormaVenta().getNombre());
+            table.addCell(String.valueOf(stock.getCantidad()));
 
             }
     }
@@ -66,7 +64,7 @@ public class ReporteVentasHoyPDF {
         PdfWriter.getInstance(document, response.getOutputStream());
         document.open();
 
-        Paragraph titulo = new Paragraph("Listado de productos vendidos en el día " + fechaDiaria);
+        Paragraph titulo = new Paragraph("Stock de productos");
 
         document.add(new Paragraph(titulo));
 

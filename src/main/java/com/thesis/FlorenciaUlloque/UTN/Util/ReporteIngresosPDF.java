@@ -10,12 +10,13 @@ import com.thesis.FlorenciaUlloque.UTN.entiities.IngresoProductos;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ReporteIngresosPDF {
     private List<IngresoProductos> listaProductos;
 
-    public ReporteIngresosPDF(List<IngresoProductos> listaProductos) {
+    public ReporteIngresosPDF(List<IngresoProductos> listaProductos, LocalDate fechaCompras) {
         this.listaProductos = listaProductos;
     }
 

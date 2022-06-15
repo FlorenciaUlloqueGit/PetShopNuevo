@@ -14,6 +14,7 @@ public interface VendedorRepository extends PagingAndSortingRepository<Vendedor,
 
     Vendedor findByUsuario(String usuario);
     Vendedor findByIdVendedor(int idVendedor);
+    List<Vendedor> findAllByOrderByUsuario();
 
 
 }

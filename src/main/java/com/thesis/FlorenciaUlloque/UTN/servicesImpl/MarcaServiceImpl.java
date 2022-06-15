@@ -7,6 +7,8 @@ import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
 import com.thesis.FlorenciaUlloque.UTN.repositories.MarcaRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.MarcaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class MarcaServiceImpl implements MarcaService {
     }
 
     public List<MarcaDto> findAllMarcas(){
-        List <Marca>listaReal  = (List<Marca>) repository.findAll();
+        List <Marca>listaReal  = repository.findAllByOrderByNombreAsc();
         List<MarcaDto> listaDto = new ArrayList<>();
 
         MarcaDto marcaDto;
@@ -84,5 +86,10 @@ public class MarcaServiceImpl implements MarcaService {
         List<Proveedor> proveedorList;
         proveedorList = (List<Proveedor>) proveedorRepository.findAll();
         return  proveedorList;
+    }
+
+    @Override
+    public Page<Marca> getAll(Pageable pageable) {
+        return repository.findAllByOrderByNombreAsc(pageable);
     }
 }

@@ -2,9 +2,12 @@ package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 import com.thesis.FlorenciaUlloque.UTN.Dtos.ProveedorDto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Stock;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ProveedorService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,9 +22,12 @@ public class ProveedorServiceImpl  implements ProveedorService {
         this.repository = repository;
     }
 
+    public Page<Proveedor> getAll(Pageable pageable){
+        return repository.findAllByOrderByNombre(pageable);
+    }
 
     public List<Proveedor> findAllProveedor(){
-        List <Proveedor>listaReal  = (List<Proveedor>) repository.findAll();
+        List <Proveedor>listaReal  = repository.findAllByOrderByNombreAsc();
         List<Proveedor> listaDto = new ArrayList<>();
 
         Proveedor proveedor;

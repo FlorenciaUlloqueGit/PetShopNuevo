@@ -1,21 +1,27 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers.Reportes;
 
 import com.lowagie.text.DocumentException;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoFaltantes;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoReporte2;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoReporteBolsaCerrada;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.SoloFecha;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.*;
 import com.thesis.FlorenciaUlloque.UTN.Util.*;
 import com.thesis.FlorenciaUlloque.UTN.entiities.*;
 import com.thesis.FlorenciaUlloque.UTN.repositories.IngresoProductosRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProductoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.SalidaProductosRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.StockRepository;
+import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
+import com.thesis.FlorenciaUlloque.UTN.services.ProductoService;
+import com.thesis.FlorenciaUlloque.UTN.services.SalidaProductosService;
+import com.thesis.FlorenciaUlloque.UTN.services.StockService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,7 +34,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/reportes")
@@ -37,18 +45,31 @@ public class ReporteController {
     private final ProductoRepository productoRepository;
     private final SalidaProductosRepository salidaProductosRepository;
     private final IngresoProductosRepository ingresoProductosRepository;
+    private final SalidaProductosService salidaProductosService;
+    private final IngresoProductosService ingresoProductosService;
+    private final ProductoService productoService;
+    private final StockService stockService;
 
-    public ReporteController(StockRepository stockRepository, ProductoRepository productoRepository, SalidaProductosRepository salidaProductosRepository, IngresoProductosRepository ingresoProductosRepository) {
+    public ReporteController(StockRepository stockRepository, ProductoRepository productoRepository, SalidaProductosRepository salidaProductosRepository, IngresoProductosRepository ingresoProductosRepository, SalidaProductosService salidaProductosService, IngresoProductosService ingresoProductosService, ProductoService productoService, StockService stockService) {
         this.stockRepository = stockRepository;
         this.productoRepository = productoRepository;
         this.salidaProductosRepository = salidaProductosRepository;
         this.ingresoProductosRepository = ingresoProductosRepository;
+        this.salidaProductosService = salidaProductosService;
+        this.ingresoProductosService = ingresoProductosService;
+        this.productoService = productoService;
+        this.stockService = stockService;
     }
 
     //  ---------listado de faltantes
     @ModelAttribute("producto")
     public Producto mapear() {
         return new Producto();
+    }
+
+    @ModelAttribute("soloFecha")
+    public SoloFecha mapearMeses() {
+        return new SoloFecha();
     }
 
     @ModelAttribute("ingresoProducto")
@@ -85,6 +106,7 @@ public class ReporteController {
     public ProductoFaltantes mapearProductoFaltante() {
         return new ProductoFaltantes();
     }
+
     @GetMapping("/listadoReportes")
     public String mostrarFormularioListadoReportes(Model model) {
 
@@ -109,9 +131,9 @@ public class ReporteController {
             productoFaltantesList.add(productoFaltantes);
         }
 
-            model.addAttribute("productoFaltantes", productoFaltantesList);
-            return "ReporteListadoFaltantes";
-        }
+        model.addAttribute("productoFaltantes", productoFaltantesList);
+        return "ReporteListadoFaltantes";
+    }
 
 
     @GetMapping("/faltantesProductos")
@@ -132,18 +154,35 @@ public class ReporteController {
             productoFaltantesList.add(productoFaltantes);
         }
 
-            model.addAttribute("productoFaltantes", productoFaltantesList);
-            return "ReporteListadoFaltantesVendedor";
+        model.addAttribute("productoFaltantes", productoFaltantesList);
+        return "ReporteListadoFaltantesVendedor";
+    }
+
+    LocalDate fechaDiaria;
+
+    @GetMapping("/buscarDia")
+    public String buscarDia(@ModelAttribute("soloFecha") SoloFecha soloFecha) {
+
+        fechaDiaria = LocalDate.parse(soloFecha.getFecha());
+        List<SalidaProducto> listaSalida = salidaProductosRepository.findAllByFecha(fechaDiaria);
+
+        if (listaSalida.size() < 1) {
+            return "redirect:/reportes/productosDiarios?errorFecha";
         }
 
-
+        return "redirect:/reportes/productosDiarios";
+    }
 
 
     @GetMapping("/productosDiarios")
-    public String mostrarFormularioProductosVendidosHoy(Model model) {
+    public String mostrarFormularioProductosVendidosHoy(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+    //    Page<Stock> pageStock = stockService.getAll(pageRequest);
+
         ProductoReporte2 productoReporte2;
         List<ProductoReporte2> reporte2List = new ArrayList<>();
-        List<String> listado = productoRepository.findAllProductosVendidosHoy();
+        List<String> listado = productoRepository.findAllProductosVendidosHoy(fechaDiaria);
 
         List<ArrayList> listadoFormateado = new ArrayList<>();
 
@@ -200,15 +239,30 @@ public class ReporteController {
             reporte2List.add(productoReporte2);
         }
 
-        model.addAttribute("productoReporte2", reporte2List);
+
+        Page<ProductoReporte2> pageList = new PageImpl<>(reporte2List);
+
+        int totalPage = pageList.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("productoReporte2", pageList.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+       // model.addAttribute("productoReporte2", reporte2List);
         model.addAttribute("acumTotales", acumTotales);
         return "ReporteListadoVentasHoy";
     }
 
 
-
     @GetMapping("/productosVendidosDiarios")
-    public String mostrarFormularioProductosVendidosHoy2(Model model) {
+    public String mostrarFormularioProductosVendidosHoy2(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
         ProductoReporte2 productoReporte2;
         List<ProductoReporte2> reporte2List = new ArrayList<>();
         List<String> listado = productoRepository.findAllProductosVendidosHoy();
@@ -268,9 +322,27 @@ public class ReporteController {
             reporte2List.add(productoReporte2);
         }
 
-        model.addAttribute("productoReporte2", reporte2List);
+        Page<ProductoReporte2> pageList = new PageImpl<>(reporte2List);
+
+        int totalPage = pageList.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("productoReporte2", pageList.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+
+      //  model.addAttribute("productoReporte2", reporte2List);
         model.addAttribute("acumTotales", acumTotales);
         return "ReporteListadoVentasHoyVendedor";
+    }
+
+    public LocalDate obtenerFechaDiaria(){
+        return fechaDiaria;
     }
 
     @GetMapping("/homeAdmin")
@@ -284,9 +356,9 @@ public class ReporteController {
         List<Producto> productosPorVencer = productoRepository.findProductosPorVencer();
         List<Producto> productosVencidos = productoRepository.findProductosVencidos();
 
-            model.addAttribute("productoPorVencer", productosPorVencer);
-            model.addAttribute("productosVencidos", productosVencidos);
-            return "ReporteListadoVencimientos";
+        model.addAttribute("productoPorVencer", productosPorVencer);
+        model.addAttribute("productosVencidos", productosVencidos);
+        return "ReporteListadoVencimientos";
 
     }
 
@@ -301,26 +373,75 @@ public class ReporteController {
         return "ReporteListadoVencimientosVendedor";
 
     }
+
+    LocalDate fecha;
+
+    @GetMapping("/buscarMesPorFecha")
+    public String buscarMesPorFecha(@ModelAttribute("soloFecha") SoloFecha soloFecha) {
+
+        LocalDate fechaRetornada = LocalDate.parse(soloFecha.getFecha());
+        fecha = fechaRetornada;
+        List<SalidaProducto> listaSalida = salidaProductosRepository.findEgresoByMonth(soloFecha.getFecha());
+
+        if (listaSalida.size() < 1) {
+            return "redirect:/reportes/ingresosPorVentas?errorFecha";
+        }
+
+        return "redirect:/reportes/ingresosPorVentas";
+    }
+
     @GetMapping("/ingresosPorVentas")
-    public String mostrarFormularioVentasMensuales(Model model) {
+    public String mostrarFormularioVentasMensuales(@RequestParam Map<String, Object> params, Model model) {
 
-        List<SalidaProducto> salidaProductos = salidaProductosRepository.findEgresoByMonth();
-        float totalVentas = salidaProductosRepository.findTotalSumaEgresosByMonth();
-        float totalVentasRedondeado = Math.round((totalVentas*100.0)/100.0);
+        List<SalidaProducto> salidaProductos = salidaProductosRepository.findEgresoByMonth(String.valueOf(fecha));
+
+        String Stringfecha = String.valueOf(fecha);
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<SalidaProducto> pageVenta = salidaProductosService.getAllReporte(Stringfecha, pageRequest);
 
 
-        model.addAttribute("salidaProducto", salidaProductos);
+        int totalPage = pageVenta.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+        float totalVentas;
+        if (salidaProductos.size() > 0) {
+            totalVentas = salidaProductosRepository.findTotalSumaEgresosByMonth(Stringfecha);
+        } else {
+
+            totalVentas = 0;
+        }
+        float totalVentasRedondeado = Math.round((totalVentas * 100.0) / 100.0);
+
         model.addAttribute("totalVentasRedondeado", totalVentasRedondeado);
+        model.addAttribute("salidaProducto", pageVenta.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
         return "ReporteMensualVentas";
 
     }
+
+    public LocalDate fechaVentas() {
+        return fecha;
+    }
+
     @GetMapping("/ventasPorBolsa")
-    public String mostrarVentasBolsaCerrada(Model model) {
+    public String mostrarVentasBolsaCerrada(@RequestParam Map<String, Object> params, Model model) {
+
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+
 
         int i = 0;
         List<Producto> productosBolsaCerrada = productoRepository.findProductosVendidosBolsa();
         List<ProductoReporteBolsaCerrada> list = new ArrayList<>();
-        for (Producto producto: productosBolsaCerrada ) {
+
+        for (Producto producto : productosBolsaCerrada) {
             ProductoReporteBolsaCerrada bolsaCerrada = new ProductoReporteBolsaCerrada();
             bolsaCerrada.setIdProducto(producto.getIdProducto());
             bolsaCerrada.setNombre(producto.getNombre());
@@ -334,21 +455,35 @@ public class ReporteController {
             list.add(bolsaCerrada);
 
         }
+        Page<ProductoReporteBolsaCerrada> pageList = new PageImpl<>(list);
 
-        model.addAttribute("productoReporteBolsaCerrada", list);
-       // model.addAttribute("totalVentasRedondeado", totalVentasRedondeado);
+        int totalPage = pageList.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+
+
+        model.addAttribute("productoReporteBolsaCerrada", pageList.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
         return "ReporteBolsasMensualesVendidas";
 
     }
 
 
     @GetMapping("/ventasPorKg")
-    public String mostrarVentasKg(Model model) {
+    public String mostrarVentasKg(@RequestParam Map<String, Object> params, Model model) {
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+
 
         int i = 0;
         List<Producto> productoVentaKg = productoRepository.findProductosVendidosKG();
         List<ProductoReporteBolsaCerrada> list = new ArrayList<>();
-        for (Producto producto: productoVentaKg ) {
+        for (Producto producto : productoVentaKg) {
             ProductoReporteBolsaCerrada ventaKg = new ProductoReporteBolsaCerrada();
             ventaKg.setIdProducto(producto.getIdProducto());
             ventaKg.setNombre(producto.getNombre());
@@ -357,7 +492,7 @@ public class ReporteController {
             ventaKg.setPesoNeto((int) producto.getPesoNeto());
             ventaKg.setMarca(producto.getMarca());
             float cantidad = productoRepository.findCantidadProductoVendidoXKg().get(i);
-            float cantidadFormateada = Math.round(cantidad*100.0/100.0);
+            float cantidadFormateada = Math.round(cantidad * 100.0 / 100.0);
 
             DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
             separadoresPersonalizados.setDecimalSeparator('.');
@@ -371,20 +506,61 @@ public class ReporteController {
             list.add(ventaKg);
 
         }
+        Page<ProductoReporteBolsaCerrada> pageList = new PageImpl<>(list);
 
-        model.addAttribute("productoReporteBolsaCerrada", list);
-        // model.addAttribute("totalVentasRedondeado", totalVentasRedondeado);
+        int totalPage = pageList.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+        model.addAttribute("productoReporteBolsaCerrada", pageList.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "ReporteKgMensualesVendidas";
 
     }
 
+    LocalDate fechaCompras;
+
+    @GetMapping("/buscarMesPorFechaCompra")
+    public String buscarMesPorFechaCompras(@ModelAttribute("soloFecha") SoloFecha soloFecha) {
+
+        LocalDate fechaRetornada = LocalDate.parse(soloFecha.getFecha());
+        fechaCompras = fechaRetornada;
+        List<IngresoProductos> listaIngresos = ingresoProductosRepository.findIngresosbyMoth(soloFecha.getFecha());
+
+        if (listaIngresos.size() < 1) {
+            return "redirect:/reportes/GastosMensualesProveedores?errorFecha";
+        }
+
+        return "redirect:/reportes/GastosMensualesProveedores";
+    }
+
     @GetMapping("/GastosMensualesProveedores")
-    public String mostrarGastosProveedores(Model model) {
+    public String mostrarGastosProveedores(@RequestParam Map<String, Object> params, Model model) {
 
         int i = 0;
-        List<IngresoProductos> ingresoProductos = ingresoProductosRepository.findIngresosbyMoth();
+
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<IngresoProductos> pageIngreso = ingresoProductosService.getAllReporte(String.valueOf(fechaCompras), pageRequest);
+        List<IngresoProductos> ingresoProductos = ingresoProductosRepository.findIngresosbyMoth(String.valueOf(fechaCompras));
+        int totalPage = pageIngreso.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+        model.addAttribute("ingresoProducto", pageIngreso.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         List<IngresoProductos> list = new ArrayList<>();
-        for (IngresoProductos ingreso: ingresoProductos ) {
+        for (IngresoProductos ingreso : ingresoProductos) {
             IngresoProductos ingresoAGuardar = new IngresoProductos();
 
             ingresoAGuardar.setIdIngreso(ingreso.getIdIngreso());
@@ -401,12 +577,14 @@ public class ReporteController {
             list.add(ingresoAGuardar);
         }
 
-        model.addAttribute("ingresoProducto", list);
+        //   model.addAttribute("ingresoProducto", list);
 
         return "ReportePagosMensualesProveedores";
     }
 
-
+    public LocalDate obtenerFecha() {
+        return fechaCompras;
+    }
 
 
     @GetMapping("/listarFaltantes/export")
@@ -429,6 +607,7 @@ public class ReporteController {
 
 
     }
+
     @GetMapping("/listadoProductosVencidos/export")
     public void exportToPDFProductosVencidos(HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/pdf");
@@ -447,6 +626,7 @@ public class ReporteController {
         UsersPDfProductosPorVencer exporter = new UsersPDfProductosPorVencer(listaProductos);
         exporter.export(response);
     }
+
     @GetMapping("/listadoProductosPorVencer/export")
     public void exportToPDFProductosXVencer(HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/pdf");
@@ -465,6 +645,7 @@ public class ReporteController {
         UsersPDfProductosPorVencer exporter = new UsersPDfProductosPorVencer(listaProductos);
         exporter.export(response);
     }
+
     @GetMapping("/ventasDelDia/export")
     public void exportToPDFVentasHoy(HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/pdf");
@@ -478,7 +659,7 @@ public class ReporteController {
         response.setHeader(headerKey, headerValue);
 
         List<ProductoReporte2> reporte2List = new ArrayList<>();
-        List<String> listado = productoRepository.findAllProductosVendidosHoy();
+        List<String> listado = productoRepository.findAllProductosVendidosHoy(fechaDiaria);
 
         List<ArrayList> listadoFormateado = new ArrayList<>();
 
@@ -501,7 +682,7 @@ public class ReporteController {
 
         double acumTotales = 0;
         for (int i = 0; i < listadoFormateado.size(); i++) {
-           ProductoReporte2 productoReporte2 = new ProductoReporte2();
+            ProductoReporte2 productoReporte2 = new ProductoReporte2();
             for (int j = 0; j < 6; j++) {
                 ArrayList array = listadoFormateado.get(i);
                 if (j == 0) {
@@ -536,13 +717,14 @@ public class ReporteController {
         }
 
 
-        ReporteVentasHoyPDF exporter = new ReporteVentasHoyPDF(reporte2List);
+        ReporteVentasHoyPDF exporter = new ReporteVentasHoyPDF(reporte2List, fechaDiaria);
         exporter.export(response);
     }
 
     @GetMapping("/ventasBolsas/export")
     public void exportToPDFProductosBolsas(HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/pdf");
+
 
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String currentDateTime = dateFormat.format(new Date());
@@ -555,7 +737,7 @@ public class ReporteController {
         int i = 0;
         List<Producto> productosBolsaCerrada = productoRepository.findProductosVendidosBolsa();
         List<ProductoReporteBolsaCerrada> listaProductos = new ArrayList<>();
-        for (Producto producto: productosBolsaCerrada ) {
+        for (Producto producto : productosBolsaCerrada) {
             ProductoReporteBolsaCerrada bolsaCerrada = new ProductoReporteBolsaCerrada();
             bolsaCerrada.setIdProducto(producto.getIdProducto());
             bolsaCerrada.setNombre(producto.getNombre());
@@ -574,6 +756,7 @@ public class ReporteController {
         ReporteVentasBolsasPDF exporter = new ReporteVentasBolsasPDF(listaProductos);
         exporter.export(response);
     }
+
     @GetMapping("/ventasKgs/export")
     public void exportToPDFProductoKGS(HttpServletResponse response) throws DocumentException, IOException {
         response.setContentType("application/pdf");
@@ -589,7 +772,7 @@ public class ReporteController {
         int i = 0;
         List<Producto> productoVentaKg = productoRepository.findProductosVendidosKG();
         List<ProductoReporteBolsaCerrada> listaProductos = new ArrayList<>();
-        for (Producto producto: productoVentaKg ) {
+        for (Producto producto : productoVentaKg) {
             ProductoReporteBolsaCerrada ventaKg = new ProductoReporteBolsaCerrada();
             ventaKg.setIdProducto(producto.getIdProducto());
             ventaKg.setNombre(producto.getNombre());
@@ -598,7 +781,7 @@ public class ReporteController {
             ventaKg.setPesoNeto((int) producto.getPesoNeto());
             ventaKg.setMarca(producto.getMarca());
             float cantidad = productoRepository.findCantidadProductoVendidoXKg().get(i);
-            float cantidadFormateada = Math.round(cantidad*100.0/100.0);
+            float cantidadFormateada = Math.round(cantidad * 100.0 / 100.0);
 
             DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
             separadoresPersonalizados.setDecimalSeparator('.');
@@ -630,9 +813,9 @@ public class ReporteController {
         response.setHeader(headerKey, headerValue);
 
         int i = 0;
-        List<IngresoProductos> ingresoProductos = ingresoProductosRepository.findIngresosbyMoth();
+        List<IngresoProductos> ingresoProductos = ingresoProductosRepository.findIngresosbyMoth(String.valueOf(fechaCompras));
         List<IngresoProductos> listadoProductos = new ArrayList<>();
-        for (IngresoProductos ingreso: ingresoProductos ) {
+        for (IngresoProductos ingreso : ingresoProductos) {
             IngresoProductos ingresoAGuardar = new IngresoProductos();
 
             ingresoAGuardar.setIdIngreso(ingreso.getIdIngreso());
@@ -650,7 +833,7 @@ public class ReporteController {
         }
 
 
-        ReporteIngresosPDF exporter = new ReporteIngresosPDF(listadoProductos);
+        ReporteIngresosPDF exporter = new ReporteIngresosPDF(listadoProductos, fechaCompras);
         exporter.export(response);
     }
 
@@ -666,15 +849,189 @@ public class ReporteController {
 
         response.setHeader(headerKey, headerValue);
 
-        List<SalidaProducto> salidaProductos = salidaProductosRepository.findEgresoByMonth();
-        float totalVentas = salidaProductosRepository.findTotalSumaEgresosByMonth();
-        float totalVentasRedondeado = Math.round((totalVentas*100.0)/100.0);
+        List<SalidaProducto> salidaProductos = salidaProductosRepository.findEgresoByMonth(String.valueOf(fecha));
+        float totalVentas;
+        if (salidaProductos.size() > 0) {
+            totalVentas = salidaProductosRepository.findTotalSumaEgresosByMonth(String.valueOf(fecha));
+        } else {
+            totalVentas = 0;
+        }
 
+        float totalVentasRedondeado = Float.valueOf(Math.round((totalVentas * 100.0) / 100));
 
 
         ReporteVentasPDF exporter = new ReporteVentasPDF(salidaProductos, totalVentas);
         exporter.export(response);
     }
 
+    @ModelAttribute("productoSoloNombre")
+    public ProductoSoloNombre mapeaDtoSoloNombre() {
+        return new ProductoSoloNombre();
+    }
+
+    @ModelAttribute("stock")
+    public Stock mapearStock() {
+        return new Stock();
+    }
+
+
+    @GetMapping("/corroborarStock")
+    public String mostrarFormu(@RequestParam Map<String, Object> params, Model model) {
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Stock> pageStock = stockService.getAll(pageRequest);
+
+        int totalPage = pageStock.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("stock", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+        return "listadoStockReporte";
+    }
+
+    @ModelAttribute("productoSoloCodBarras")
+    public ProductoSoloCodBarras mapeaProdStockSoloCod() {
+        return new ProductoSoloCodBarras();
+    }
+
+    String nombre;
+    long codBarras;
+
+    @GetMapping("/buscarNombre")
+    public String buscarNombre(@ModelAttribute("productoSoloNombre") ProductoSoloNombre productoSoloNombre) {
+
+        nombre = productoSoloNombre.getNombre();
+        List<Stock> listaProductos = stockRepository.findStockByProductoNombre(nombre);
+
+        if (listaProductos.size() < 1) {
+            return "redirect:/reportes/reporteStock?errorNombre";
+        }
+
+        return "redirect:/reportes/reporteStock";
+    }
+
+    @GetMapping("/buscarCodBarras")
+    public String buscarCodBarras(@ModelAttribute("productoSoloCodBarras") ProductoSoloCodBarras productoSoloCodBarras) {
+
+        codBarras = productoSoloCodBarras.getCodBarras();
+
+        if (codBarras == 0) {
+            return "redirect:/reportes/reporteStock?errorCodigo";
+        }
+        return "redirect:/reportes/reporteStock";
+    }
+
+    @GetMapping("/reporteStock")
+    public String mostrarFormularioConID(Model model) {
+
+
+        List<Stock> listaStock = stockRepository.findStockByProductoNombre(nombre);
+
+        if (codBarras != 0) {
+            Stock listaStock2 = stockRepository.findByProductoCodBarras(codBarras);
+            model.addAttribute("stock", listaStock2);
+            return "reporteStock";
+        }
+
+
+        model.addAttribute("stock", listaStock);
+        return "reporteStock";
+    }
+
+    @GetMapping("/corroborarStocks")
+    public String mostrarFormularioStok(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Stock> pageStock = stockService.getAll(pageRequest);
+
+        int totalPage = pageStock.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("stock", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
+        return "listadoStockReporteVendedor";
+    }
+
+    @ModelAttribute("buscarProductoSoloCodBarras")
+    public ProductoSoloCodBarras mapeaProdStockSoloCodVendedor() {
+        return new ProductoSoloCodBarras();
+    }
+
+    String nombreProdVendedor;
+    long codBarrasProdVendedor;
+
+    @GetMapping("/buscarNombreProducto")
+    public String buscarNombreVendedor(@ModelAttribute("productoSoloNombre") ProductoSoloNombre productoSoloNombre) {
+
+        nombreProdVendedor = productoSoloNombre.getNombre();
+        List<Stock> listaProductos = stockRepository.findStockByProductoNombre(nombreProdVendedor);
+
+        if (listaProductos.size() < 1) {
+            return "redirect:/reportes/reporteStocks?errorNombre";
+        }
+
+        return "redirect:/reportes/reporteStocks";
+    }
+
+    @GetMapping("/buscarCodBarrasProducto")
+    public String buscarCodBarrasVendedor(@ModelAttribute("productoSoloCodBarras") ProductoSoloCodBarras productoSoloCodBarras) {
+
+        codBarrasProdVendedor = productoSoloCodBarras.getCodBarras();
+
+        if (codBarrasProdVendedor == 0) {
+            return "redirect:/reportes/reporteStocks?errorCodigo";
+        }
+        return "redirect:/reportes/reporteStocks";
+    }
+
+    @GetMapping("/reporteStocks")
+    public String mostrarFormularioConIDVendedor(Model model) {
+
+
+        List<Stock> listaStock = stockRepository.findStockByProductoNombre(nombreProdVendedor);
+
+        if (codBarrasProdVendedor != 0) {
+            Stock listaStock2 = stockRepository.findByProductoCodBarras(codBarrasProdVendedor);
+            model.addAttribute("stock", listaStock2);
+            return "reporteStockVendedor";
+        }
+
+
+        model.addAttribute("stock", listaStock);
+        return "reporteStockVendedor";
+    }
+
+    @GetMapping("/corroborarStock/export")
+    public void exportToPDFStock(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users.pdf";
+
+        response.setHeader(headerKey, headerValue);
+
+
+        List<Stock> listaStocks = stockRepository.findAllByOrderByProductoNombreAsc();
+
+        ReporteStockPDF exporter = new ReporteStockPDF(listaStocks);
+        exporter.export(response);
+
+
+    }
 
 }

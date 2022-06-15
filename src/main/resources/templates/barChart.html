@@ -61,7 +61,7 @@
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Productos vendidos el día de hoy </h2>
+    <h2 style="text-align: center">Productos diarios vendidos </h2>
     <br>
 
 </div>
@@ -90,7 +90,7 @@
             type: 'column'
         },
         title: {
-            text: 'Ventas del día clasificadas por diferentes categorías de producto'
+            text: 'Ventas del día seleccionado clasificadas por diferentes categorías de producto'
         },
         subtitle: {
             text: 'Detalle'
@@ -101,7 +101,7 @@
         },
         yAxis: {
             min: 0,
-            max:100,
+            max:80,
             title: {
                 text: 'Cantidad'
             }
@@ -121,7 +121,7 @@
             }
         },
         series: [{
-            name: 'Name',
+            name: 'Nombre',
             data: [[${values}]]
         }]
       });

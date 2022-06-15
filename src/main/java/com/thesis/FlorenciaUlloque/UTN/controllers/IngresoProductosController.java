@@ -1,5 +1,6 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.SoloFecha;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.DetalleIngresoDtoIdIngreso;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.IngresoDto;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.IngresoDtos;
@@ -11,13 +12,19 @@ import com.thesis.FlorenciaUlloque.UTN.repositories.StockRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.DetalleIngresoService;
 import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
 import com.thesis.FlorenciaUlloque.UTN.services.StockService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -210,21 +217,56 @@ public class IngresoProductosController {
 
 
 
+    @ModelAttribute("soloFecha")
+    public SoloFecha mapearMeses() {
+        return new SoloFecha();
+    }
 
-    @GetMapping("/listar")
-    public String listar(Model model){
+    LocalDate fechaCompras;
+    @GetMapping("/buscarMesPorFechaCompra")
+    public String buscarMesPorFechaCompras(@ModelAttribute("soloFecha") SoloFecha soloFecha) {
 
-        List<IngresoProductos> listaIngresos = ingresoProductosService.getAllIngresos();
-        for (IngresoProductos ingresos: listaIngresos) {
-            if(ingresos.getListadoDetalleIngresos().size() < 1){
-                ingresoProductosService.deleteIngreso(ingresos.getIdIngreso());
-            }
+        LocalDate fechaRetornada = LocalDate.parse(soloFecha.getFecha());
+        fechaCompras = fechaRetornada;
+        List<IngresoProductos> listaIngresos = repository.findAllByFecha(fechaCompras);
+
+        if (listaIngresos.size() < 1) {
+            return "redirect:/ingresos/listarFiltrado?errorFecha";
         }
 
+        return "redirect:/ingresos/listarFiltrado";
+    }
 
-        model.addAttribute("ingresoDto", ingresoProductosService.getAllIngresos());
+    @GetMapping("/listar")
+    public String findAll(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<IngresoProductos> pageIngresos = ingresoProductosService.getAll(pageRequest);
+
+        int totalPage = pageIngresos.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("ingresoDto", pageIngresos.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "listadoIngresos";
     }
+    @GetMapping("/listarFiltrado")
+    public String findAllFiltrado( Model model){
+        String Stringfecha = String.valueOf(fechaCompras);
+
+        List<IngresoProductos> ingresoProductos = repository.findAllByFecha(fechaCompras);
+
+        model.addAttribute("ingresoDto", ingresoProductos);
+        return "listadoIngresosFiltrador";
+
+    }
+
 
 
     @GetMapping("/delete/{idIngreso}")

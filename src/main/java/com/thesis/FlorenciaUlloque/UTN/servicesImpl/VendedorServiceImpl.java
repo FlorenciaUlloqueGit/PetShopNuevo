@@ -23,7 +23,7 @@ public class VendedorServiceImpl implements VendedorService {
 
 
     public List<VendedorDtos> findAllVendedores(){
-       List <Vendedor>listaReal  = (List<Vendedor>) repository.findAll();
+       List <Vendedor>listaReal  = (List<Vendedor>) repository.findAllByOrderByUsuario();
        List<VendedorDtos> listaDto = new ArrayList<>();
 
         VendedorDtos vendedorDtos ;

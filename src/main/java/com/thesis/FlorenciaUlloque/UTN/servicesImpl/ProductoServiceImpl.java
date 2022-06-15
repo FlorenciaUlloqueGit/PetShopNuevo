@@ -6,6 +6,8 @@ import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDtos;
 import com.thesis.FlorenciaUlloque.UTN.entiities.*;
 import com.thesis.FlorenciaUlloque.UTN.repositories.*;
 import com.thesis.FlorenciaUlloque.UTN.services.ProductoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -217,9 +219,32 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public Page<Producto> getAll(Pageable pageable) {
+       return repository.findAllByOrderByNombreAsc(pageable);
+    }
+
+    @Override
+    public Page<Producto> getAllBolsas(Pageable pageable) {
+        return repository.findProductosVendidosBolsa(pageable);
+    }
+
+    @Override
+    public Page<Producto> getAllKG(Pageable pageable) {
+        return repository.findProductosVendidosKG(pageable);
+    }
+
+    @Override
+    public Page<String> getAllProdVendidosHoy(Pageable pageable) {
+        return repository.findAllProductosVendidosHoy(pageable);
+    }
+
+
+    @Override
     public List<UnidadMedida> listaUnidadMedida() {
         List<UnidadMedida> unidadMedidas;
         unidadMedidas = (List<UnidadMedida>) unidadMedidaRepository.findAll();
         return unidadMedidas;
     }
+
+
 }

@@ -53,18 +53,17 @@
     </div>
 </nav>
 
-
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Listado de productos
+        Búsqueda de Stock por producto
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Alta, baja y modificación de productos</h2>
+    <h2 style="text-align: center">Puede buscar el producto por nombre o código</h2>
     <br>
 
 </div>
@@ -73,19 +72,13 @@
 <br>
 <br>
 
-
 <div class="container">
-    <td><a  th:href="@{/productos/mostrarForm}" class="btn btn-danger"> Crear nuevo producto</a></td>
-</div>
-<br>
-<br>
-
-<div class="container" th:if=${param.exito}>
-    <div class="alert alert-info">El producto se ha eliminado exitosamente.</div>
+    <div th:if=${param.error2}>
+        <div class="alert alert-danger">Reintente. El código de barras no puede ser 0</div></div>
 </div>
 <div class="container">
-    <div class="container"
-        <form th:action="@{/productos/buscarNombreProducto}" method="get" th:object="${soloNombre}">
+    <div class="container">
+        <form th:action="@{/reportes/buscarNombreProducto}" method="get" th:object="${productoSoloNombre}">
             <div class="row">
                 <div class="col">
                     <div class="form-group">
@@ -101,11 +94,10 @@
             </div>
         </form>
     </div>
-</div>
     <br>
 
     <div class="container">
-        <form th:action="@{/productos/buscarCodBarrasProducto}" method="get" th:object="${soloCodBarras}">
+        <form th:action="@{/reportes/buscarCodBarrasProducto}" method="get" th:object="${productoSoloCodBarras}">
             <div class="row">
                 <div class="col">
                     <div class="form-group">
@@ -127,76 +119,74 @@
 </div>
 
 <br>
+<br>
+
+
 <div class="container">
-
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Código de barras</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Fecha de vencimiento</th>
-            <th scope="col">Peso</th>
-            <th scope="col">Unidad de medida </th>
-            <th colspan="2" scope="col">Precio de compra </th>
-            <th colspan="2" scope="col">Precio de venta </th>
-            <th scope="col">Forma de venta </th>
-            <th scope="col">Marca </th>
-            <th scope="col">Categoría </th>
-            <th scope="col">Animal </th>
-            <th scope="col">Edad animal </th>
-            <th scope="col">Tamaño animal </th>
-
-
-
-
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="producto : ${productoReal}">
-            <td style="text-align:left" th:text="${producto.idProducto}"></td>
-            <td style="text-align:left" th:text="${producto.codBarras}"></td>
-            <td th:text="${producto.nombre}"></td>
-            <td th:text="${producto.fechaVencimiento}"></td>
-            <td style="text-align:left" th:text="${producto.pesoNeto}"></td>
-            <td th:text="${producto.unidadMedida.nombre}"></td>
-            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.precioCompra}"></td></td>
-            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.precioVenta}"></td></td>
-            <td th:text="${producto.formaVenta.nombre}"></td>
-            <td th:text="${producto.marca.nombre}"></td>
-            <td th:text="${producto.categoria.nombre}"></td>
-            <td th:text="${producto.tipoAnimal.nombre}"></td>
-            <td th:text="${producto.edad.nombre}"></td>
-            <td th:text="${producto.tamano.nombre}"></td>
-            <td><a th:href="@{/productos/updateProducto/{idProducto}(idProducto=${producto.idProducto})}" class="btn btn-info">
-                Editar</a></td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <nav aria-label="Pagination">
-                <ul class="pagination justify-content-center" style="background=gray">
-                    <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{|/productos/listarProductos/?page=${prev}|}" >Anterior</a>
-                    </li>
-                    <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                        <a class="page-link" th:href="@{|/productos/listarProductos/?page=${page}|}" th:text="${page}"></a>
-                    </li>
-                    <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{|/productos/listarProductos/?page=${next}|}" > Siguiente</a>
-                    </li>
-                </ul>
-            </nav>
+    <div class="container">
+        <div th:if=${param.exito}>
+            <div class="alert alert-info">Felicitaciones! Se han registrado el producto exitosamente.</div>
         </div>
-    <br>
-        <div> <td><a th:href="@{/homeVendedor}" class="btn btn-warning">
-            Volver al menú </a></td></div>
+    </div>
+    <div class="container">
+        <div th:if=${param.errorNombre}>
+            <div class="alert alert-danger">No se encontraron coincidencias con el nombre del producto ingresado.</div>
+        </div>
+    </div>
+    <div class="container">
+        <div th:if=${param.errorCodigo}>
+            <div class="alert alert-danger">La búsqueda por código de barras no acepta el código 0.</div>
+        </div>
+    </div>
+    <form th:action="@{/reportes/reporteStocks}" method="post">
 
+
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Código de barras</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Peso neto</th>
+                <th scope="col">Unidad medida</th>
+                <th colspan="2" scope="col">Precio público</th>
+                <th scope="col">Cantidad</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="stock: ${stock}">
+
+                <td style="text-align:left" th:text="${stock.producto.idProducto}"></td>
+                <td th:text="${stock.producto.nombre}"></td>
+                <td style="text-align:left" th:text="${stock.producto.codBarras}"></td>
+                <td th:text="${stock.producto.categoria.nombre}"></td>
+                <td style="text-align:left" th:text="${stock.producto.pesoNeto}"></td>
+                <td th:text="${stock.producto.unidadMedida.nombre}"></td>
+                <td style="text-align:left">AR$ <td style="text-align=left" th:text="${stock.producto.precioVenta}"></td></td>
+                <td style="text-align:left" th:text="${stock.cantidad}"></td>
+
+
+            </tr>
+            </tbody>
+        </table>
+        </form>
+    <div class="container">
+        <a th:href="@{/reportes/corroborarStocks}" class="btn btn-warning">
+            Volver</a>
+    </div>
 </div>
-<br>
-<br>
-<br>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></select>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
 </html>
+

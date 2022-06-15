@@ -105,6 +105,25 @@
         </tr>
         </tbody>
     </table>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center" style="background=gray">
+                    <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/proveedores/listar/?page=${prev}|}" >Anterior</a>
+                    </li>
+                    <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                        <a class="page-link" th:href="@{|/proveedores/listar/?page=${page}|}" th:text="${page}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/proveedores/listar/?page=${next}|}" > Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
     <br>
     <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
         Volver al menú </a></td>

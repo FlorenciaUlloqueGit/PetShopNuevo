@@ -80,7 +80,46 @@
     <div class="alert alert-info">El producto se ha eliminado exitosamente.</div>
 </div>
 
-
+<div class="container">
+    <div>
+        <form th:action="@{/productos/buscarNombre}" method="get" th:object="${soloNombre}">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
+                               required autofocus="autofocus" >
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Buscar por nombre</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br>
+    </div>
+</div>
+<div class="container">
+    <div>
+        <form th:action="@{/productos/buscarCodBarras}" method="get" th:object="${soloCodBarras}">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="number" class="form-control" id="codBarras" th:field="*{codBarras}"
+                               required autofocus="autofocus" >
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Buscar por código de barras</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br> <br>
+    </div>
+</div>
 <div class="container">
 
     <table class="table table-striped" >
@@ -125,6 +164,25 @@
         </tr>
         </tbody>
     </table>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center" style="background=gray">
+                    <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/productos/listar/?page=${prev}|}" >Anterior</a>
+                    </li>
+                    <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                        <a class="page-link" th:href="@{|/productos/listar/?page=${page}|}" th:text="${page}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/productos/listar/?page=${next}|}" > Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
     <br>
     <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
         Volver al menú </a></td>

@@ -50,18 +50,17 @@
     </div>
 </nav>
 
-
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Stocks
+        Listado de Stocks
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Modificación de stock</h2>
+    <h2 style="text-align: center">Stock actual de productos a la venta</h2>
     <br>
 
 </div>
@@ -70,35 +69,69 @@
 <br>
 <br>
 
+
+<div class="container">
+    <td><a  th:href="@{/reportes/reporteStock}" class="btn btn-danger"> Buscar stock de un producto específico</a></td>
+
+    <td><a th:href="@{/reportes/corroborarStock/export}" class="btn btn-info">
+        Exportar a PDF</a></td></div>
+<br>
+<br>
+
+
+
 <div class="container">
 
-    <div th:if=${param.exito}>
-        <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Peso</th>
+            <th scope="col">Unidad de medida</th>
+            <th scope="col">Forma de venta</th>
+            <th scope="col">Cantidad</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="stock : ${stock}">
+            <td  th:text="${stock.producto.nombre}"></td>
+            <td th:text="${stock.producto.categoria.nombre}"></td>
+            <td style="text-align:left" th:text="${stock.producto.pesoNeto}"></td>
+            <td  th:text="${stock.producto.unidadMedida.nombre}"></td>
+            <td  th:text="${stock.producto.formaVenta.nombre}"></td>
+            <td style="text-align:left" th:text="${stock.cantidad}"></td>
+
+
+
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center" style="background=gray">
+                    <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/reportes/corroborarStock/?page=${prev}|}" >Anterior</a>
+                    </li>
+                    <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                        <a class="page-link" th:href="@{|/reportes/corroborarStock/?page=${page}|}" th:text="${page}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/reportes/corroborarStock/?page=${next}|}" > Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-2"></div>
     </div>
-
-      <form th:action="@{/stocks/updateStock/{idStock}(idStock=${stock.idStock})}" method="post" th:object="${stockDtoSoloCant}" >
-
-          <div class="form-group">
-              <label for="cantidad">Cantidad</label>
-              <input type="text" class="form-control" id="cantidad" th:field="*{cantidad}"
-                     required autofocus="autofocus" enabled >
-              </select>
-          </div>
-                <BR>
-              <button type="submit" class="btn btn-success">Modificar</button>
-          <td><a th:href="@{/stocks/listadoPaginado}" class="btn btn-info"> Volver al listado</a></td>
-          </form>
-
-    </div>
-
+    <br>
+    <br>
+    <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
+        Volver al menú </a></td>
 </div>
-
-
-<!-- Latest compiled and minified JavaScript -->
-<script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+<br>
+<br>
+<br>
 </body>
 </html>
-

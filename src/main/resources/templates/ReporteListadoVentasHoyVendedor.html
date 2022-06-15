@@ -57,14 +57,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Productos vendidos hoy
+        Ventas del día
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Productos sin stock</h2>
+    <h2 style="text-align: center">Listado de productos vendidos en el día de hoy</h2>
     <br>
 
 </div>
@@ -75,7 +75,7 @@
 
 
 <div class="container" th:if=${param.error}>
-    <div class="alert alert-info">No hay productos en falta en este momento</div>
+    <div class="alert alert-info">No hay productos vendidos en el día de hoy hasta el momento</div>
 </div>
 
 <div class="container">
@@ -106,7 +106,25 @@
             <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${producto.total}"></td>
         </tbody>
     </table>
-
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center" style="background=gray">
+                    <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/reportes/productosVendidosDiarios/?page=${prev}|}" >Anterior</a>
+                    </li>
+                    <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                        <a class="page-link" th:href="@{|/reportes/productosVendidosDiarios/?page=${page}|}" th:text="${page}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/reportes/productosVendidosDiarios/?page=${next}|}" > Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
 <br>
     <div class="container">
         <label for="acumTotales">Total en AR$</label>

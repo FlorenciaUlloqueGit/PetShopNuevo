@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script type="text/javascript" src="Scripts/jquery-2.1.1.min.js"></script>
+        <title>Home</title>
+    </head>
+<body style="background-color: rgb(250, 237, 202)">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(193, 219, 179);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Almacén de Mascotas</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"  th:href="@{/homeAdmin}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reportes/listadoReportes}">Reportes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/vendedores/}">Administrar vendedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/proveedores/listar}">Administrar Proveedores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"th:href="@{/ventas/listar}">Modificar ventas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/stocks/}">Administrar stock</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
+    <h1 style="text-align: center">
+        <br><br>
+        Búsqueda de Stock por producto
+        <br><br><br>
+    </h1>
+</div>
+<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
+
+    <br>
+    <h2 style="text-align: center">Puede buscar el producto por nombre o código</h2>
+    <br>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="container">
+    <div th:if=${param.error2}>
+        <div class="alert alert-danger">Reintente. El código de barras no puede ser 0</div></div>
+</div>
+<div class="container">
+    <div class="container">
+        <form th:action="@{/reportes/buscarNombre}" method="get" th:object="${productoSoloNombre}">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
+                               required autofocus="autofocus" placeholder="Ingrese el nombre del producto">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Buscar por nombre</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+
+    <div class="container">
+        <form th:action="@{/reportes/buscarCodBarras}" method="get" th:object="${productoSoloCodBarras}">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="codBarras" th:field="*{codBarras}"
+                               required autofocus="autofocus"
+                               placeholder="Ingrese el código de barras del producto">
+
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Buscar por código</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<br>
+<br>
+
+
+<div class="container">
+    <div class="container">
+        <div th:if=${param.exito}>
+            <div class="alert alert-info">Felicitaciones! Se han registrado el producto exitosamente.</div>
+        </div>
+    </div>
+    <div class="container">
+        <div th:if=${param.errorNombre}>
+            <div class="alert alert-danger">No se encontraron coincidencias con el nombre del producto ingresado.</div>
+        </div>
+    </div>
+    <div class="container">
+        <div th:if=${param.errorCodigo}>
+            <div class="alert alert-danger">La búsqueda por código de barras no acepta el código 0.</div>
+        </div>
+    </div>
+    <form th:action="@{/reportes/reporteStock}" method="post">
+
+
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Código de barras</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Peso neto</th>
+                <th scope="col">Unidad medida</th>
+                <th colspan="2" scope="col">Precio público</th>
+                <th scope="col">Cantidad</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="stock: ${stock}">
+
+                <td style="text-align:left" th:text="${stock.producto.idProducto}"></td>
+                <td th:text="${stock.producto.nombre}"></td>
+                <td style="text-align:left" th:text="${stock.producto.codBarras}"></td>
+                <td th:text="${stock.producto.categoria.nombre}"></td>
+                <td style="text-align:left" th:text="${stock.producto.pesoNeto}"></td>
+                <td th:text="${stock.producto.unidadMedida.nombre}"></td>
+                <td style="text-align:left">AR$ <td style="text-align=left" th:text="${stock.producto.precioVenta}"></td></td>
+                <td style="text-align:left" th:text="${stock.cantidad}"></td>
+
+
+            </tr>
+            </tbody>
+        </table>
+        </form>
+    <div class="container">
+        <a th:href="@{/reportes/corroborarStock}" class="btn btn-warning">
+            Volver</a>
+    </div>
+</div>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></select>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>
+

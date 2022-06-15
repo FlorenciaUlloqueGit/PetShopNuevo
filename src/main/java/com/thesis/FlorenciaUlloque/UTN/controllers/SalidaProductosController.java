@@ -1,5 +1,6 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.SoloFecha;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.EgresoDto;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.EgresoDtos;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.EgresoIdTotal;
@@ -9,13 +10,19 @@ import com.thesis.FlorenciaUlloque.UTN.repositories.*;
 import com.thesis.FlorenciaUlloque.UTN.services.DetalleEgresoService;
 import com.thesis.FlorenciaUlloque.UTN.services.SalidaProductosService;
 import com.thesis.FlorenciaUlloque.UTN.services.StockService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -59,7 +66,10 @@ public class SalidaProductosController {
     public SalidaProducto getSalidaByFormaPagoNombre(@PathVariable String nombre) {
         return repository.findByFormaPagoNombre(nombre);
     }
-
+    @ModelAttribute("soloFecha")
+    public SoloFecha mapearMeses() {
+        return new SoloFecha();
+    }
     //funcionaa
     @GetMapping("/total/{total}")
     public SalidaProducto getSalidaByTotal(@PathVariable double total) {
@@ -185,7 +195,20 @@ public class SalidaProductosController {
         model.addAttribute("formaPagos", formaPagos);
         return "UpdateEgreso";
     }
+    LocalDate fechaCompras;
+    @GetMapping("/buscarMesPorFechaCompra")
+    public String buscarMesPorFechaCompras(@ModelAttribute("soloFecha") SoloFecha soloFecha) {
 
+        LocalDate fechaRetornada = LocalDate.parse(soloFecha.getFecha());
+        fechaCompras = fechaRetornada;
+        List<SalidaProducto> listaSalidas = repository.findAllByFecha(fechaCompras);
+
+        if (listaSalidas.size() < 1) {
+            return "redirect:/ventas/listarFiltrado?errorFecha";
+        }
+
+        return "redirect:/ventas/listarFiltrado";
+    }
 
     @PostMapping("/updateEgreso/{idEgreso}")
     public String updatearVendedor(@ModelAttribute("egreso") EgresoDto egresoDto,
@@ -214,10 +237,10 @@ public class SalidaProductosController {
     }
 
 
-    @GetMapping("/listar")
+    @GetMapping("/listarFiltrado")
     public String listar(Model model) {
 
-        List<SalidaProducto> listaEgresos = salidaProductosService.getAllEgresos();
+        List<SalidaProducto> listaEgresos = repository.findAllByFecha(fechaCompras);
         for (SalidaProducto egresos : listaEgresos) {
             if (egresos.getListadoSalidaProducto().size() < 1) {
                 salidaProductosService.deleteEgreso(egresos.getIdEgreso());
@@ -225,12 +248,31 @@ public class SalidaProductosController {
         }
 
 
-        model.addAttribute("egresoDto", salidaProductosService.getAllEgresos());
+        model.addAttribute("egresoDto", repository.findAllByFecha(fechaCompras));
+        return "listadoEgresosFiltrado";
+    }
+
+    @GetMapping("/listar")
+    public String findAll(@RequestParam Map<String, Object> params, Model model) {
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<SalidaProducto> pageSalida = salidaProductosService.getAll(pageRequest);
+
+        int totalPage = pageSalida.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+        model.addAttribute("egresoDto", pageSalida.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "listadoEgresos";
     }
 
-
-    @GetMapping("/delete/{idEgreso}")
+        @GetMapping("/delete/{idEgreso}")
     public String deleteVendedor(@PathVariable int idEgreso) {
 
         List<DetalleEgreso> detalleIngresoList = detalleEgresoRepository.findAllBySalidaProductoIdEgreso(idEgreso);

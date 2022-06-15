@@ -1,5 +1,6 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.SoloFecha;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.DetalleIngresoDtoIdIngreso;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.IngresoDto;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.IngresoDtos;
@@ -11,13 +12,18 @@ import com.thesis.FlorenciaUlloque.UTN.repositories.StockRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.DetalleIngresoService;
 import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
 import com.thesis.FlorenciaUlloque.UTN.services.StockService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -62,6 +68,10 @@ public class IngresoProductosControllerVendedor {
         return repository.findByProveedorNombre(nombre);
     }
 
+    @ModelAttribute("soloFecha")
+    public SoloFecha mapearMeses() {
+        return new SoloFecha();
+    }
     //funcionaa
     @GetMapping("/total/{total}")
     public IngresoProductos getClienteByProveedorName(@PathVariable double total) {
@@ -212,17 +222,22 @@ public class IngresoProductosControllerVendedor {
 
 
     @GetMapping("/listar")
-    public String listar(Model model){
+    public String findAll(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<IngresoProductos> pageIngresos = ingresoProductosService.getAll(pageRequest);
 
-        List<IngresoProductos> listaIngresos = ingresoProductosService.getAllIngresos();
-        for (IngresoProductos ingresos: listaIngresos) {
-            if(ingresos.getListadoDetalleIngresos().size() < 1){
-                ingresoProductosService.deleteIngreso(ingresos.getIdIngreso());
-            }
+        int totalPage = pageIngresos.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
         }
+        model.addAttribute("ingresoDto", pageIngresos.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
 
-
-        model.addAttribute("ingresoDto", ingresoProductosService.getAllIngresos());
         return "listadoIngresosVendedor";
     }
 

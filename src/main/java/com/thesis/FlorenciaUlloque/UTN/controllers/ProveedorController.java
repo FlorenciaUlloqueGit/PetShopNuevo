@@ -3,14 +3,20 @@ package com.thesis.FlorenciaUlloque.UTN.controllers;
 
 import com.thesis.FlorenciaUlloque.UTN.Dtos.ProveedorDto;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Stock;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ProveedorService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/proveedores")
@@ -83,15 +89,22 @@ public class ProveedorController  {
 
 
     @GetMapping({"/listar", "/"})
-    public String listar(Model model){
-        List<Proveedor> proveedorSinVarios = new ArrayList<>();
-        for (Proveedor proveedor: proveedorService.findAllProveedor()) {
-            if(proveedor.getIdProveedor() != 4){
-                proveedorSinVarios.add(proveedor);
-            }
+    public String findAll(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Proveedor> pageStock = proveedorService.getAll(pageRequest);
 
+        int totalPage = pageStock.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
         }
-        model.addAttribute("proveedorReal", proveedorSinVarios);
+        model.addAttribute("proveedorReal", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "listadoProveedores";
     }
 
@@ -147,16 +160,23 @@ public class ProveedorController  {
 
 
     @GetMapping("/listarProveedores")
-    public String listar2(Model model){
-        List<Proveedor> proveedorSinVarios = new ArrayList<>();
-        for (Proveedor proveedor: proveedorService.findAllProveedor()) {
-            if(proveedor.getIdProveedor() != 4){
-                proveedorSinVarios.add(proveedor);
-            }
+    public String findAll2(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Proveedor> pageStock = proveedorService.getAll(pageRequest);
 
+
+        int totalPage = pageStock.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
         }
+        model.addAttribute("proveedorReal", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
 
-        model.addAttribute("proveedorReal", proveedorSinVarios);
         return "listadoProveedoresFromVendedor";
     }
 

@@ -1,6 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.servicesImpl;
 
 
+import com.thesis.FlorenciaUlloque.UTN.Dtos.SoloFecha;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosIngresos.IngresoDtos;
 import com.thesis.FlorenciaUlloque.UTN.entiities.FormaPago;
 import com.thesis.FlorenciaUlloque.UTN.entiities.IngresoProductos;
@@ -9,7 +10,10 @@ import com.thesis.FlorenciaUlloque.UTN.repositories.FormaPagoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.IngresoProductosRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProveedorRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.IngresoProductosService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +31,6 @@ public class IngresoProductosServiceImpl implements IngresoProductosService {
         this.proveedorRepository = proveedorRepository;
         this.formaPagoRepository = formaPagoRepository;
     }
-
 
     @Override
     public IngresoProductos updateIngreso(IngresoProductos ingresoProductos) {
@@ -59,7 +62,7 @@ public class IngresoProductosServiceImpl implements IngresoProductosService {
 
     @Override
     public List<IngresoProductos> getAllIngresos() {
-        List <IngresoProductos>listaReal  = (List<IngresoProductos>) repository.findAll();
+        List <IngresoProductos>listaReal  = (List<IngresoProductos>) repository.findAllByOrderByFechaDesc();
 
         return listaReal;
     }
@@ -94,5 +97,15 @@ public class IngresoProductosServiceImpl implements IngresoProductosService {
         List<FormaPago> formaPagoList;
         formaPagoList = (List<FormaPago>) formaPagoRepository.findAll();
         return  formaPagoList;
+    }
+
+    @Override
+    public Page<IngresoProductos> getAll(Pageable pageable) {
+        return repository.findAllByOrderByFechaDesc(pageable);
+    }
+
+    @Override
+    public Page<IngresoProductos> getAllReporte(String fecha, Pageable pageable) {
+        return repository.findIngresosbyMoth(fecha, pageable);
     }
 }

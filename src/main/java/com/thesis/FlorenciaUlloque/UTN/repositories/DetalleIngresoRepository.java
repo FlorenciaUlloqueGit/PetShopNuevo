@@ -23,4 +23,5 @@ public interface DetalleIngresoRepository extends PagingAndSortingRepository<Det
     List<DetalleIngreso> findAllByIngresoProductosIdIngreso(int idIngreso);
 
 
+
 }

@@ -6,6 +6,8 @@ import com.thesis.FlorenciaUlloque.UTN.repositories.FormaPagoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.SalidaProductosRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.usersRepositories.ClienteRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.SalidaProductosService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -57,7 +59,7 @@ public class SalidaProductosServiceImpl implements SalidaProductosService {
 
     @Override
     public List<SalidaProducto> getAllEgresos() {
-        List <SalidaProducto>listaReal  = (List<SalidaProducto>) repository.findAll();
+        List <SalidaProducto>listaReal  = repository.findAllByOrderByFechaDesc();
 
         return listaReal;
     }
@@ -85,6 +87,16 @@ public class SalidaProductosServiceImpl implements SalidaProductosService {
         List<Cliente> clienteList;
         clienteList = (List<Cliente>) clienteRepository.findAll();
         return  clienteList;
+    }
+
+    @Override
+    public Page<SalidaProducto> getAllReporte(String month, Pageable pageable) {
+        return repository.findEgresosByMonthPageable(month, pageable);
+    }
+
+    @Override
+    public Page<SalidaProducto> getAll(Pageable pageable) {
+        return repository.findAllByOrderByFechaDesc(pageable);
     }
 
     @Override

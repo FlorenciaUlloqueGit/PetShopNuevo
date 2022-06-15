@@ -4,13 +4,19 @@ import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDto;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.MarcaDtos;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Marca;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Stock;
 import com.thesis.FlorenciaUlloque.UTN.repositories.MarcaRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.MarcaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/marcas")
@@ -150,18 +156,44 @@ public class MarcaController {
     }
 
 
-
     @GetMapping({"/listar", "/"})
-    public String listar(Model model){
-        model.addAttribute("marcaReal", marcaService.findAllMarcas());
+    public String findAll(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Marca> pageStock = marcaService.getAll(pageRequest);
+
+        int totalPage = pageStock.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("marcaReal", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "listadoMarcas";
     }
     @GetMapping("/listarMarcas")
-    public String listar2(Model model){
-        model.addAttribute("marcaReal", marcaService.findAllMarcas());
+    public String findAll2(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Marca> pageStock = marcaService.getAll(pageRequest);
+
+        int totalPage = pageStock.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("marcaReal", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "listadoMarcasFromVendedor";
     }
-
 
     @GetMapping("/delete/{idMarca}")
     public String deleteVendedor( @PathVariable int idMarca){

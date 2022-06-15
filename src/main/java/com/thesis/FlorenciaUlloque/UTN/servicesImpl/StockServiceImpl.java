@@ -10,6 +10,8 @@ import com.thesis.FlorenciaUlloque.UTN.repositories.ProductoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.StockRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ProductoService;
 import com.thesis.FlorenciaUlloque.UTN.services.StockService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +28,11 @@ public class StockServiceImpl implements StockService {
         this.repository = repository;
         this.productoRepository = productoRepository;
         this.productoService = productoService;
+    }
+
+
+    public Page<Stock> getAll(Pageable pageable){
+       return repository.findAllByOrderByProductoNombreAsc(pageable);
     }
 
     @Override
@@ -57,7 +64,7 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public List<StockDto> findAllStocks() {
-        List <Stock>listaReal  = (List<Stock>) repository.findAll();
+        List <Stock>listaReal  = repository.findAllByOrderByProductoNombreAsc();
         List<StockDto> listaDto = new ArrayList<>();
 
         StockDto stockDto ;

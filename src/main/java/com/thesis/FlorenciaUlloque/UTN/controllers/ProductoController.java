@@ -1,12 +1,15 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDto;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDtoDetalle;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.ProductoDtos;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoStocks.StockSoloCodBarras;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtoStocks.StockSoloNombre;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.DetalleIEgresoDtos;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosProductos.*;
 import com.thesis.FlorenciaUlloque.UTN.entiities.*;
 import com.thesis.FlorenciaUlloque.UTN.repositories.CategoriaRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.ProductoRepository;
 import com.thesis.FlorenciaUlloque.UTN.services.ProductoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,9 @@ import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -98,6 +104,16 @@ public class ProductoController {
     @ModelAttribute("productoReal")
     public Producto mapearProductoREal() {
         return new Producto();
+    }
+
+    @ModelAttribute("soloNombre")
+    public ProductoSoloNombre mapearSoloNombre() {
+        return new ProductoSoloNombre();
+    }
+
+    @ModelAttribute("soloCodBarras")
+    public ProductoSoloCodBarras mapearSoloCodBarras() {
+        return new ProductoSoloCodBarras();
     }
 
 
@@ -298,8 +314,22 @@ public class ProductoController {
     }
 
     @GetMapping({"/listar", "/"})
-    public String listar(Model model) {
-        model.addAttribute("productoReal", productoService.findAllProductos());
+    public String findAll(@RequestParam Map<String, Object> params, Model model) {
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Producto> pageStock = productoService.getAll(pageRequest);
+
+        int totalPage = pageStock.getTotalPages();
+        if (totalPage > 0) {
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages", pages);
+        }
+        model.addAttribute("productoReal", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "listadoProductos";
     }
 
@@ -460,15 +490,15 @@ public class ProductoController {
             return "redirect:/productos/updateProducto/{idProducto}?errorPeso";
         }
         if (productoExiste.getPrecioCompra() == 0 || productoExiste.getPrecioVenta() == 0) {
-        return "redirect:/productos/updateProducto/{idProducto}?errorProductoPrecio0";
-    }
+            return "redirect:/productos/updateProducto/{idProducto}?errorProductoPrecio0";
+        }
         if (productoExiste.getPrecioCompra() < 0 || productoExiste.getPrecioVenta() < 0) {
-        return "redirect:/productos/updateProducto/{idProducto}?errorProductoPrecioNegativo";
-    }
+            return "redirect:/productos/updateProducto/{idProducto}?errorProductoPrecioNegativo";
+        }
 
         if (productoExiste.getFechaVencimiento() == null && productoExiste.getCategoria().getIdCategoria() != 2) {
-        return "redirect:/productos/updateProducto/{idProducto}?errorFechaVencimiento";
-    }
+            return "redirect:/productos/updateProducto/{idProducto}?errorFechaVencimiento";
+        }
         productoService.update(productoExiste);
 
 
@@ -477,7 +507,7 @@ public class ProductoController {
     }
 
     @GetMapping("/updateProductoDetalleVendedor/{idProducto}")
-    public String mostrarformUpdateProductoDetalle23(@PathVariable int idProducto, Model model){
+    public String mostrarformUpdateProductoDetalle23(@PathVariable int idProducto, Model model) {
 
         Producto producto = repository.findByIdProducto(idProducto);
         ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
@@ -486,13 +516,13 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
-        model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
+        model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleIngresoVendedor";
     }
 
 
     @GetMapping("/updateProductoDetalleEgresoVendedor/{idProducto}")
-    public String mostrarformUpdateProductoDetalle4(@PathVariable int idProducto, Model model){
+    public String mostrarformUpdateProductoDetalle4(@PathVariable int idProducto, Model model) {
 
         Producto producto = repository.findByIdProducto(idProducto);
         ProductoDtoDetalle productoDtoDetalle = new ProductoDtoDetalle();
@@ -501,14 +531,90 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
-        model.addAttribute("ProductoDtoDetalle",productoDtoDetalle);
+        model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleEgresoVendedor";
     }
 
 
+    String nombre;
+    @GetMapping("/buscarNombre")
+    public String buscarNombre(@ModelAttribute("soloNombre") ProductoSoloNombre solonombre) {
+
+        nombre = solonombre.getNombre();
+        return "redirect:/productos/listarProductoFiltrado";
+    }
+
+    long codBarras;
+    @GetMapping("/buscarCodBarras")
+    public String buscarCodBarras(@ModelAttribute("soloCodBarras") ProductoSoloCodBarras soloCodBarras) {
+
+        codBarras = soloCodBarras.getCodBarras();
+        return "redirect:/productos/listarProductoFiltrado";
+    }
+
+    @GetMapping("/listarProductoFiltrado")
+    public String findAllProductoFiltrado(Model model){
+        List<Producto> productos = repository.findAllProductosByNameIndistinto(nombre);
+
+        if(codBarrasProducto != 0){
+            Producto prodocto = repository.findByCodBarras(codBarras);
+            model.addAttribute("productoReal", prodocto);
+            return "ListadoProductoEspecificoAdmin";
+        }
+        model.addAttribute("productoReal" , productos);
+
+        return "ListadoProductoEspecificoAdmin";
+    }
+
+    String nombreProducto;
+    @GetMapping("/buscarNombreProducto")
+    public String buscarNombre2(@ModelAttribute("soloNombre") ProductoSoloNombre solonombre) {
+
+        nombreProducto = solonombre.getNombre();
+        return "redirect:/productos/listarProductoFiltradoEspecifico";
+    }
+
+    long codBarrasProducto;
+    @GetMapping("/buscarCodBarrasProducto")
+    public String buscarCodBarras2(@ModelAttribute("soloCodBarras") ProductoSoloCodBarras soloCodBarras) {
+
+        codBarrasProducto = soloCodBarras.getCodBarras();
+        return "redirect:/productos/listarProductoFiltradoEspecifico";
+    }
+
+    @GetMapping("/listarProductoFiltradoEspecifico")
+    public String findAllProductoFiltrado2(Model model){
+        List<Producto> productos = repository.findAllProductosByNameIndistinto(nombre);
+        if(codBarrasProducto != 0){
+            Producto prodocto = repository.findByCodBarras(codBarrasProducto);
+            model.addAttribute("productoReal", prodocto);
+            return "ListadoProductoEspecificoVendedor";
+        }
+
+        model.addAttribute("productoReal" , productos);
+
+        return "ListadoProductoEspecificoVendedor";
+    }
+
+
+
     @GetMapping("/listarProductos")
-    public String listar2(Model model) {
-        model.addAttribute("productoReal", productoService.findAllProductos());
+    public String findAll2(@RequestParam Map<String, Object> params, Model model){
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
+        PageRequest pageRequest = PageRequest.of(page, 7);
+        Page<Producto> pageStock = productoService.getAll(pageRequest);
+
+        int totalPage = pageStock.getTotalPages();
+        if(totalPage> 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            model.addAttribute("pages",pages);
+        }
+        model.addAttribute("productoReal", pageStock.getContent());
+        model.addAttribute("current", page + 1);
+        model.addAttribute("next", page + 2);
+        model.addAttribute("prev", page);
+        model.addAttribute("last", totalPage);
+
         return "listadoProductosVendedor";
     }
 

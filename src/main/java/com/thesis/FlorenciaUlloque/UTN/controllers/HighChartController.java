@@ -1,8 +1,10 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
+import com.thesis.FlorenciaUlloque.UTN.controllers.Reportes.ReporteController;
 import com.thesis.FlorenciaUlloque.UTN.repositories.DetalleEgresoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.IngresoProductosRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.SalidaProductosRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +20,13 @@ public class HighChartController{
     private final DetalleEgresoRepository detalleEgresoRepository;
     private final SalidaProductosRepository salidaProductosRepository;
     private final IngresoProductosRepository ingresoProductosRepository;
+    private final ReporteController reporteController;
 
-    public HighChartController(DetalleEgresoRepository detalleEgresoRepository, SalidaProductosRepository salidaProductosRepository, IngresoProductosRepository ingresoProductosRepository) {
+    public HighChartController(DetalleEgresoRepository detalleEgresoRepository, SalidaProductosRepository salidaProductosRepository, IngresoProductosRepository ingresoProductosRepository, ReporteController reporteController, ReporteController reporteController1) {
         this.detalleEgresoRepository = detalleEgresoRepository;
         this.salidaProductosRepository = salidaProductosRepository;
         this.ingresoProductosRepository = ingresoProductosRepository;
+        this.reporteController = reporteController1;
     }
 
     @GetMapping("/reporteTotalVentaHoy")
@@ -32,29 +36,30 @@ public class HighChartController{
         int cantCatHigiene;
         int cantCatSalud;
 
-        if(null == detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria1Hoy()){
+        LocalDate dia = reporteController.obtenerFechaDiaria();
+        if(null == detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria1Hoy(dia)){
             cantidadCategoriaAlimentos = 0;
         } else {
-             cantidadCategoriaAlimentos = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria1Hoy();
+             cantidadCategoriaAlimentos = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria1Hoy(dia);
         }
 
-        if( detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria2Hoy() == null){
+        if( detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria2Hoy(dia) == null){
             cantCatAccesorios = 0;
         }else{
-            cantCatAccesorios = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria2Hoy();
+            cantCatAccesorios = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria2Hoy(dia);
         }
 
 
-        if(detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria3Hoy() == null ){
+        if(detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria3Hoy(dia) == null ){
             cantCatHigiene = 0;
         }else{
-            cantCatHigiene = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria3Hoy();
+            cantCatHigiene = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria3Hoy(dia);
         }
 
-        if(detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria4Hoy()==null){
+        if(detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria4Hoy(dia)==null){
             cantCatSalud = 0;
         }else{
-            cantCatSalud = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria4Hoy();
+            cantCatSalud = detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria4Hoy(dia);
         }
 
         Map<String, Integer> data = new LinkedHashMap<String, Integer>();
@@ -160,11 +165,12 @@ public class HighChartController{
     }
 
 
-    @GetMapping("/reporteIngresos")
+    @GetMapping("/reporteEgresos")
     public String barChartIngresos(Model model){
 
+        LocalDate fecha = reporteController.fechaVentas();
         //TODO: cambiar fecha
-        LocalDate fecha = LocalDate.parse("2022-06-06");
+    //    LocalDate fecha = LocalDate.parse("2022-06-06");
 
         float totalMesActual = 0;
         float totalMesAnterior = 0;
@@ -217,13 +223,14 @@ public class HighChartController{
 
         model.addAttribute("keySet", data.keySet());
         model.addAttribute("values", data.values());
-        return "barChartIngresos";
+        return "barChartEgresos";
     }
-    @GetMapping("/reporteEgresos")
+    @GetMapping("/reporteIngresos")
     public String barChartEgresos(Model model){
 
         //TODO: cambiar fecha
-        LocalDate fecha = LocalDate.parse("2022-06-06"); //cambiarFecha
+        LocalDate fecha = reporteController.obtenerFecha();
+      //  LocalDate fecha = LocalDate.parse("2022-06-06"); //cambiarFecha
 
         float totalMesActual = 0;
         float totalMesAnterior = 0;
@@ -276,7 +283,7 @@ public class HighChartController{
 
         model.addAttribute("keySet", data.keySet());
         model.addAttribute("values", data.values());
-        return "barChartEgresos";
+        return "barChartIngresos";
     }
 
 

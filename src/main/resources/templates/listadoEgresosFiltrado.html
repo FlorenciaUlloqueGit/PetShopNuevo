@@ -50,18 +50,17 @@
     </div>
 </nav>
 
-
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Stocks
+        Listado de ventas
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Modificación de stock</h2>
+    <h2 style="text-align: center">Alta, baja y modificación de ventas</h2>
     <br>
 
 </div>
@@ -70,35 +69,58 @@
 <br>
 <br>
 
+
 <div class="container">
+    <td><a  th:href="@{/ventas}" class="btn btn-danger"> Registrar nueva venta</a></td>
+</div>
+<br>
+<br>
 
-    <div th:if=${param.exito}>
-        <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
-    </div>
-
-      <form th:action="@{/stocks/updateStock/{idStock}(idStock=${stock.idStock})}" method="post" th:object="${stockDtoSoloCant}" >
-
-          <div class="form-group">
-              <label for="cantidad">Cantidad</label>
-              <input type="text" class="form-control" id="cantidad" th:field="*{cantidad}"
-                     required autofocus="autofocus" enabled >
-              </select>
-          </div>
-                <BR>
-              <button type="submit" class="btn btn-success">Modificar</button>
-          <td><a th:href="@{/stocks/listadoPaginado}" class="btn btn-info"> Volver al listado</a></td>
-          </form>
-
-    </div>
-
+<div class="container" th:if=${param.exito}>
+    <div class="alert alert-info"> La venta ha sido eliminada exitosamente.</div>
 </div>
 
+<div class="container" th:if=${param.errorFecha}>
+    <div class="alert alert-info"> No se encontraron ventas registradas en la fecha especificada.</div>
+</div>
 
-<!-- Latest compiled and minified JavaScript -->
-<script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+<div class="container">
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col" hidden>Número de venta</th>
+            <th scope="col">Fecha</th>
+            <th colspan="2" scope="col">Total Costo</th>
+            <th scope="col">Forma de pago</th>
+            <th scope="col">Email cliente</th>
+            <th scope="col">Detalles</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="egreso : ${egresoDto}">
+            <td th:text="${egreso.idEgreso}" hidden></td>
+            <td th:text="${egreso.fecha}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${egreso.total}"></td></td>
+            <td th:text="${egreso.formaPago.nombre}"></td>
+            <td th:text="${egreso.cliente.email}"></td>
+            <td><a th:href="@{/detalleEgresos/listar/{idEgreso}(idEgreso=${egreso.idEgreso})}" class="btn btn-warning">
+                Ver productos vendidos</a></td>
+            <td><a th:href="@{/ventas/update/{idEgreso}(idEgreso=${egreso.idEgreso})}" class="btn btn-info">
+                Editar</a></td>
+            <td><a th:href="@{/ventas/delete/{idEgreso}(idEgreso=${egreso.idEgreso})}" class="btn btn-danger">
+                Eliminar</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
+        Volver al menú </a></td>
+</div>
+<br>
+<br>
+<br>
 </body>
 </html>
-

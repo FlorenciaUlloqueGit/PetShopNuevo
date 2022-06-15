@@ -50,18 +50,17 @@
     </div>
 </nav>
 
-
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Stocks
+        Listado de clientes
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Modificación de stock</h2>
+    <h2 style="text-align: center">Datos</h2>
     <br>
 
 </div>
@@ -70,35 +69,43 @@
 <br>
 <br>
 
+
+
 <div class="container">
 
-    <div th:if=${param.exito}>
-        <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
-    </div>
+    <br>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Email</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Dirección</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cliente: ${customer}">
+            <td style="text-align=left" th:text="${cliente.idCliente}"></td>
+            <td th:text="${cliente.nombre}"></td>
+            <td th:text="${cliente.apellido}"></td>
+            <td th:text="${cliente.email}"></td>
+            <td style="text-align=left" th:text="${cliente.telefono}"></td>
+            <td th:text="${cliente.direccion}"></td>
+            <td><a th:href="@{/customer/update/{idCliente}(idCliente=${cliente.idCliente})}" class="btn btn-info">
+                Editar</a></td>
+            <td><a th:href="@{/customer/delete/{idCliente}(idCliente=${cliente.idCliente})}" class="btn btn-danger">
+                Eliminar</a></td>
+        </tr>
+        </tbody>
+    </table>
 
-      <form th:action="@{/stocks/updateStock/{idStock}(idStock=${stock.idStock})}" method="post" th:object="${stockDtoSoloCant}" >
-
-          <div class="form-group">
-              <label for="cantidad">Cantidad</label>
-              <input type="text" class="form-control" id="cantidad" th:field="*{cantidad}"
-                     required autofocus="autofocus" enabled >
-              </select>
-          </div>
-                <BR>
-              <button type="submit" class="btn btn-success">Modificar</button>
-          <td><a th:href="@{/stocks/listadoPaginado}" class="btn btn-info"> Volver al listado</a></td>
-          </form>
-
-    </div>
-
+    <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
+        Volver al menú </a></td>
 </div>
-
-
-<!-- Latest compiled and minified JavaScript -->
-<script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+<br>
+<br>
+<br>
 </body>
 </html>
-

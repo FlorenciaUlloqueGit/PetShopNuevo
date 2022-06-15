@@ -53,14 +53,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Listado mensual de productos vendidos por peso
+        Listado de Ingresos
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Detalle productos vendidos por peso</h2>
+    <h2 style="text-align: center">Alta, baja y modificación de ingresos</h2>
     <br>
 
 </div>
@@ -70,38 +70,45 @@
 <br>
 
 
-<div class="container" th:if=${param.error}>
-    <div class="alert alert-info">No hay bolsas cerradas vendidas en lo que va del mes</div>
-</div>
 <div class="container">
-    <td><a th:href="@{/reportes/ventasKgs/export}" class="btn btn-info">
-        Descargar PDF </a></td>
-    <td><a th:href="@{/graficos/pieChartVentaKG}" class="btn btn-success">
-        Ver gráfico porcentual de ventas según su forma </a></td>
+    <td><a  th:href="@{/ingresos}" class="btn btn-danger"> Crear nuevo ingreso</a></td>
+</div>
+<br>
+<br>
+
+<div class="container" th:if=${param.exito}>
+    <div class="alert alert-info"> El ingreso se ha eliminado exitosamente.</div>
 </div>
 
+<div class="container" th:if=${param.errorFecha}>
+    <div class="alert alert-info">No hay ingresos registrados para el día seleccionado</div>
+</div>
+
+
 <div class="container">
+
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col">Identificador único</th>
-            <th scope="col">Producto</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Marca</th>
-            <th scope="col">Peso</th>
-            <th scope="col">Unidad de medida</th>
-            <th scope="col">Cantidad vendida</th>
+            <th scope="col">Número de ingreso</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Proveedor</th>
+            <th colspan="2" scope="col">Total Costo</th>
+            <th scope="col">Forma de pago</th>
+            <th scope="col">Detalles</th>
+
         </tr>
         </thead>
         <tbody>
-        <tr th:each="producto: ${productoReporteBolsaCerrada}">
-            <td style="text-align:left" th:text="${producto.idProducto}"></td>
-            <td th:text="${producto.nombre}"></td>
-            <td th:text="${producto.categoria.nombre}"></td>
-            <td th:text="${producto.marca.nombre}"></td>
-            <td style="text-align:left" th:text="${producto.pesoNeto}"></td>
-            <td th:text="${producto.unidadMedida.nombre}"></td>
-            <td style="text-align:left" th:text="${producto.cantidad}" ></td>
+        <tr th:each="ingreso : ${ingresoDto}">
+            <td  style="text-align:left" th:text="${ingreso.idIngreso}"></td>
+            <td th:text="${ingreso.fecha}"></td>
+            <td th:text="${ingreso.proveedor.nombre}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${ingreso.total}"></td>
+            <td th:text="${ingreso.formaPago.nombre}"></td>
+            <td><a th:href="@{/detalleIngresosProveedor/listar/{idIngreso}(idIngreso=${ingreso.idIngreso})}" class="btn btn-warning">
+                Ver productos</a></td>
+        </tr>
         </tbody>
     </table>
     <div class="row">
@@ -110,13 +117,13 @@
             <nav aria-label="Pagination">
                 <ul class="pagination justify-content-center" style="background=gray">
                     <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{|/reportes/ventasPorKg/?page=${prev}|}" >Anterior</a>
+                        <a class="page-link" th:href="@{|/ingresosProveedor/listar/?page=${prev}|}" >Anterior</a>
                     </li>
                     <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                        <a class="page-link" th:href="@{|/reportes/ventasPorKg/?page=${page}|}" th:text="${page}"></a>
+                        <a class="page-link" th:href="@{|/ingresosProveedor/listar/?page=${page}|}" th:text="${page}"></a>
                     </li>
                     <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{|/reportes/ventasPorKg/?page=${next}|}" > Siguiente</a>
+                        <a class="page-link" th:href="@{|/ingresosProveedor/listar/?page=${next}|}" > Siguiente</a>
                     </li>
                 </ul>
             </nav>
@@ -124,8 +131,8 @@
         <div class="col-md-2"></div>
     </div>
     <br>
-    <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
-        Volver al menú </a></td>
+    <div> <td><a th:href="@{/homeAdmin}" class="btn btn-warning">
+        Volver al menú </a></td></div>
 </div>
 <br>
 <br>

@@ -1,6 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.repositories;
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
+import com.thesis.FlorenciaUlloque.UTN.entiities.Stock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,10 @@ public interface ProveedorRepository extends PagingAndSortingRepository<Proveedo
 
     Proveedor findByNombre(String nombre);
     Proveedor findById(int id);
+    List<Proveedor>findAllByOrderByNombreAsc();
+
+    @Query(value = "select * from proveedores p where p.id_proveedor != 4 order by p.nombre asc", nativeQuery = true)
+    Page<Proveedor> findAllByOrderByNombre(Pageable pageable);
 
     @Query(value = "select id_proveedor, nombre, telefono from proveedores", nativeQuery = true)
     List<String> findAllProveedors(int page, int limit); //REVISAR

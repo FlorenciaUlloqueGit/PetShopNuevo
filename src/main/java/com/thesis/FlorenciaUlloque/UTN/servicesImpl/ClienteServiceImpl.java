@@ -76,7 +76,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     public List<ClienteDto> findAllClientes(){
-        List <Cliente>listaReal  = (List<Cliente>) repository.findAll();
+        List <Cliente>listaReal  =  repository.findAllByOrderByNombreAsc();
         List<ClienteDto> listaDto = new ArrayList<>();
 
         ClienteDto clienteDto ;
@@ -93,6 +93,11 @@ public class ClienteServiceImpl implements ClienteService {
         }
 
         return listaDto;
+    }
+
+    @Override
+    public Page<Cliente> getAll(Pageable pageable) {
+        return repository.findAllByOrderByNombreAsc(pageable);
     }
 
     @Override

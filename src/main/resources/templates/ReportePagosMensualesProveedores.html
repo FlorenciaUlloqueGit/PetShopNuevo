@@ -72,12 +72,32 @@
 
 
 <div class="container" th:if=${param.error}>
-    <div class="alert alert-info">No hay bolsas cerradas vendidas en lo que va del mes</div>
+    <div class="alert alert-info">No hay ingresos registrados en el mes seleccionado</div>
 </div>
 
+
 <div class="container">
+    <div class="container">
     <td><a th:href="@{/reportes/ingresosMensuales/export}" class="btn btn-info">
         Descargar PDF </a></td>
+        <div>
+            <br> <br>
+            <form th:action="@{/reportes/buscarMesPorFechaCompra}" method="get" th:object="${soloFecha}">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <input type="date" class="form-control" id="fecha" th:field="*{fecha}"
+                                   required autofocus="autofocus" placeholder="Seleccione cualquier día dentro del mes a buscar">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Buscar por mes</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br> <br>
 </div>
 
 <div class="container">
@@ -98,6 +118,25 @@
             <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${ingreso.total}"></td>
         </tbody>
     </table>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center" style="background=gray">
+                    <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/reportes/GastosMensualesProveedores/?page=${prev}|}" >Anterior</a>
+                    </li>
+                    <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
+                        <a class="page-link" th:href="@{|/reportes/GastosMensualesProveedores/?page=${page}|}" th:text="${page}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{|/reportes/GastosMensualesProveedores/?page=${next}|}" > Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
     <br>
     <td><a th:href="@{/graficos/reporteIngresos}" class="btn btn-success">
         Ver movimiento económico por compras </a></td>
