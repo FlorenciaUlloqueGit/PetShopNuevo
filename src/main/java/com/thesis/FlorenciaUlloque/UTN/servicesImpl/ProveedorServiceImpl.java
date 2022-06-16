@@ -77,7 +77,7 @@ public class ProveedorServiceImpl  implements ProveedorService {
             registrado = true;
         } else{
             registrado = false;
-            Proveedor newProveedor = new Proveedor(proveedor.getNombre(), proveedor.getTelefono());
+            Proveedor newProveedor = new Proveedor(proveedor.getNombre(), proveedor.getTelefono(), proveedor.getRepresentante());
 
             repository.save(newProveedor);
         }

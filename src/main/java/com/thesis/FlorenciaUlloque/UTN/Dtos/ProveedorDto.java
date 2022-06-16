@@ -4,13 +4,23 @@ public class ProveedorDto {
 
     private String nombre;
     private long telefono;
+    private String representante;
 
-    public ProveedorDto(String nombre, long telefono) {
+    public ProveedorDto(String nombre, long telefono, String representante) {
         this.nombre = nombre;
         this.telefono = telefono;
+        this.representante = representante;
     }
 
     public ProveedorDto() {
+    }
+
+    public String getRepresentante() {
+        return representante;
+    }
+
+    public void setRepresentante(String representante) {
+        this.representante = representante;
     }
 
     public ProveedorDto(String nombre) {

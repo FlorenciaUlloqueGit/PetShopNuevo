@@ -75,6 +75,9 @@
 </div>
 <br>
 <br>
+<div class="container" th:if=${param.exitoRegistroVenta}>
+    <div class="alert alert-info"> La venta ha sido registrada correctamente</div>
+</div>
 
 <div class="container" th:if=${param.exito}>
     <div class="alert alert-info"> La venta ha sido eliminada exitosamente.</div>

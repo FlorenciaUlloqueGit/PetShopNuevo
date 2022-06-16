@@ -73,7 +73,11 @@
 <div class="container">
 
     <div th:if=${param.error}>
-        <div class="alert alert-danger">Error: No se puede registrar una venta sin productos vendidos!</div>
+        <div class="alert alert-danger">Error: No se puede registrar una venta con una fecha mayor a la actual</div>
+    </div>
+
+    <div th:if=${param.errorFecha}>
+        <div class="alert alert-danger">Error: No se puede registrar una venta con una fecha mayor a la actual</div>
     </div>
 
     <form th:action="@{/ventas}" method="post" th:object="${egresoReal}">
@@ -111,6 +115,7 @@
                         th:value="${formaPago.idFormaPago}"
                         th:text="${formaPago.nombre}"/>
             </select>
+        </div>
 
             <br>
             <button type="submit"  class="btn btn-success" id="botonCrear">Registrar</button>

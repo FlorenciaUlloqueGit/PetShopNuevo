@@ -14,6 +14,15 @@ public class Proveedor {
     private int idProveedor;
     private String nombre;
     private long telefono;
+    private String representante;
+
+    public String getRepresentante() {
+        return representante;
+    }
+
+    public void setRepresentante(String representante) {
+        this.representante = representante;
+    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "proveedor")
@@ -68,18 +77,11 @@ public class Proveedor {
     public Proveedor() {
     }
 
-    public Proveedor(String nombre, long telefono) {
+    public Proveedor(String nombre, long telefono, String representante) {
         this.nombre = nombre;
         this.telefono = telefono;
+        this.representante = representante;
     }
 
-    @Override
-    public String toString() {
-        return "Proveedor{" +
-                "idProveedor=" + idProveedor +
-                ", nombre='" + nombre + '\'' +
-                ", telefono=" + telefono +
-                ", marcas=" + marcas +
-                '}';
-    }
+
 }

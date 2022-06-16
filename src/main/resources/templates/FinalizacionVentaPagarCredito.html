@@ -47,6 +47,7 @@
                 </li>
             </ul>
         </div>
+
     </div>
 </nav>
 
@@ -54,14 +55,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Proveedores
+        Venta en proceso
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Modificación de proveedores</h2>
+    <h2 style="text-align: center">¡Último paso! Ingrese la forma de abonar</h2>
     <br>
 
 </div>
@@ -72,33 +73,64 @@
 
 <div class="container">
 
+    <div th:if=${param.error}>
+        <div class="alert alert-danger">Error: Debe completar todos los campos para realizar la transacción</div>
+    </div>
+    <div th:if=${param.errorInteres}>
+        <div class="alert alert-danger">No se aceptan números negativos en la casilla interés</div>
+
     <div th:if=${param.exito}>
-        <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
+          <div class="alert alert-info">Se ha registrado la venta exitosamente. </div>
     </div>
 
-      <form th:action="@{/proveedores/updateProveedor/{idProveedor}(idProveedor=${proveedor.idProveedor})}" method="post" th:object="${proveedor}" >
+    <form th:action="@{ventas/confirmacionVentaCredito/{idEgreso}(idEgreso=${egreso.idEgreso})}}" method="get" th:object="${egresoDtoCredito}">
 
-              <div class="form-group">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
-                         required autofocus="autofocus">
-              </div>
-              <div class="form-group">
-                  <label for="telefono">Password</label>
-                  <input type="number" class="form-control" id="telefono" th:field="*{telefono}"
-                         required autofocus="autofocus" placeholder="12345/">
-              </div>
-          <div class="form-group">
-              <label for="representante">Nombre</label>
-              <input type="text" class="form-control" id="representante" th:field="*{representante}"
-                     required autofocus="autofocus">
-          </div>
-                <BR>
-              <button type="submit" class="btn btn-success">Modificar</button>
-          <td><a th:href="@{/proveedores/}" class="btn btn-info"> Volver al listado</a></td>
-          </form>
 
+        <div class="form-group">
+            <label for="total">Total venta en AR$</label>
+            <input type="number" class="form-control" id="total" th:value="${egresoDtoCredito.total}" disabled>
+        </div>
+
+        <div th:if=${param.cuotas}>
+            <div class="form-group">
+                <label for="cuota">Cantidad de cuotas</label>
+                <select th:field="*{formaPago}" class="form-control form-control" id="cuota">
+                    <option th:each="cuota:${cuotas                                                                                                                                           }"
+                            th:value="${cuota.numero}"
+                            th:text="${cuota.numero}"/>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="total">Interés en porcentaje % a agregar al total</label>
+                <input type="number" class="form-control" id="porcentajeInteres" th:value="${egresoDtoCredito.porcentajeInteres}">
+            </div>
+        <br>
+        <BR>
+    </form>
+
+
+</div>
+
+        <div align="center">
+            <td><a th:href="@{/ventas/finalizarVenta}"  class="btn btn-success">Finalizar</a></td>
+            <td><a th:href="@{/ventas/listar}" class="btn btn-info">
+                Volver al listado</a></td>
+        </div>
     </div>
+
+
+    <br>
+
+</div>
+
+</div>
+<!--
+        <td><a th:href="@{/detalleIngresos/{idIngreso}(idIngreso=${ingreso.idIngreso})}" class="btn btn-info">
+            Agregar productos a la entrega</a></td>
+-->
+
+<br>
+
 </div>
 
 
@@ -106,7 +138,14 @@
 <script
         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></select>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11">
+
+
+
+
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
 </html>
 

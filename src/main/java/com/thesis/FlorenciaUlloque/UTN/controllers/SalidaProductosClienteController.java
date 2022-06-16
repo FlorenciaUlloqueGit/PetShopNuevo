@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -127,10 +129,16 @@ public class SalidaProductosClienteController {
     @PostMapping
     public String create(@ModelAttribute("egresoReal") SalidaProducto salidaProducto) {
         salidaProductosService.saveEgreso(salidaProducto);
-        SalidaProducto salida = salidaProductosService.saveEgreso(salidaProducto);
-        idEgres = salida.getIdEgreso();
-        return "redirect:/ventasCliente/agregarDetalles";
+        LocalDate fechaACtual = LocalDate.from(LocalDateTime.now());
 
+        if(salidaProducto.getFecha().isAfter(fechaACtual)){
+            return "redirect:/ventasCliente?errorFecha";
+        }else {
+            salidaProductosService.saveEgreso(salidaProducto);
+            SalidaProducto salida = salidaProductosService.saveEgreso(salidaProducto);
+            idEgres = salida.getIdEgreso();
+            return "redirect:/ventasCliente/agregarDetalles";
+        }
     }
 
     @GetMapping("/agregarDetalle")
@@ -243,8 +251,16 @@ public class SalidaProductosClienteController {
     public String findAll(@RequestParam Map<String, Object> params, Model model){
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
         PageRequest pageRequest = PageRequest.of(page, 7);
-        Page<SalidaProducto> pageIngresos = salidaProductosService.getAll(pageRequest);
 
+        List<SalidaProducto> lista = repository.findAllByOrderByFechaDesc();
+        for (SalidaProducto list:  lista) {
+            if(list.getTotal() == 0) {
+                int id = list.getIdEgreso();
+                salidaProductosService.deleteEgreso(id);
+            }
+        }
+
+        Page<SalidaProducto> pageIngresos = salidaProductosService.getAll(pageRequest);
         int totalPage = pageIngresos.getTotalPages();
         if(totalPage> 0){
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());

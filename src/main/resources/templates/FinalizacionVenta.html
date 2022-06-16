@@ -47,6 +47,7 @@
                 </li>
             </ul>
         </div>
+
     </div>
 </nav>
 
@@ -54,14 +55,14 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Proveedores
+        Venta en proceso
         <br><br><br>
     </h1>
 </div>
 <div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
 
     <br>
-    <h2 style="text-align: center">Modificación de proveedores</h2>
+    <h2 style="text-align: center">¡Último paso! Ingrese la forma de abonar</h2>
     <br>
 
 </div>
@@ -72,33 +73,71 @@
 
 <div class="container">
 
-    <div th:if=${param.exito}>
-        <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
+    <div th:if=${param.error}>
+        <div class="alert alert-danger">Error:Debe completar todos los campos para realizar la transacción</div>
+    </div>
+    <div th:if=${param.errorMonto}>
+        <div class="alert alert-danger">Error:El dinero en efectivo brindado por el cliente debe ser mayor o igual al de
+            la compra
+        </div>
+    </div>
+    <div th:if=${param.exitoIngreso}>
+          <div class="alert alert-info">Se ha registrado la venta exitosamente. Ahora agregue
+              los productos vendidos para completar el registro de venta </div>
     </div>
 
-      <form th:action="@{/proveedores/updateProveedor/{idProveedor}(idProveedor=${proveedor.idProveedor})}" method="post" th:object="${proveedor}" >
+    <form th:action="@{ventas/cobranzas}" method="post" th:object="${egresoDtoFinalizar}">
 
-              <div class="form-group">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
-                         required autofocus="autofocus">
-              </div>
-              <div class="form-group">
-                  <label for="telefono">Password</label>
-                  <input type="number" class="form-control" id="telefono" th:field="*{telefono}"
-                         required autofocus="autofocus" placeholder="12345/">
-              </div>
-          <div class="form-group">
-              <label for="representante">Nombre</label>
-              <input type="text" class="form-control" id="representante" th:field="*{representante}"
-                     required autofocus="autofocus">
-          </div>
-                <BR>
-              <button type="submit" class="btn btn-success">Modificar</button>
-          <td><a th:href="@{/proveedores/}" class="btn btn-info"> Volver al listado</a></td>
-          </form>
+        <div class="form-group">
+            <label for="total">Número de venta</label>
+            <input type="number" class="form-control" id="idEgreso" th:value="${egresoDtoFinalizar.idEgreso}" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="fecha">Fecha venta</label>
+            <input type="date" class="form-control" id="fecha" th:value="${egresoDtoFinalizar.fecha}" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="total">Total venta en AR$</label>
+            <input type="number" class="form-control" id="total" th:value="${egresoDtoFinalizar.total}" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="formaPago">Forma de pago</label>
+            <select th:field="*{formaPago}" class="form-control form-control" id="formaPago"  required autofocus="autofocus">
+                <option th:each="formaPago:${formasPagos                                                                                                                                            }"
+                        th:value="${formaPago.idFormaPago}"
+                        th:text="${formaPago.nombre}"/>
+            </select>
+
+            <br>
+            <br>
+            <div class="container" align="center">
+            <button type="submit" class="btn btn-info" >Confirmar</button>
+            </div>
+
+    </form>
+
+
+</div>
+
 
     </div>
+
+
+    <br>
+
+</div>
+
+</div>
+<!--
+        <td><a th:href="@{/detalleIngresos/{idIngreso}(idIngreso=${ingreso.idIngreso})}" class="btn btn-info">
+            Agregar productos a la entrega</a></td>
+-->
+
+<br>
+
 </div>
 
 
@@ -106,7 +145,14 @@
 <script
         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></select>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11">
+
+
+
+
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
 </html>
 

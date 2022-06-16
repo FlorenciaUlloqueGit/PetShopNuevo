@@ -13,6 +13,24 @@ public class EgresoDtos {
     private double total;
     private FormaPago formaPago;
     private List<DetalleEgreso> detalleEgresoList;
+    private int cantidadCuotas;
+    private float procentajeInteres;
+
+    public int getCantidadCuotas() {
+        return cantidadCuotas;
+    }
+
+    public void setCantidadCuotas(int cantidadCuotas) {
+        this.cantidadCuotas = cantidadCuotas;
+    }
+
+    public float getProcentajeInteres() {
+        return procentajeInteres;
+    }
+
+    public void setProcentajeInteres(float procentajeInteres) {
+        this.procentajeInteres = procentajeInteres;
+    }
 
     public EgresoDtos(Cliente cliente, LocalDate fecha, double total, FormaPago formaPago, List<DetalleEgreso> detalleEgresoList) {
         this.cliente = cliente;

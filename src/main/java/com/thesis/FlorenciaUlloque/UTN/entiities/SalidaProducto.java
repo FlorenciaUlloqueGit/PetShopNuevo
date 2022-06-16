@@ -37,14 +37,45 @@ public class SalidaProducto {
     @Column(name = "detalleSalida_salidaProducto")
     private List<DetalleEgreso> listadoSalidaProducto;
 
-    public SalidaProducto(int idEgreso, double total, LocalDate fecha, FormaPago formaPago, Cliente cliente,
+    private int cantidadCuotas;
+    private float porcentajeInteres;
+
+    public SalidaProducto(int idEgreso, double total, LocalDate fechaFormato, FormaPago formaPago, Cliente cliente,
                           List<DetalleEgreso> listadoSalidaProducto) {
+        this.idEgreso = idEgreso;
+        this.total = total;
+        this.fecha = fechaFormato;
+        this.formaPago = formaPago;
+        this.cliente = cliente;
+        this.listadoSalidaProducto = listadoSalidaProducto;
+    }
+
+    public int getCantidadCuotas() {
+        return cantidadCuotas;
+    }
+
+    public void setCantidadCuotas(int cantidadCuotas) {
+        this.cantidadCuotas = cantidadCuotas;
+    }
+
+    public float getPorcentajeInteres() {
+        return porcentajeInteres;
+    }
+
+    public void setPorcentajeInteres(float porcentajeInteres) {
+        this.porcentajeInteres = porcentajeInteres;
+    }
+
+    public SalidaProducto(int idEgreso, double total, LocalDate fecha, FormaPago formaPago, Cliente cliente,
+                          List<DetalleEgreso> listadoSalidaProducto, int cantidadCuotas, float porcentajeInteres) {
         this.idEgreso = idEgreso;
         this.total = total;
         this.fecha = fecha;
         this.formaPago = formaPago;
         this.cliente = cliente;
         this.listadoSalidaProducto = listadoSalidaProducto;
+        this.cantidadCuotas = cantidadCuotas;
+        this.porcentajeInteres = porcentajeInteres;
     }
 
     public Cliente getCliente() {
