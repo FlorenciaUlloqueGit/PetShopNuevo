@@ -24,17 +24,19 @@ public class ReporteVentasPDF {
     private void writeTableHeader(PdfPTable table){
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(Color.orange);
-        cell.setPadding(5);
+        cell.setPadding(6);
 
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
         font.setColor(Color.black);
-        cell.setPhrase(new Phrase("ID venta", font));
-        table.addCell(cell);
         cell.setPhrase(new Phrase("fecha", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Forma de pago", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Cliente", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("N° Cuotas", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("Porc. interés", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Subtotal en AR$", font));
         table.addCell(cell);
@@ -42,10 +44,11 @@ public class ReporteVentasPDF {
     private void  writeTableData(PdfPTable table){
 
         for(SalidaProducto salidaProducto: salidaProductos ) {
-            table.addCell(String.valueOf(salidaProducto.getIdEgreso()));
             table.addCell(String.valueOf(salidaProducto.getFecha()));
             table.addCell(salidaProducto.getFormaPago().getNombre());
             table.addCell(salidaProducto.getCliente().getEmail());
+            table.addCell(String.valueOf(salidaProducto.getCantidadCuotas()));
+            table.addCell(String.valueOf(salidaProducto.getPorcentajeInteres()));
             table.addCell(String.valueOf(salidaProducto.getTotal()));
         }
     }
@@ -66,7 +69,7 @@ public class ReporteVentasPDF {
 
         document.add(new Paragraph(subtitulo));
 
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
         table.setSpacingBefore(15);
 

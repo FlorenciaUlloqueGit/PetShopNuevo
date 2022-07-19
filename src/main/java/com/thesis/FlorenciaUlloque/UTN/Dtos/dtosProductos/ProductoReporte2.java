@@ -10,6 +10,24 @@ public class ProductoReporte2
     private float cantidad;
     private float total;
     private String formaVenta;
+    private int cantidadCuotas;
+    private double porcentajeInteres;
+
+    public int getCantidadCuotas() {
+        return cantidadCuotas;
+    }
+
+    public void setCantidadCuotas(int cantidadCuotas) {
+        this.cantidadCuotas = cantidadCuotas;
+    }
+
+    public double getPorcentajeInteres() {
+        return porcentajeInteres;
+    }
+
+    public void setPorcentajeInteres(double porcentajeInteres) {
+        this.porcentajeInteres = porcentajeInteres;
+    }
 
     public ProductoReporte2(String nombre, String categoria, float precioVenta, float cantidad, float total, String formaVenta) {
         this.nombre = nombre;

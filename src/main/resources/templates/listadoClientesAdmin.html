@@ -71,26 +71,26 @@
 
 
 <div class="container" th:if=${param.exito}>
-    <div class="alert alert-info">El cliente se ha eliminado exitosamente.</div>
+    <div class="alert alert-info">El cliente se ha deshabilitado exitosamente.</div>
 </div>
 
 <div class="container" th:if=${param.errorEmail}>
-    <div class="alert alert-info">El email ingresado no pertenece a ningún cliente registrado</div>
+    <div class="alert alert-info">El DNI ingresado no pertenece a ningún cliente registrado</div>
 </div>
 
 <div class="container">
     <div>
-        <form th:action="@{/customer/buscarEmail}" method="get" th:object="${soloEmail}">
+        <form th:action="@{/customer/buscarEmail}" method="get" th:object="${soloDni}">
             <div class="row">
                 <div class="col">
                     <div class="form-group">
-                        <input type="email" class="form-control" id="email" th:field="*{email}"
-                               required autofocus="autofocus" placeholder="Ejemplo: almacenMascotas@gmail.com">
+                        <input type="number" class="form-control" id="dni" th:field="*{dni}"
+                               required autofocus="autofocus" placeholder="Ejemplo: 14755468">
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-success">Buscar por email</button>
+                        <button type="submit" class="btn btn-success">Buscar por DNI</button>
                     </div>
                 </div>
             </div>
@@ -109,6 +109,7 @@
             <th scope="col">ID</th>
             <th scope="col">Nombre</th>
             <th scope="col">Apellido</th>
+            <th scope="col">DNI</th>
             <th scope="col">Email</th>
             <th scope="col">Teléfono</th>
             <th scope="col">Dirección</th>
@@ -119,6 +120,7 @@
             <td style="text-align=left" th:text="${cliente.idCliente}"></td>
             <td th:text="${cliente.nombre}"></td>
             <td th:text="${cliente.apellido}"></td>
+            <td style="text-align=left" th:text="${cliente.dni}"></td>
             <td th:text="${cliente.email}"></td>
             <td style="text-align=left" th:text="${cliente.telefono}"></td>
             <td th:text="${cliente.direccion}"></td>

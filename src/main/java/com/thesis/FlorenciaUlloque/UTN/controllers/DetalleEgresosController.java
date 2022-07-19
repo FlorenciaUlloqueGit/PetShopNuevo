@@ -440,6 +440,11 @@ public class DetalleEgresosController {
         }
         stockService.update(stock);
         double total = salidaProductosRepository.calcularTotalEgreso(salidaProducto.getIdEgreso());
+        if (salidaProducto.getFormaPago().getIdFormaPago() == 2){
+            double subtotal = (salidaProductosRepository.calcularTotalEgreso(salidaProducto.getIdEgreso()) * salidaProducto.getPorcentajeInteres()) /100;
+            total = subtotal + total;
+        }
+
         salidaProducto.setTotal(total);
         salidaProductosService.updateEgreso(salidaProducto);
 

@@ -10,8 +10,26 @@ public class ClienteDto {
         private String apellido;
         private long telefono;
         private String direccion;
+        private boolean enabled;
+        private long dni;
 
-        public String getDireccion() {
+    public long getDni() {
+        return dni;
+    }
+
+    public void setDni(long dni) {
+        this.dni = dni;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getDireccion() {
             return direccion;
         }
 

@@ -1,0 +1,88 @@
+
+<div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
+    <h1 style="text-align: center">
+        <br><br>
+        Revise el vuelto a devolver al cliente
+        <br><br><br>
+    </h1>
+</div>
+<div class="container-fluid text-white" style="background-color: rgb(242, 192, 120);">
+
+    <br>
+    <h2 style="text-align: center">Finalizando venta</h2>
+    <br>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="container">
+
+    <div th:if=${param.error}>
+        <div class="alert alert-danger">Error: Debe completar todos los campos para realizar la transacción</div>
+    </div>
+    <div th:if=${param.errorMonto}>
+        <div class="alert alert-danger">Error:El dinero en efectivo brindado por el cliente debe ser mayor o igual al de
+            la compra
+        </div>
+    </div>
+    <div th:if=${param.exitoIngreso}>
+        <div class="alert alert-info">Se ha registrado la venta exitosamente.
+        </div>
+    </div>
+
+    <form th:action="@{ventasCliente/confirmacionVentaDebito}" method="post" th:object="${dtoPago}">
+
+        <div class="form-group">
+            <label for="total">Total venta en AR$</label>
+            <input type="number" class="form-control" id="total" th:value="${dtoPago.total}" disabled>
+        </div>
+
+
+        <div class="form-group">
+            <label for="cantidadEntrante">Cantidad dinero entrante en AR$</label>
+            <input type="number" class="form-control" id="cantidadEntrante" th:field="${dtoPago.cantidadEntrante}">
+        </div>
+
+        <br>
+        <button type="submit"  class="btn btn-success" id="botonCrear">Finalizar</button>
+    </form>
+
+
+</div>
+
+
+
+<br>
+
+</div>
+
+</div>
+<!--
+        <td><a th:href="@{/detalleIngresos/{idIngreso}(idIngreso=${ingreso.idIngreso})}" class="btn btn-info">
+            Agregar productos a la entrega</a></td>
+-->
+
+<br>
+
+</div>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></select>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11">
+
+
+
+
+
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>
+

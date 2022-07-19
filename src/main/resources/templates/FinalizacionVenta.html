@@ -81,12 +81,11 @@
             la compra
         </div>
     </div>
-    <div th:if=${param.exitoIngreso}>
-          <div class="alert alert-info">Se ha registrado la venta exitosamente. Ahora agregue
-              los productos vendidos para completar el registro de venta </div>
+    <div th:if=${param.exito}>
+          <div class="alert alert-info">Se ha registrado la venta exitosamente. </div>
     </div>
 
-    <form th:action="@{ventas/cobranzas}" method="post" th:object="${egresoDtoFinalizar}">
+    <form th:action="@{/ventas/cobrarVenta}" method="post" th:object="${egresoDtoFinalizar}">
 
         <div class="form-group">
             <label for="total">Número de venta</label>
@@ -115,6 +114,8 @@
             <br>
             <div class="container" align="center">
             <button type="submit" class="btn btn-info" >Confirmar</button>
+                <td><a th:href="@{/ventas/listar}" class="btn btn-warning">
+                    Volver al listado </a></td>
             </div>
 
     </form>

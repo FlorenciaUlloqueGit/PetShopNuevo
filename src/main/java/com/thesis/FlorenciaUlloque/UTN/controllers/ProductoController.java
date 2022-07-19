@@ -169,6 +169,7 @@ public class ProductoController {
             productoDtos.setEdad(producto.getEdad());
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
+            productoDtos.setEnabled(true);
         } else {
             productoDtos.setCodBarras(producto.getCodBarras());
             productoDtos.setNombre(producto.getNombre());
@@ -183,6 +184,7 @@ public class ProductoController {
             productoDtos.setEdad(producto.getEdad());
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
+            productoDtos.setEnabled(true);
 
             Clock c1 = Clock.systemUTC();
             fechaDeHoy = LocalDate.now(c1);
@@ -265,6 +267,7 @@ public class ProductoController {
         productoExiste.setTipoAnimal(producto.getTipoAnimal());
         productoExiste.setPesoNeto(producto.getPesoNeto());
         productoExiste.setUnidadMedida(producto.getUnidadMedida());
+        productoExiste.setEnabled(producto.isEnabled());
 
         if (productoExiste.getPesoNeto() <= 0) {
             return "redirect:/productos/update?errorPeso";
@@ -295,6 +298,8 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
+        productoDtoDetalle.setEnabled(producto.isEnabled());
+
         model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleIngreso";
     }
@@ -309,6 +314,8 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
+        productoDtoDetalle.setEnabled(producto.isEnabled());
+
         model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleEgreso";
     }
@@ -336,7 +343,9 @@ public class ProductoController {
 
     @GetMapping("/delete/{idProducto}")
     public String deleteVendedor(@PathVariable int idProducto) {
-        productoService.delete(idProducto);
+        Producto producto = repository.findByIdProducto(idProducto);
+        producto.setEnabled(false);
+        productoService.update(producto);
         return "redirect:/productos/listar?exito";
 
     }
@@ -392,6 +401,7 @@ public class ProductoController {
             productoDtos.setEdad(producto.getEdad());
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
+            productoDtos.setEnabled(producto.isEnabled());
         } else {
             productoDtos.setCodBarras(producto.getCodBarras());
             productoDtos.setNombre(producto.getNombre());
@@ -406,6 +416,7 @@ public class ProductoController {
             productoDtos.setEdad(producto.getEdad());
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
+            productoDtos.setEnabled(producto.isEnabled());
             Clock c1 = Clock.systemUTC();
             fechaDeHoy = LocalDate.now(c1);
 
@@ -485,6 +496,7 @@ public class ProductoController {
         productoExiste.setTipoAnimal(producto.getTipoAnimal());
         productoExiste.setPesoNeto(producto.getPesoNeto());
         productoExiste.setUnidadMedida(producto.getUnidadMedida());
+        productoExiste.setEnabled(producto.isEnabled());
 
         if (productoExiste.getPesoNeto() <= 0) {
             return "redirect:/productos/updateProducto/{idProducto}?errorPeso";
@@ -516,6 +528,7 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
+        productoDtoDetalle.setEnabled(producto.isEnabled());
         model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleIngresoVendedor";
     }
@@ -531,6 +544,7 @@ public class ProductoController {
         productoDtoDetalle.setNombre(producto.getNombre());
         productoDtoDetalle.setPrecioVenta(producto.getPrecioVenta());
         productoDtoDetalle.setPrecioCompra(producto.getPrecioCompra());
+        productoDtoDetalle.setEnabled(producto.isEnabled());
         model.addAttribute("ProductoDtoDetalle", productoDtoDetalle);
         return "UpdateProductoForDetalleEgresoVendedor";
     }

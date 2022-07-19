@@ -1,13 +1,13 @@
 package com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos;
 
 public class DtoVuelto {
-    private float dineroEntrante;
+    private float vuelto;
 
-    public float getDineroEntrante() {
-        return dineroEntrante;
+    public float getVuelto() {
+        return vuelto;
     }
 
-    public void setDineroEntrante(float dineroEntrante) {
-        this.dineroEntrante = dineroEntrante;
+    public void setVuelto(float vuelto) {
+        this.vuelto = vuelto;
     }
 }

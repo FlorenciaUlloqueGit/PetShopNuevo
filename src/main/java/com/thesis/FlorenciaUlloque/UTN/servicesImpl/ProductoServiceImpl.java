@@ -108,7 +108,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public List<Producto> listAllByName(String nombre) {
-        return repository.findAllProductosByName(nombre);
+        return repository.findAllProductosByNameIndistinto(nombre);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class ProductoServiceImpl implements ProductoService {
                     productoDtos.getUnidadMedida(),
                     productoDtos.getTipoAnimal(),
                     productoDtos.getTamano(),
-                    productoDtos.getEdad());
+                    productoDtos.getEdad(), true);
 
             repository.save(newProducto);
         } else {
@@ -166,7 +166,7 @@ public class ProductoServiceImpl implements ProductoService {
                         productoDtos.getUnidadMedida(),
                         productoDtos.getTipoAnimal(),
                         productoDtos.getTamano(),
-                        productoDtos.getEdad());
+                        productoDtos.getEdad(), true);
                 repository.save(newProducto);
             }
 
@@ -178,7 +178,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public List<Marca> listadoMarcas() {
         List<Marca> marcaList;
-        marcaList = (List<Marca>) marcaRepository.findAll();
+        marcaList =  marcaRepository.findAllByOrderByNombreAsc();
         return  marcaList;
     }
 

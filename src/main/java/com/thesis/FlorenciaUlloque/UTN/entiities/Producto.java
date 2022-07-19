@@ -1,13 +1,10 @@
 package com.thesis.FlorenciaUlloque.UTN.entiities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity(name = "producto")
@@ -52,6 +49,15 @@ public class Producto{
     private Tamano tamano;
 
     private float pesoNeto;
+    private boolean enabled;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
@@ -73,7 +79,7 @@ public class Producto{
     public Producto(long codBarras, String nombre, LocalDate fechaVencimiento, double precioCompra,
                     double precioVenta, Marca marca, FormaVenta formaVenta, Categoria categoria,
                     float pesoNeto, UnidadMedida unidadMedida, TipoAnimal tipoAnimal,
-                    Tamano tamano, Edad edad) {
+                    Tamano tamano, Edad edad, boolean enabled) {
         this.codBarras = codBarras;
         this.nombre = nombre;
         this.fechaVencimiento = fechaVencimiento;
@@ -87,11 +93,12 @@ public class Producto{
         this.tipoAnimal = tipoAnimal;
         this.tamano = tamano;
         this.edad = edad;
+        this.enabled = enabled;
     }
     public Producto(String nombre, LocalDate fechaVencimiento, double precioCompra,
                     double precioVenta, Marca marca, FormaVenta formaVenta, Categoria categoria,
                     float pesoNeto, UnidadMedida unidadMedida, TipoAnimal tipoAnimal,
-                    Tamano tamano, Edad edad) {
+                    Tamano tamano, Edad edad, boolean enabled) {
         this.nombre = nombre;
         this.fechaVencimiento = fechaVencimiento;
         this.precioCompra = precioCompra;
@@ -104,6 +111,7 @@ public class Producto{
         this.tipoAnimal = tipoAnimal;
         this.tamano = tamano;
         this.edad = edad;
+        this.enabled = enabled;
     }
 
     public Categoria getCategoria() {

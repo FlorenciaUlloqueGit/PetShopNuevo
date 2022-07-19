@@ -5,11 +5,21 @@ public class ProveedorDto {
     private String nombre;
     private long telefono;
     private String representante;
+    private boolean enabled;
 
-    public ProveedorDto(String nombre, long telefono, String representante) {
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public ProveedorDto(String nombre, long telefono, String representante, boolean enabled) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.representante = representante;
+        this.enabled = enabled;
     }
 
     public ProveedorDto() {

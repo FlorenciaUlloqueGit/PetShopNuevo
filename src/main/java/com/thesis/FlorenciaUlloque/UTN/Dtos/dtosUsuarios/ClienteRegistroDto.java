@@ -11,6 +11,24 @@ public class ClienteRegistroDto {
     private long telefono;
     private String direccion;
     private Rol rol;
+    private boolean enabled;
+    private long dni;
+
+    public long getDni() {
+        return dni;
+    }
+
+    public void setDni(long dni) {
+        this.dni = dni;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public Rol getRol() {
         return rol;

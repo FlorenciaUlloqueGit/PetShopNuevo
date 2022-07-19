@@ -404,7 +404,7 @@ public class ReporteController {
         int totalPage = pageVenta.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages", pages);
+            model.addAttribute("page", pages);
         }
 
         float totalVentas;
@@ -491,8 +491,14 @@ public class ReporteController {
             ventaKg.setUnidadMedida(producto.getUnidadMedida());
             ventaKg.setPesoNeto((int) producto.getPesoNeto());
             ventaKg.setMarca(producto.getMarca());
-            float cantidad = productoRepository.findCantidadProductoVendidoXKg().get(i);
-            float cantidadFormateada = Math.round(cantidad * 100.0 / 100.0);
+            int cantProdVendido = productoRepository.findCantidadProductoVendidoXKg().size();
+            float cantidad;
+            if(list.size() < cantProdVendido){
+                cantidad = productoRepository.findCantidadProductoVendidoXKg().get(i);
+            }else{
+             cantidad = 1;
+            }
+
 
             DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
             separadoresPersonalizados.setDecimalSeparator('.');

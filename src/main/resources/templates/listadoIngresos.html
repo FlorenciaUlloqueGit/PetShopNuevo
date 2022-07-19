@@ -109,7 +109,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col">Número de ingreso</th>
+            <th scope="col" hidden>Número de ingreso</th>
             <th scope="col">Fecha</th>
             <th scope="col">Proveedor</th>
             <th colspan="2" scope="col">Total Costo</th>
@@ -121,7 +121,7 @@
         </thead>
         <tbody>
         <tr th:each="ingreso : ${ingresoDto}">
-            <td style="text-align=left" th:text="${ingreso.idIngreso}"></td>
+            <td style="text-align=left" hidden th:text="${ingreso.idIngreso}"></td>
             <td th:text="${ingreso.fecha}"></td>
             <td th:text="${ingreso.proveedor.nombre}"></td>
             <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${ingreso.total}"></td>

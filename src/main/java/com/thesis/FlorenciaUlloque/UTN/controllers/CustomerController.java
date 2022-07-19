@@ -6,6 +6,7 @@ import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.DetalleEgresoDtoIdEgreso
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteDto;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteDtos;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.ClienteRegistroDto;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosUsuarios.soloDni;
 import com.thesis.FlorenciaUlloque.UTN.Dtos.soloEmail;
 import com.thesis.FlorenciaUlloque.UTN.Util.UsersPDfExporterListadoClientes;
 import com.thesis.FlorenciaUlloque.UTN.entiities.Cliente;
@@ -45,7 +46,10 @@ public class CustomerController {
         this.repository = repository;
     }
 
-
+    @ModelAttribute("soloDni")
+    public soloDni mapeardni() {
+        return new soloDni();
+    }
     @ModelAttribute("clienteReal")
     public Cliente mapearClienteREal() {
         return new Cliente();
@@ -82,10 +86,11 @@ public class CustomerController {
         Cliente clienteExiste = repository.findByIdCliente(idCliente);
         clienteExiste.setDireccion(clienteRegistroDto.getDireccion());
         clienteExiste.setNombre(clienteRegistroDto.getNombre());
-        clienteExiste.setPass("");
         clienteExiste.setApellido(clienteRegistroDto.getApellido());
         clienteExiste.setTelefono(clienteRegistroDto.getTelefono());
         clienteExiste.setEmail(clienteRegistroDto.getEmail());
+        clienteExiste.setDni(clienteExiste.getDni());
+        clienteExiste.setEnabled(true);
         clienteService.updateCliente(clienteExiste);
         Cliente clienteTest = clienteService.updateCliente(clienteExiste);
         if(clienteTest == null){
@@ -97,17 +102,18 @@ public class CustomerController {
 
     }
 
+    //REEMPLAZAR
     Cliente cliente ;
     @GetMapping("/buscarEmail")
-    public String buscarMesPorFecha(@ModelAttribute("soloEmail") soloEmail soloEmail) {
+    public String buscarMesPorFecha(@ModelAttribute("soloDni") soloDni soloDni) {
 
 
 
-        if (repository.findByEmail(soloEmail.getEmail()) == null) {
+        if (repository.findByDni(soloDni.getDni()) == null) {
 
             return "redirect:/customer/listarClientesAdmin?errorEmail";
         }else{
-            cliente = repository.findByEmail(soloEmail.getEmail());
+            cliente = repository.findByDni(soloDni.getDni());
             return "redirect:/customer/listadoFiltradoCliente";
         }
     }
@@ -183,20 +189,23 @@ public class CustomerController {
 
     @GetMapping("/delete/{idCliente}")
     public String deleteVendedor2( @PathVariable int idCliente){
-        clienteService.deleteCliente(idCliente);
+
+        Cliente cliente = repository.findByIdCliente(idCliente);
+        cliente.setEnabled(false);
+        clienteService.updateCliente(cliente);
         return "redirect:/customer/listarClientesAdmin?exito";
 
     }
     Cliente clienteNuevo ;
     @GetMapping("/buscarEmailCliente")
-    public String buscarMesPorFecha2(@ModelAttribute("soloEmail") soloEmail soloEmail) {
+    public String buscarMesPorFecha2(@ModelAttribute("soloDni") soloDni soloDni) {
 
 
-        if (repository.findByEmail(soloEmail.getEmail()) == null) {
+        if (repository.findByDni(soloDni.getDni()) == null) {
 
             return "redirect:/customer/listarClientesVendedor?errorEmail";
         }else{
-            clienteNuevo = repository.findByEmail(soloEmail.getEmail());
+            clienteNuevo = repository.findByDni(soloDni.getDni());
             return "redirect:/customer/listadoFiltradoClienteVendedor";
         }
     }

@@ -2,14 +2,20 @@ package com.thesis.FlorenciaUlloque.UTN.Dtos;
 
 import com.thesis.FlorenciaUlloque.UTN.entiities.Proveedor;
 
-import java.util.List;
-
 public class MarcaDto {
 
     private int idMarca;
     private String nombre;
     private Proveedor proveedor;
+    private boolean enabled;
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public int getIdMarca() {
         return idMarca;
@@ -36,10 +42,11 @@ public class MarcaDto {
     }
 
 
-    public MarcaDto(int idMarca, String nombre, Proveedor proveedor) {
+    public MarcaDto(int idMarca, String nombre, Proveedor proveedor, boolean enabled) {
         this.idMarca = idMarca;
         this.nombre = nombre;
         this.proveedor = proveedor;
+        this.enabled = enabled;
     }
 
     public MarcaDto(String nombre, Proveedor proveedor) {

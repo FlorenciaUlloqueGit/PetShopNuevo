@@ -45,17 +45,20 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente updateCliente(Cliente clienteRegistroDto) {
 
-        String email = clienteRegistroDto.getEmail();
+        long dni = clienteRegistroDto.getDni();
         Cliente returnValue;
-        Cliente clienteForUpdate = repository.findByEmail(email);
+        Cliente clienteForUpdate = repository.findByDni(dni);
         if (clienteForUpdate == null) {
            // throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
             returnValue = null;
         } else{
+            clienteForUpdate.setDni(dni);
             clienteForUpdate.setApellido(clienteRegistroDto.getApellido());
             clienteForUpdate.setNombre(clienteRegistroDto.getNombre());
             clienteForUpdate.setTelefono(clienteRegistroDto.getTelefono());
             clienteForUpdate.setDireccion(clienteRegistroDto.getDireccion());
+            clienteForUpdate.setEnabled(clienteRegistroDto.isEnabled());
+            clienteForUpdate.setEmail(clienteRegistroDto.getEmail());
 
             returnValue = repository.save(clienteForUpdate);
         }
@@ -69,14 +72,15 @@ public class ClienteServiceImpl implements ClienteService {
         if (cliente == null) {
             throw new RuntimeException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
         }
-        repository.delete(cliente);
+        cliente.setEnabled(false);
+        repository.save(cliente);
 
     }
 
 
-
+//si no anda volver a findAllByOrderByNOmbreASc2
     public List<ClienteDto> findAllClientes(){
-        List <Cliente>listaReal  =  repository.findAllByOrderByNombreAsc();
+        List <Cliente>listaReal  =  repository.findAllByOrderByNombreAsc2();
         List<ClienteDto> listaDto = new ArrayList<>();
 
         ClienteDto clienteDto ;
@@ -86,9 +90,10 @@ public class ClienteServiceImpl implements ClienteService {
             clienteDto.setNombre(cliente.getNombre());
             clienteDto.setApellido(cliente.getApellido());
             clienteDto.setEmail(cliente.getEmail());
-            clienteDto.setPass(cliente.getPass());
             clienteDto.setTelefono(cliente.getTelefono());
             clienteDto.setDireccion(cliente.getDireccion());
+            clienteDto.setEnabled(true);
+            clienteDto.setDni(cliente.getDni());
             listaDto.add(clienteDto);
         }
 
@@ -97,7 +102,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Page<Cliente> getAll(Pageable pageable) {
-        return repository.findAllByOrderByNombreAsc(pageable);
+        return repository.findAllClientesEnabled(pageable);
     }
 
     @Override
@@ -113,7 +118,8 @@ public class ClienteServiceImpl implements ClienteService {
 
             Cliente  newCliente = new Cliente(clienteRegistroDto.getEmail(),
                     clienteRegistroDto.getNombre(), clienteRegistroDto.getApellido(), clienteRegistroDto.getTelefono(),
-                    clienteRegistroDto.getDireccion(), clienteRegistroDto.getRol());
+                    clienteRegistroDto.getDireccion(), clienteRegistroDto.getRol(), true,
+                    clienteRegistroDto.getDni());
             repository.save(newCliente);
 
         }

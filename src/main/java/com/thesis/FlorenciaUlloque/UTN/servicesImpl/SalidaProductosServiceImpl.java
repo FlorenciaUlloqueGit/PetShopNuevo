@@ -41,6 +41,8 @@ public class SalidaProductosServiceImpl implements SalidaProductosService {
         salidaForUpdate.setFecha(salidaProducto.getFecha());
         salidaForUpdate.setCliente(salidaProducto.getCliente());
         salidaForUpdate.setListadoSalidaProducto(salidaProducto.getListadoSalidaProducto());
+        salidaForUpdate.setCantidadCuotas(salidaProducto.getCantidadCuotas());
+        salidaForUpdate.setPorcentajeInteres(salidaProducto.getPorcentajeInteres());
 
         returnValue = repository.save(salidaForUpdate);
         return returnValue;
@@ -85,7 +87,7 @@ public class SalidaProductosServiceImpl implements SalidaProductosService {
     @Override
     public List<Cliente> listaClientes() {
         List<Cliente> clienteList;
-        clienteList = (List<Cliente>) clienteRepository.findAll();
+        clienteList = clienteRepository.findAllByOrderByNombreAsc2();
         return  clienteList;
     }
 

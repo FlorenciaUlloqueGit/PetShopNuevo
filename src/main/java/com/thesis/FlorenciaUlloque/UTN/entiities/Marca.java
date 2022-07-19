@@ -12,6 +12,15 @@ public class Marca {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idMarca;
     private String nombre;
+    private boolean enabled;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "marca")
@@ -54,31 +63,12 @@ public class Marca {
         this.nombre = nombre;
     }
 
-
-    public Marca(int idMarca, String nombre, Proveedor proveedor) {
-        this.idMarca = idMarca;
+    public Marca(String nombre, boolean enabled, Proveedor proveedor) {
         this.nombre = nombre;
-        this.proveedor = proveedor;
-    }
-
-    public Marca(int idMarca, String nombre) {
-        this.idMarca = idMarca;
-        this.nombre = nombre;
-    }
-
-    public Marca(String nombre, Proveedor proveedor) {
-        this.nombre = nombre;
+        this.enabled = enabled;
         this.proveedor = proveedor;
     }
 
     public Marca() {
-    }
-
-    @Override
-    public String toString() {
-        return "Marca{" +
-                "idMarca=" + idMarca +
-                ", nombre='" + nombre + '\'' +
-                '}';
     }
 }

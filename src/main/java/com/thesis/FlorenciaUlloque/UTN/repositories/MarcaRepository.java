@@ -15,8 +15,10 @@ import java.util.List;
 public interface MarcaRepository  extends PagingAndSortingRepository<Marca, Integer> {
     Marca findByNombre(String nombre);
     Marca findByIdMarca(int id);
+
+    @Query(value = "select * from marcas m where m.enabled = true order by m.nombre asc", nativeQuery = true)
     List<Marca> findAllByOrderByNombreAsc();
-    @Query(value = "select * from marcas m where m.id_marca != 5 order by m.nombre asc", nativeQuery = true)
+    @Query(value = "select * from marcas m where m.id_marca != 5 and m.enabled = true order by m.nombre asc", nativeQuery = true)
     Page<Marca> findAllByOrderByNombreAsc(Pageable pageable);
     @Query(value = "select  m.nombre from marcas m", nativeQuery = true)
     List<String> findAllMarcas(int page, int limit); //REVISAR

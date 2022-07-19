@@ -25,7 +25,7 @@ public class ReporteVentasHoyPDF {
     private void writeTableHeader(PdfPTable table){
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(Color.orange);
-        cell.setPadding(6);
+        cell.setPadding(8);
 
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
         font.setColor(Color.black);
@@ -38,6 +38,10 @@ public class ReporteVentasHoyPDF {
         cell.setPhrase(new Phrase("Precio de venta", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Cantidad vendida", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("N° cuotas", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("Porc. Interés", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Subtotal en AR$", font));
         table.addCell(cell);
@@ -54,6 +58,8 @@ public class ReporteVentasHoyPDF {
             table.addCell(producto.getFormaVenta());
             table.addCell(String.valueOf(producto.getPrecioVenta()));
             table.addCell(String.valueOf(producto.getCantidad()));
+            table.addCell(String.valueOf(producto.getCantidadCuotas()));
+            table.addCell(String.valueOf(producto.getPorcentajeInteres()));
             table.addCell(String.valueOf(producto.getTotal()));
 
             }
@@ -70,7 +76,7 @@ public class ReporteVentasHoyPDF {
 
         document.add(new Paragraph(titulo));
 
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(8);
         table.setWidthPercentage(100);
         table.setSpacingBefore(15);
 

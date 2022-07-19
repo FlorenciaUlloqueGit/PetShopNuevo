@@ -23,7 +23,15 @@ public class ProductoDtos {
     private TipoAnimal tipoAnimal;
     private Edad edad;
     private Tamano tamano;
+    private boolean enabled;
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public TipoAnimal getTipoAnimal() {
         return tipoAnimal;

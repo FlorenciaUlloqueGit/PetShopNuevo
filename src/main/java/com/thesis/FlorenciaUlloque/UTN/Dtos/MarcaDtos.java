@@ -8,6 +8,15 @@ public class MarcaDtos {
 
     private String nombre;
     private Proveedor proveedor;
+    private boolean enabled;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public String getNombre() {
         return nombre;

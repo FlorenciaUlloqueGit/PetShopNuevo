@@ -54,7 +54,10 @@ public class ClienteController {
 
     @DeleteMapping("/{idCliente}")
     public String deleteCliente( @PathVariable int idCliente){
-        clienteService.deleteCliente(idCliente);
+        Cliente cliente = repository.findByIdCliente(idCliente);
+        cliente.setEnabled(false);
+        clienteService.updateCliente(cliente);
+      //  clienteService.deleteCliente(idCliente);
         return "El cliente ha sido eliminado exitosamente";
 
     }

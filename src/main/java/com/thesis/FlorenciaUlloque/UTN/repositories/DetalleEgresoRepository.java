@@ -52,4 +52,8 @@ public interface DetalleEgresoRepository extends PagingAndSortingRepository<Deta
             "join detalle_egreso de on de.id_egreso = e.id_egreso join productos p on p.id_producto =" +
             " de.id_producto where Month(e.fecha) = month(curdate()) and p.id_forma_venta =2", nativeQuery = true)
     Integer findCantKgVendidos();
+
+    @Query(value = "select nombre  from productos where fecha_vencimiento < curdate()  or month(fecha_vencimiento) " +
+            "< month(curdate())+3 and nombre like '%:nombre%';", nativeQuery = true)
+    String findProductosVencerNombre(@Param("nombre") String nombre);
 }

@@ -15,7 +15,7 @@ public class EgresoDto {
     private double total;
     private FormaPago formaPago;
     private int cantidadCuotas;
-    private float procentajeInteres;
+    private float porcentajeInteres;
 
     public int getCantidadCuotas() {
         return cantidadCuotas;
@@ -26,11 +26,11 @@ public class EgresoDto {
     }
 
     public float getProcentajeInteres() {
-        return procentajeInteres;
+        return porcentajeInteres;
     }
 
     public void setProcentajeInteres(float procentajeInteres) {
-        this.procentajeInteres = procentajeInteres;
+        this.porcentajeInteres = procentajeInteres;
     }
 
     public EgresoDto() {

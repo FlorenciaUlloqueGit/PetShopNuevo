@@ -30,6 +30,8 @@ public interface ProductoRepository extends CrudRepository<Producto,Integer > {
 
     List<Producto> findAllByCodBarras(long codBarras);
     List<Producto> findAllByOrderByNombreAsc();
+
+    @Query(value="select* from productos where enabled = true order by nombre asc",nativeQuery = true)
     Page<Producto>  findAllByOrderByNombreAsc(Pageable pageable);
 
     //trae TODOS los datos de los productos por marca

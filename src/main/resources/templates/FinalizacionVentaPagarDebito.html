@@ -57,7 +57,7 @@
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
         <br><br>
-        Venta en proceso
+        Revise el vuelto a devolver al cliente
         <br><br><br>
     </h1>
 </div>
@@ -88,19 +88,18 @@
         </div>
     </div>
 
-    <form th:action="@{ventas/confirmacionVentaDebito/{idEgreso}(idEgreso=${egreso.idEgreso})}}" method="post" th:object="${egresoDtoCredito}">
+    <form th:action="@{ventas/confirmacionVentaDebito}" method="post" th:object="${dtoPago}">
 
         <div class="form-group">
             <label for="total">Total venta en AR$</label>
-            <input type="number" class="form-control" id="total" th:value="${egresoDtoCredito.total}" disabled>
+            <input type="number" class="form-control" id="total" th:value="${dtoPago.total}" disabled>
         </div>
 
 
         <div class="form-group">
-            <label for="dineroEntrante">Cantidad dinero entrante en AR$</label>
-            <input type="number" class="form-control" id="dineroEntrante" th:value="${dtoDineroEntrante.dineroEntrante}">
+            <label for="cantidadEntrante">Cantidad dinero entrante en AR$</label>
+            <input type="number" class="form-control" id="cantidadEntrante" th:field="${dtoPago.cantidadEntrante}">
         </div>
-
 
         <br>
         <button type="submit"  class="btn btn-success" id="botonCrear">Finalizar</button>
@@ -109,10 +108,6 @@
 
 </div>
 
-<div align="center">
-    <td><a th:href="@{/ventas/pagar}" class="btn btn-success">Continuar</a></td>
-</div>
-</div>
 
 
 <br>

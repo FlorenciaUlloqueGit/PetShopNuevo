@@ -49,7 +49,8 @@ public class ProveedorServiceImpl  implements ProveedorService {
         if (proveedor == null) {
             existe = false;
         }
-        repository.delete(proveedor);
+        proveedor.setEnabled(false);
+        repository.save(proveedor);
         return existe;
     }
 
@@ -77,7 +78,7 @@ public class ProveedorServiceImpl  implements ProveedorService {
             registrado = true;
         } else{
             registrado = false;
-            Proveedor newProveedor = new Proveedor(proveedor.getNombre(), proveedor.getTelefono(), proveedor.getRepresentante());
+            Proveedor newProveedor = new Proveedor(proveedor.getNombre(), proveedor.getTelefono(), proveedor.getRepresentante(), true);
 
             repository.save(newProveedor);
         }

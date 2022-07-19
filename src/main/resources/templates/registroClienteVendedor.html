@@ -78,9 +78,11 @@
     <div th:if=${param.errorGeneral}>
     <div class="alert alert-info">Ups! no se pudo registrar el cliente</div>
 </div>
-
+    <div th:if=${param.errorDNI}>
+        <div class="alert alert-danger">Error! El DNI ingresado debe contener al menos 6 caracteres</div>
+    </div>
     <div th:if=${param.error}>
-        <div class="alert alert-danger">Error! El mail ingresado ya existe</div>
+        <div class="alert alert-danger">Error! Los datos ingresados pertenecen a un usuario registrado.</div>
     </div>
     <div th:if=${param.errorTelefono0}>
         <div class="alert alert-danger">Error! El número de teléfono no puede ser igual a 0</div>
@@ -103,6 +105,11 @@
                 id="apellido" class="form-control" th:field="*{apellido}"
                 required autofocus="autofocus">
         </div>
+        <div class="form-group">
+            <label class="control-label" for="dni">DNI : </label> <input
+                id="dni" type="number" class="form-control" th:field="*{dni}"
+                required autofocus="autofocus">
+        </div>
 
         <div class="form-group">
             <label class="control-label" for="email">Email : </label> <input
@@ -112,7 +119,7 @@
 
         <div class="form-group">
             <label class="control-label" for="Telefono">Teléfono : </label> <input
-                type="number" id="telefono" class="form-control" th:field="*{telefono}"
+                type="number" id="telefono" style="text-align=left" class="form-control" th:field="*{telefono}"
                 required autofocus="autofocus">
         </div>
 

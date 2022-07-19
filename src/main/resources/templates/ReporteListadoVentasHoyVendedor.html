@@ -90,9 +90,9 @@
             <th scope="col">Producto</th>
             <th scope="col">Categoría</th>
             <th scope="col">Forma de venta</th>
-            <th scope="col">Precio de venta</th>
+            <th colspan="2" scope="col">Precio de venta</th>
             <th scope="col">Cantidad vendida</th>
-            <th scope="col">Subtotal</th>
+            <th colspan="2" scope="col">Subtotal</th>
 
         </tr>
         </thead>
@@ -101,7 +101,7 @@
             <td th:text="${producto.nombre}"></td>
             <td th:text="${producto.categoria}"></td>
             <td th:text="${producto.formaVenta}"></td>
-            <td th:text="${producto.precioVenta}"></td>
+            <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.precioVenta}"></td>
             <td style="text-align:left" th:text="${producto.cantidad}"></td>
             <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${producto.total}"></td>
         </tbody>
@@ -128,7 +128,7 @@
 <br>
     <div class="container">
         <label for="acumTotales">Total en AR$</label>
-        <input class="form-control" type="text"
+        <input class="form-control" type="text"  style="text-align:left"
                th:value="${acumTotales}" id="acumTotales" name="acumTotales" disabled/>
     </div>
 

@@ -80,19 +80,22 @@
 
         <div class="form-group">
             <label for="total">Total venta en AR$</label>
-            <input type="number" class="form-control" id="total" th:value="${egresoDtoCredito.total}" disabled>
+            <input type="number" class="form-control" id="total" th:value="${egresoDtoCredito.total}"
+                   style="text-align=left"disabled>
         </div>
 
 
         <div class="form-group">
             <label for="dineroEntrante">Cantidad dinero entrante en AR$</label>
-            <input type="number" class="form-control" id="dineroEntrante" th:value="${dtoDineroEntrante.dineroEntrante}" disabled>
+            <input type="number" class="form-control" id="dineroEntrante" style="text-align=left"
+                   th:value="${dtoDineroEntrante.dineroEntrante}" disabled>
         </div>
 
 
             <div class="form-group">
                 <label for="dtoVuelto">Cantidad dinero entrante en AR$</label>
-                <input type="number" class="form-control" id="dtoVuelto" th:value="${dtoVuelto.dineroEntrante}" disabled>
+                <input type="number" class="form-control" id="dtoVuelto" style="text-align=left"
+                       th:value="${dtoVuelto.dineroEntrante}" disabled>
             </div>
 
         </form>

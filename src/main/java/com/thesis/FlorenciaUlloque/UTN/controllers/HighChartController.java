@@ -203,7 +203,7 @@ public class HighChartController{
         }
 
 
-        if(salidaProductosRepository.findIngresosMesAnteriorX2(String.valueOf(fecha)).isNaN() ){
+        if(salidaProductosRepository.findIngresosMesAnteriorX2(String.valueOf(fecha)) == null){
             totalMesAnteAnterior = 0;
             int  nuevaFecha = fecha.getMonth().getValue() -2;
             int mesAnteAnterior = nuevaFecha;

@@ -20,9 +20,25 @@ public class Cliente{ //crear clase cliente en la base
     private String apellido;
     private long telefono;
     private String direccion;
+    private boolean enabled;
+    private long dni;
 
+    public long getDni() {
+        return dni;
+    }
 
-    /*
+    public void setDni(long dni) {
+        this.dni = dni;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+/*
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "cliente_rol",
@@ -48,13 +64,16 @@ public class Cliente{ //crear clase cliente en la base
         this.rol = rol;
     }
 
-    public Cliente(String email, String nombre, String apellido, long telefono, String direccion, Rol rol) {
+    public Cliente(String email, String nombre, String apellido, long telefono, String direccion, Rol rol, boolean enabled,
+                   long dni) {
         this.email = email;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.direccion = direccion;
         this.rol = rol;
+        this.enabled = enabled;
+        this.dni = dni;
     }
 
     public Rol getRol() {
@@ -143,16 +162,5 @@ public class Cliente{ //crear clase cliente en la base
         this.rol = rol;
     }
 
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "idCliente=" + idCliente +
-                ", email='" + email + '\'' +
-                ", pass='" + pass + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", telefono=" + telefono +
-                ", salidaProductos=" + salidaProductos +
-                '}';
-    }
+
 }

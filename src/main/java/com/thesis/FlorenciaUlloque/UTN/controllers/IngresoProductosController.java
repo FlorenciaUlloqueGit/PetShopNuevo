@@ -241,6 +241,16 @@ public class IngresoProductosController {
     public String findAll(@RequestParam Map<String, Object> params, Model model){
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
         PageRequest pageRequest = PageRequest.of(page, 7);
+
+
+        List<IngresoProductos> lista = repository.findAllByOrderByFechaDesc();
+        for (IngresoProductos list:  lista) {
+            if(list.getTotal() == 0) {
+                int id = list.getIdIngreso();
+                ingresoProductosService.deleteIngreso(id);
+            }
+        }
+
         Page<IngresoProductos> pageIngresos = ingresoProductosService.getAll(pageRequest);
 
         int totalPage = pageIngresos.getTotalPages();

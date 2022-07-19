@@ -86,12 +86,12 @@
 
         <div class="form-group">
             <label for="total">Número de venta</label>
-            <input type="number" class="form-control" id="idEgreso" th:value="${egresoIdTotal.idEgreso}" disabled>
+            <input type="number" class="form-control" id="idEgreso" style="text-align=left" th:value="${egresoIdTotal.idEgreso}" disabled>
         </div>
 
         <div class="form-group">
             <label for="total">Total en AR$</label>
-            <input type="number" class="form-control" id="total" th:value="${egresoIdTotal.total}" disabled>
+            <input type="number" class="form-control" id="total"style="text-align=left"  th:value="${egresoIdTotal.total}" disabled>
         </div>
         <br>
         <BR>
@@ -121,6 +121,7 @@
                 <th scope="col" hidden>ID detalle</th>
                 <th scope="col">Producto</th>
                 <th scope="col">Cantidad</th>
+                <th colspan="2" scope="col">Precio unitario</th>
                 <th colspan="2" scope="col">Subtotal</th>
             </tr>
             </thead>
@@ -130,6 +131,7 @@
                 <td th:text="${detalleEgreso.idEgreso}" hidden></td>
                 <td th:text="${detalleEgreso.producto.nombre}"></td>
                 <td style="text-align:left" th:text="${detalleEgreso.cantidad}"></td>
+                <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${detalleEgreso.producto.precioVenta}"></td>
                 <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${detalleEgreso.total}"></td>
 
                     <input type="number"  step=".01" class="form-control" th:value="${detalleEgreso.idEgreso}" disabled hidden>
@@ -139,7 +141,7 @@
         </table>
 
         <div>
-            <td><a th:href="@{/ventasCliente/listar}" class="btn btn-warning">Finalizar carga</a></td>
+            <td><a th:href="@{/ventasCliente/cobrar}" class="btn btn-warning">Finalizar carga</a></td>
         </div>
     </div>
 

@@ -85,6 +85,7 @@ public class MarcaController {
     public String create(@ModelAttribute("marcaDtos") MarcaDtos marcaDtos) {
         boolean registrado = marcaService.saveMarca(marcaDtos);
         if (registrado == true){
+            marcaDtos.setEnabled(true);
             marcaService.saveMarca(marcaDtos);
             return "redirect:/marcas?error";
         }else {
@@ -96,6 +97,7 @@ public class MarcaController {
     public String create2(@ModelAttribute("marcaDtos") MarcaDtos marcaDtos) {
         boolean registrado = marcaService.saveMarca(marcaDtos);
         if (registrado == true){
+            marcaDtos.setEnabled(true);
             marcaService.saveMarca(marcaDtos);
             return "redirect:/marcas/MarcaForm?error";
         }else {
@@ -123,6 +125,7 @@ public class MarcaController {
         marcaExiste.setIdMarca(marca.getIdMarca());
         marcaExiste.setNombre(marca.getNombre());
         marcaExiste.setProveedor(marca.getProveedor());
+        marcaExiste.setEnabled(marca.isEnabled());
         marcaService.updateMarca(marcaExiste);
 
         return "redirect:/marcas/update/{idMarca}?exito";
@@ -149,6 +152,7 @@ public class MarcaController {
         marcaExiste.setIdMarca(marca.getIdMarca());
         marcaExiste.setNombre(marca.getNombre());
         marcaExiste.setProveedor(marca.getProveedor());
+        marcaExiste.setEnabled(marca.isEnabled());
         marcaService.updateMarca(marcaExiste);
 
         return "redirect:/marcas/updateMarca/{idMarca}?exito";

@@ -109,20 +109,25 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col">Identificador único de venta</th>
+            <th scope="col" hidden>Identificador único de venta</th>
             <th scope="col">Fecha</th>
             <th scope="col">Forma de pago</th>
             <th scope="col">Cliente</th>
+            <th scope="col">N° de cuotas</th>
+            <th scope="col">Intereses aplicados</th>
             <th colspan="2" scope="col">Subtotal</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="salida: ${salidaProducto}">
-            <td style="text-align:left" th:text="${salida.idEgreso}"></td>
+            <td  hidden style="text-align:left" th:text="${salida.idEgreso}"></td>
             <td th:text="${salida.fecha}"></td>
             <td th:text="${salida.formaPago.nombre}"></td>
             <td th:text="${salida.cliente.nombre}"></td>
+            <td  style="text-align:left" th:text="${salida.cantidadCuotas}"></td>
+            <td  style="text-align:left" th:text="${salida.porcentajeInteres}"></td>
             <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${salida.total}"></td>
+
         </tbody>
     </table>
     <div class="row">

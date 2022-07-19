@@ -15,6 +15,15 @@ public class Proveedor {
     private String nombre;
     private long telefono;
     private String representante;
+    private boolean enabled;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public String getRepresentante() {
         return representante;
@@ -77,11 +86,18 @@ public class Proveedor {
     public Proveedor() {
     }
 
-    public Proveedor(String nombre, long telefono, String representante) {
+    public Proveedor(int idProveedor, String nombre, long telefono, String representante, boolean enabled) {
+        this.idProveedor = idProveedor;
         this.nombre = nombre;
         this.telefono = telefono;
         this.representante = representante;
+        this.enabled = enabled;
     }
 
-
+    public Proveedor(String nombre, long telefono, String representante, boolean enabled) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.representante = representante;
+        this.enabled = enabled;
+    }
 }

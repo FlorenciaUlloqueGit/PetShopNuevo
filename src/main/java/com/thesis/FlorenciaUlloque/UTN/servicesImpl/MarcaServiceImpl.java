@@ -74,7 +74,7 @@ public class MarcaServiceImpl implements MarcaService {
             registrado = true;
         } else{
             registrado = false;
-            Marca newMarca = new Marca(marcaDtos.getNombre(), marcaDtos.getProveedor());
+            Marca newMarca = new Marca(marcaDtos.getNombre(),true, marcaDtos.getProveedor());
 
             repository.save(newMarca);
         }
@@ -84,7 +84,7 @@ public class MarcaServiceImpl implements MarcaService {
     @Override
     public List<Proveedor> listaProveedores() {
         List<Proveedor> proveedorList;
-        proveedorList = (List<Proveedor>) proveedorRepository.findAll();
+        proveedorList = proveedorRepository.findAllByOrderByNombreAsc();
         return  proveedorList;
     }
 

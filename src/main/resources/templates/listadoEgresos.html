@@ -111,6 +111,7 @@
             <th scope="col">Fecha</th>
             <th colspan="2" scope="col">Total Costo</th>
             <th scope="col">Forma de pago</th>
+            <th scope="col"> % Interés</th>
             <th scope="col">Email cliente</th>
             <th scope="col">Detalles</th>
             <th scope="col">Editar</th>
@@ -123,6 +124,7 @@
             <td th:text="${egreso.fecha}"></td>
             <td style="text-align:left">AR$<td style="text-align:left align:left"  th:text="${egreso.total}"></td></td>
             <td th:text="${egreso.formaPago.nombre}"></td>
+            <td style="text-align:left" th:text="${egreso.porcentajeInteres}"></td>
             <td th:text="${egreso.cliente.email}"></td>
             <td><a th:href="@{/detalleEgresos/listar/{idEgreso}(idEgreso=${egreso.idEgreso})}" class="btn btn-warning">
                 Ver productos vendidos</a></td>

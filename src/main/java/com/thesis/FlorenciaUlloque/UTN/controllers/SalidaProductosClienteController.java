@@ -1,10 +1,7 @@
 package com.thesis.FlorenciaUlloque.UTN.controllers;
 
 import com.thesis.FlorenciaUlloque.UTN.Dtos.SoloFecha;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.DetalleEgresoDtoIdEgreso;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.EgresoDto;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.EgresoDtos;
-import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.EgresoIdTotal;
+import com.thesis.FlorenciaUlloque.UTN.Dtos.dtosEgresos.*;
 import com.thesis.FlorenciaUlloque.UTN.entiities.*;
 import com.thesis.FlorenciaUlloque.UTN.repositories.DetalleEgresoRepository;
 import com.thesis.FlorenciaUlloque.UTN.repositories.SalidaProductosRepository;
@@ -173,6 +170,293 @@ public class SalidaProductosClienteController {
         return "pagIntermediaEgresosDetalle2Vendedor";
     }
 
+
+    @ModelAttribute("egresoDtoFinalizar")
+    public EgresoDtoFinalizar mapeaDtosOtro() {
+        return new EgresoDtoFinalizar();
+    }
+
+    @GetMapping("/cobrar")
+    public String mostrarFormularioFinalizarCarga1(Model model) {
+
+        SalidaProducto egreso = repository.findByIdEgreso((idEgres));
+
+        List<FormaPago> formasPagos = salidaProductosService.listaFormasPagos();
+
+
+        SalidaProducto salidaProducto = new SalidaProducto();
+        model.addAttribute("formasPagos", formasPagos);
+        model.addAttribute("egresoDtoFinalizar", egreso);
+        return "FinalizacionVentaCliente";
+    }
+    @RequestMapping(value = "/cobrarVenta", method = { RequestMethod.GET, RequestMethod.POST })
+    public String updateEgresoParaCobrar2(@ModelAttribute("egresoDtoFinalizar") EgresoDtoFinalizar egresoDtoFinalizar
+    ) {
+
+        // idEgreso = this.idEgr;
+        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgres);
+        egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+        egresoExiste.setFecha(egresoExiste.getFecha());
+        egresoExiste.setCliente(egresoExiste.getCliente());
+        egresoExiste.setTotal(egresoExiste.getTotal());
+        egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+        egresoExiste.setFormaPago(egresoDtoFinalizar.getFormaPago());
+
+
+
+        if( egresoExiste.getFormaPago().getIdFormaPago() == 1 || egresoExiste.getFormaPago().getIdFormaPago() == 4){
+            egresoExiste = repository.findByIdEgreso(idEgres);
+            egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+            egresoExiste.setFecha(egresoExiste.getFecha());
+            egresoExiste.setCliente(egresoExiste.getCliente());
+            egresoExiste.setTotal(egresoExiste.getTotal());
+            egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+            egresoExiste.setFormaPago(egresoDtoFinalizar.getFormaPago());
+            egresoExiste.setPorcentajeInteres(0);
+            egresoExiste.setCantidadCuotas(0);
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/cobrar?exito" ;
+        }
+        if(egresoExiste.getFormaPago().getIdFormaPago() == 2){
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/finalizarVentaCredito";
+        }else {
+            // idEgreso = this.idEgr;
+            egresoExiste = repository.findByIdEgreso(idEgres);
+            egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+            egresoExiste.setFecha(egresoExiste.getFecha());
+            egresoExiste.setCliente(egresoExiste.getCliente());
+            egresoExiste.setTotal(egresoExiste.getTotal());
+            egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+            egresoExiste.setFormaPago(egresoDtoFinalizar.getFormaPago());
+            egresoExiste.setPorcentajeInteres(0);
+            egresoExiste.setCantidadCuotas(0);
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/finalizarVentaEfectivo";
+        }
+
+
+    }
+
+    @RequestMapping(value = "/ventasCliente/cobrarVenta", method = { RequestMethod.GET, RequestMethod.POST })
+    public String updateEgresoParaCobrar(@ModelAttribute("egresoDtoFinalizar") EgresoDtoFinalizar egresoDtoFinalizar
+    ) {
+
+        // idEgreso = this.idEgr;
+        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgres);
+        egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+        egresoExiste.setFecha(egresoExiste.getFecha());
+        egresoExiste.setCliente(egresoExiste.getCliente());
+        egresoExiste.setTotal(egresoExiste.getTotal());
+        egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+        egresoExiste.setFormaPago(egresoDtoFinalizar.getFormaPago());
+
+
+
+        if( egresoExiste.getFormaPago().getIdFormaPago() == 1 || egresoExiste.getFormaPago().getIdFormaPago() == 4){
+            egresoExiste = repository.findByIdEgreso(idEgres);
+            egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+            egresoExiste.setFecha(egresoExiste.getFecha());
+            egresoExiste.setCliente(egresoExiste.getCliente());
+            egresoExiste.setTotal(egresoExiste.getTotal());
+            egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+            egresoExiste.setFormaPago(egresoDtoFinalizar.getFormaPago());
+            egresoExiste.setPorcentajeInteres(0);
+            egresoExiste.setCantidadCuotas(0);
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/cobrar?exito" ;
+        }
+        if(egresoExiste.getFormaPago().getIdFormaPago() == 2){
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/finalizarVentaCredito";
+        }else {
+            // idEgreso = this.idEgr;
+            egresoExiste = repository.findByIdEgreso(idEgres);
+            egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+            egresoExiste.setFecha(egresoExiste.getFecha());
+            egresoExiste.setCliente(egresoExiste.getCliente());
+            egresoExiste.setTotal(egresoExiste.getTotal());
+            egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+            egresoExiste.setFormaPago(egresoDtoFinalizar.getFormaPago());
+            egresoExiste.setPorcentajeInteres(0);
+            egresoExiste.setCantidadCuotas(0);
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/finalizarVentaEfectivo";
+        }
+
+    }
+
+    @GetMapping("/finalizarVentaCredito")
+    public String mostrarFormularioFinalizarCarga2(Model model) {
+
+        SalidaProducto egreso = repository.findByIdEgreso((idEgres));
+
+        Cuota cuotass = new Cuota();
+        List<Cuota> cuotas = cuotass.crearCuotas();
+        egresoDtoCreditoFin egresoDtoCreditoFin = new egresoDtoCreditoFin();
+        egresoDtoCreditoFin.setTotal(egreso.getTotal());
+        egresoDtoCreditoFin.setCantidadCuotas(1);
+        egresoDtoCreditoFin.setPorcentaje(0);
+
+        model.addAttribute("cuotas", cuotas);
+        model.addAttribute("egresoDtoCreditoFin", egresoDtoCreditoFin);
+        return "FinalizacionVentaPagarCreditoVendedor" ;
+    }
+
+
+    @ModelAttribute("dtoDineroEntrante")
+    public DtoDineroEntrante mapeaDtosOtrod() {
+        return new DtoDineroEntrante();
+    }
+    @ModelAttribute("dtoVuelto")
+    public DtoVuelto mapeaDtosOtross() {
+        return new DtoVuelto();
+    }
+    @ModelAttribute("egresoDtoDebito")
+    public EgresoDtoDebito mapeaDtosOtross3() {
+        return new EgresoDtoDebito();
+    }
+    @ModelAttribute("dtoVentaConfirmada")
+    public dtoVentaConfirmada mapeaDtosOtrossd3() {
+        return new dtoVentaConfirmada();
+    }
+    @ModelAttribute("dtoPago")
+    public dtoPago mapeaDtosOtrossd33() {
+        return new dtoPago();
+    }
+
+    @ModelAttribute("egresoDtoCreditoFin")
+    public egresoDtoCreditoFin mapeaDtosOtrossd332() {
+        return new egresoDtoCreditoFin();
+    }
+
+
+    @GetMapping("/finalizarVentaEfectivo")
+    public String mostrarFormularioFinalizarCarga23(Model model) {
+
+        SalidaProducto egreso = repository.findByIdEgreso((idEgres));
+        dtoPago dtoPago = new dtoPago();
+        dtoPago.setTotal((float) egreso.getTotal());
+
+        model.addAttribute("dtoPago", dtoPago);
+        return "FinalizacionVentaPagarDebitoVendedor" ;
+    }
+    @RequestMapping(value = "/confirmacionVentaCredito", method = { RequestMethod.POST })
+    public String confirmarVentacRedito(@ModelAttribute("egresoDtoCreditoFin") egresoDtoCreditoFin egresoDto) {
+
+        // idEgreso = this.idEgr;
+        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgres);
+        egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+        egresoExiste.setFecha(egresoExiste.getFecha());
+        egresoExiste.setCliente(egresoExiste.getCliente());
+        egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+        egresoExiste.setFormaPago(egresoExiste.getFormaPago());
+        egresoExiste.setCantidadCuotas(egresoDto.getCantidadCuotas());
+        egresoExiste.setPorcentajeInteres(egresoDto.getPorcentaje());
+        double totalFinal =  ( egresoExiste.getTotal() * egresoExiste.getPorcentajeInteres() /100) + egresoExiste.getTotal();;
+
+        double roundOff = Math.round(totalFinal * 100.0) / 100.0;
+        egresoExiste.setTotal(roundOff);
+        salidaProductosService.updateEgreso(egresoExiste);
+        if(egresoExiste.getPorcentajeInteres() < 0){
+            return "redirect:/ventasCliente/finalizarVentaCredito?errorInteres";
+        } else{
+
+            return "redirect:/ventasCliente/finalizarVentaCredito?exito";
+        }
+    }
+    @RequestMapping(value = "/ventasCliente/confirmacionVentaCredito", method = { RequestMethod.GET, RequestMethod.POST })
+    public String confirmarVentacReditoe(@ModelAttribute("egresoDtoCreditoFin") egresoDtoCreditoFin egresoDto) {
+
+        // idEgreso = this.idEgr;
+        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgres);
+        egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+        egresoExiste.setFecha(egresoExiste.getFecha());
+        egresoExiste.setCliente(egresoExiste.getCliente());
+        egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+        egresoExiste.setFormaPago(egresoExiste.getFormaPago());
+        egresoExiste.setCantidadCuotas(egresoDto.getCantidadCuotas());
+        egresoExiste.setPorcentajeInteres(egresoDto.getPorcentaje());
+        double totalFinal =  ( egresoExiste.getTotal() * egresoExiste.getPorcentajeInteres() /100) + egresoExiste.getTotal();;
+
+        double roundOff = Math.round(totalFinal * 100.0) / 100.0;
+        egresoExiste.setTotal(roundOff);
+        salidaProductosService.updateEgreso(egresoExiste);
+
+        if(egresoExiste.getPorcentajeInteres() < 0){
+            return "redirect:/ventasCliente/finalizarVentaCredito?errorInteres";
+        } else{
+            return "redirect:/ventasCliente/finalizarVentaCredito?exito";
+        }
+    }
+
+
+    float vuelto = 0;
+    float dineroingreso;
+    @RequestMapping(value = "/confirmacionVentaDebito", method = { RequestMethod.GET, RequestMethod.POST })
+    public String confirmarVentaCredito(@ModelAttribute("dtoPago") dtoPago dto) {
+
+        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgres);
+        egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+        egresoExiste.setFecha(egresoExiste.getFecha());
+        egresoExiste.setCliente(egresoExiste.getCliente());
+        egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+        egresoExiste.setFormaPago(egresoExiste.getFormaPago());
+        egresoExiste.setCantidadCuotas(0);
+        egresoExiste.setPorcentajeInteres(0);
+        egresoExiste.setTotal(egresoExiste.getTotal());
+        dineroingreso = dto.getCantidadEntrante();
+        vuelto = (float) (dto.getCantidadEntrante() -egresoExiste.getTotal());
+
+        if(dto.getCantidadEntrante() < egresoExiste.getTotal()){
+            return "redirect:/ventasCliente/finalizarVentaEfectivo?errorMonto";
+        } else{
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/mostrarVuelto?exito";
+        }
+    }
+    float vuelto2 = 0;
+    float dineroEntrante2 = 0;
+    @RequestMapping(value = "/ventasCliente/confirmacionVentaDebito", method = {  RequestMethod.POST })
+    public String confirmarVentaCredito2(@ModelAttribute("dtoPago") dtoPago dto) {
+
+        SalidaProducto egresoExiste = repository.findByIdEgreso(idEgres);
+        egresoExiste.setIdEgreso(egresoExiste.getIdEgreso());
+        egresoExiste.setFecha(egresoExiste.getFecha());
+        egresoExiste.setCliente(egresoExiste.getCliente());
+        egresoExiste.setListadoSalidaProducto(egresoExiste.getListadoSalidaProducto());
+        egresoExiste.setFormaPago(egresoExiste.getFormaPago());
+        egresoExiste.setCantidadCuotas(0);
+        egresoExiste.setPorcentajeInteres(0);
+        egresoExiste.setTotal(egresoExiste.getTotal());
+        dineroEntrante2 = dto.getCantidadEntrante();
+        vuelto2 = (float) (dto.getCantidadEntrante() -egresoExiste.getTotal());
+
+        if(dto.getCantidadEntrante() < egresoExiste.getTotal()){
+            return "redirect:/ventasCliente/finalizarVentaEfectivo?errorMonto";
+        } else{
+            salidaProductosService.updateEgreso(egresoExiste);
+            return "redirect:/ventasCliente/mostrarVuelto?exito";
+        }
+    }
+    @GetMapping("/mostrarVuelto")
+    public String mostrarFormularioFinalizarCarga2e3(Model model) {
+        SalidaProducto egreso = repository.findByIdEgreso((idEgres));
+        dtoVentaConfirmada dto = new dtoVentaConfirmada();
+        dto.setTotal((float) egreso.getTotal());
+        dto.setCantidadEntrante(dineroEntrante2);
+        dto.setVuelto(vuelto2);
+
+
+        model.addAttribute("dtoVentaConfirmada", dto);
+
+
+        return "FinalizacionVentaPagarDebito2Vendedor" ;
+    }
+
+
+
+
     @GetMapping("/agregarDetalles")
     public String mostrarFormularioIntermedio(Model model) {
 
@@ -264,7 +548,7 @@ public class SalidaProductosClienteController {
         int totalPage = pageIngresos.getTotalPages();
         if(totalPage> 0){
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("pages",pages);
+            model.addAttribute("page",pages);
         }
         model.addAttribute("egresoDto", pageIngresos.getContent());
         model.addAttribute("current", page + 1);

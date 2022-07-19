@@ -7,6 +7,16 @@ public class ProductoDtoDetalle {
     private double precioCompra;
     private double precioVenta;
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    private boolean enabled;
+
     public int getIdProducto() {
         return idProducto;
     }

@@ -35,12 +35,15 @@ public class RegistroController {
     @PostMapping //registra el usuario y redirige.
     public String registrarUsuario(@ModelAttribute("cliente") ClienteRegistroDto clienteRegistroDto) {
 
-        Cliente clienteRegistrado = repository.findByEmail(clienteRegistroDto.getEmail());
+        Cliente clienteRegistrado = repository.findByDni(clienteRegistroDto.getDni());
         boolean registrado = false;
         if(clienteRegistrado != null){
             registrado = true;
 
         }
+        long dni = clienteRegistroDto.getDni();
+        String dniCast = String.valueOf(dni);
+        int tamDni = dniCast.length();
         long tel = clienteRegistroDto.getTelefono();
         String telefono = String.valueOf(tel);
         int tamTel = telefono.length();
@@ -53,9 +56,15 @@ public class RegistroController {
             return "redirect:/registro?errorTelefonoLenght";
 
         }
+        if (tamDni < 6 || tamTel >= 15) {
+
+            return "redirect:/registro?errorDNI";
+
+        }
        if (registrado == true) {
             return "redirect:/registro?error";
         }else {
+           clienteRegistroDto.setEnabled(true);
             clienteService.saveRegistro(clienteRegistroDto);
             return "redirect:/registro?exito";
         }
@@ -93,6 +102,7 @@ public class RegistroController {
         if (registrado == true) {
             return "redirect:/registro/nuevo?error";
         }else {
+            clienteRegistroDto.setEnabled(true);
             clienteService.saveRegistro(clienteRegistroDto);
             return "redirect:/registro/nuevo?exito";
         }
