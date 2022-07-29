@@ -90,7 +90,7 @@
         <div class="alert alert-danger">El tipo de producto ingresado requiere fecha de vencimiento</div>
     </div>
 
-      <form th:action="@{/productos/updateProductoEspecifico/{idProducto}(idProducto=${producto.idProducto})}" method="post" th:object="${productoDtos}" >
+      <form th:action="@{/productos/updateProductoEspecifico/{idProducto}(idProducto=${producto.idProducto})}" method="post" th:object="${producto}" >
 
           <div class="form-group">
               <label for="codBarras">Código de barras</label>

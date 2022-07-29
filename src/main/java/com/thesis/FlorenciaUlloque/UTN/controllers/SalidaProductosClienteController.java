@@ -548,7 +548,7 @@ public class SalidaProductosClienteController {
         int totalPage = pageIngresos.getTotalPages();
         if(totalPage> 0){
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("page",pages);
+            model.addAttribute("pages",pages);
         }
         model.addAttribute("egresoDto", pageIngresos.getContent());
         model.addAttribute("current", page + 1);

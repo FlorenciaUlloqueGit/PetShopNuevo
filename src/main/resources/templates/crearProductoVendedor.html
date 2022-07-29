@@ -119,7 +119,7 @@
 
           <div class="form-group">
               <label for="pesoNeto">Ingrese el Peso del producto (en caso de no contar con el peso, ingrese aproximado)</label>
-              <input type="number" class="form-control" id="pesoNeto" th:field="*{pesoNeto}"
+              <input type="number" class="form-control" step=".01" id="pesoNeto" th:field="*{pesoNeto}"
                      required autofocus="autofocus" >
           </div>
 

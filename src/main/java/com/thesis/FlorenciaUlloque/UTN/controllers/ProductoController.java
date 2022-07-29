@@ -75,7 +75,7 @@ public class ProductoController {
 
     @GetMapping("/nombre/{nombre}") //funciona
     public Producto getProductoByNombre(@PathVariable String nombre) {
-        return repository.findByNombre(nombre);
+        return (Producto) repository.findAllProductosByNameIndistinto(nombre);
     }
 
     @ModelAttribute("producto")
@@ -194,8 +194,8 @@ public class ProductoController {
         if (productoDtos.getPesoNeto() <= 0) {
             return "redirect:/productos?errorPeso";
         }
-        if (productoDtos.getFechaVencimiento().isBefore(LocalDate.now())) {
-            return "redirect:/productos?errorProductoVencido";
+        if (productoDtos.getCategoria().getIdCategoria() != 2 && productoDtos.getFechaVencimiento().isBefore(LocalDate.now()) ) {
+                return "redirect:/productos?errorProductoVencido";
         }
         if (productoDtos.getPrecioCompra() == 0 || productoDtos.getPrecioVenta() == 0) {
             return "redirect:/productos?errorProductoPrecio0";
@@ -401,7 +401,7 @@ public class ProductoController {
             productoDtos.setEdad(producto.getEdad());
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
-            productoDtos.setEnabled(producto.isEnabled());
+            productoDtos.setEnabled(true);
         } else {
             productoDtos.setCodBarras(producto.getCodBarras());
             productoDtos.setNombre(producto.getNombre());
@@ -416,7 +416,7 @@ public class ProductoController {
             productoDtos.setEdad(producto.getEdad());
             productoDtos.setTamano(producto.getTamano());
             productoDtos.setTipoAnimal(producto.getTipoAnimal());
-            productoDtos.setEnabled(producto.isEnabled());
+            productoDtos.setEnabled(true);
             Clock c1 = Clock.systemUTC();
             fechaDeHoy = LocalDate.now(c1);
 
@@ -555,7 +555,12 @@ public class ProductoController {
     public String buscarNombre(@ModelAttribute("soloNombre") ProductoSoloNombre solonombre) {
 
         nombre = solonombre.getNombre();
-        return "redirect:/productos/listarProductoFiltrado";
+        List<Producto> resultado = repository.findAllProductosByNameIndistinto(nombre);
+        if (!resultado.isEmpty()){
+            return "redirect:/productos/listarProductoFiltrado";
+        }else{
+           return "redirect:/productos/?errorNombre";
+        }
     }
 
     long codBarras;
@@ -563,14 +568,19 @@ public class ProductoController {
     public String buscarCodBarras(@ModelAttribute("soloCodBarras") ProductoSoloCodBarras soloCodBarras) {
 
         codBarras = soloCodBarras.getCodBarras();
-        return "redirect:/productos/listarProductoFiltrado";
+        if(codBarras != 0){
+            return "redirect:/productos/listarProductoFiltrado";
+        } else{
+            return "redirect:/productos/?errorCodBarras";
+        }
+
     }
 
     @GetMapping("/listarProductoFiltrado")
     public String findAllProductoFiltrado(Model model){
         List<Producto> productos = repository.findAllProductosByNameIndistinto(nombre);
 
-        if(codBarrasProducto != 0){
+        if(codBarras != 0){
             Producto prodocto = repository.findByCodBarras(codBarras);
             model.addAttribute("productoReal", prodocto);
             return "ListadoProductoEspecificoAdmin";
@@ -585,7 +595,12 @@ public class ProductoController {
     public String buscarNombre2(@ModelAttribute("soloNombre") ProductoSoloNombre solonombre) {
 
         nombreProducto = solonombre.getNombre();
-        return "redirect:/productos/listarProductoFiltradoEspecifico";
+        List <Producto> resultado = repository.findAllProductosByNameIndistinto(nombreProducto);
+        if (!resultado.isEmpty()){
+            return "redirect:/productos/listarProductoFiltradoEspecifico";
+        } else {
+            return "redirect:/productos/?errorNombre";
+        }
     }
 
     long codBarrasProducto;
@@ -593,7 +608,12 @@ public class ProductoController {
     public String buscarCodBarras2(@ModelAttribute("soloCodBarras") ProductoSoloCodBarras soloCodBarras) {
 
         codBarrasProducto = soloCodBarras.getCodBarras();
-        return "redirect:/productos/listarProductoFiltradoEspecifico";
+        if (codBarrasProducto != 0) {
+
+            return "redirect:/productos/listarProductoFiltradoEspecifico";
+        } else {
+            return "redirect:/productos/?errorCodBarras";
+        }
     }
 
     @GetMapping("/listarProductoFiltradoEspecifico")
@@ -615,7 +635,7 @@ public class ProductoController {
     @GetMapping("/listarProductos")
     public String findAll2(@RequestParam Map<String, Object> params, Model model){
         int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) -1) :0;
-        PageRequest pageRequest = PageRequest.of(page, 7);
+        PageRequest pageRequest = PageRequest.of(page, 5);
         Page<Producto> pageStock = productoService.getAll(pageRequest);
 
         int totalPage = pageStock.getTotalPages();

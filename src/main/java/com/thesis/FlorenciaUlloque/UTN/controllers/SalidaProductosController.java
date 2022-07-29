@@ -143,7 +143,9 @@ public class SalidaProductosController {
         SalidaProducto egreso = repository.findByIdEgreso((idEgres));
 
         double total = repository.calcularTotalEgreso(idEgres);
-        double totalRedondeado = Math.round(total*100.0/100.0);
+        double interes = egreso.getPorcentajeInteres();
+        double totalConInteres =( (interes * 100)/total) + total;
+        double totalRedondeado = Math.round(totalConInteres*100.0/100.0);
         egreso.setTotal(totalRedondeado);
         salidaProductosService.updateEgreso(egreso);
 
@@ -559,7 +561,7 @@ public class SalidaProductosController {
         int totalPage = pageSalida.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("page", pages);
+            model.addAttribute("pages", pages);
         }
         model.addAttribute("egresoDto", pageSalida.getContent());
         model.addAttribute("current", page + 1);

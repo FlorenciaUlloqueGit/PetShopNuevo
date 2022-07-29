@@ -234,7 +234,7 @@ public class StockController {
     @GetMapping("/delete/{idStock}")
     public String delete( @PathVariable int idStock){
         stockService.delete(idStock);
-        return "redirect:/stocks/listar?exito";
+        return "redirect:/stocks/listadoPaginado?exito";
 
     }
 

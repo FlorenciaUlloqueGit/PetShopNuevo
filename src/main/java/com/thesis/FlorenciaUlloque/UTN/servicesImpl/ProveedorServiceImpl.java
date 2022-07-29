@@ -64,6 +64,8 @@ public class ProveedorServiceImpl  implements ProveedorService {
         proveedorForUpdate.setNombre(proveedor.getNombre());
         proveedorForUpdate.setTelefono(proveedor.getTelefono());
         proveedorForUpdate.setIdProveedor((int) proveedor.getIdProveedor());
+        proveedorForUpdate.setRepresentante(proveedor.getRepresentante());
+        proveedorForUpdate.setEnabled(proveedor.isEnabled());
 
         returnValue = repository.save(proveedorForUpdate);
         return returnValue;

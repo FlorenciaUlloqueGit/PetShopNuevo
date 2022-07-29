@@ -79,6 +79,7 @@
         <a th:href="@{/detalleEgresos/listar/{idEgreso}(idEgreso=${egreso.idEgreso})}" class="btn btn-warning">
             Ver productos</a>
     </div>
+    <br>
 
       <form th:action="@{/ventas/updateEgreso/{idEgreso}(idEgreso=${egreso.idEgreso})}" method="post" th:object="${egreso}" >
 
@@ -87,7 +88,7 @@
               <select  th:field="*{cliente}" class="form-control form-control" id="cliente">
                   <option th:each="cliente:${clientes}"
                           th:value="${cliente.idCliente}"
-                          th:text="${cliente.nombre}" />
+                          th:text="${cliente.nombre} +' ' +  ${cliente.apellido}" />
               </select>
           </div>
 

@@ -50,6 +50,7 @@ public class MarcaServiceImpl implements MarcaService {
         marcaForUpdate.setNombre(marca.getNombre());
         marcaForUpdate.setIdMarca(marca.getIdMarca());
         marcaForUpdate.setProveedor(marca.getProveedor());
+        marcaForUpdate.setEnabled(marca.isEnabled());
 
         returnValue = repository.save(marcaForUpdate);
         return returnValue;

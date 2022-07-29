@@ -61,6 +61,7 @@ public class ProductoServiceImpl implements ProductoService {
         productoForUpdate.setTamano(producto.getTamano());
         productoForUpdate.setEdad(producto.getEdad());
         productoForUpdate.setTipoAnimal(producto.getTipoAnimal());
+        productoForUpdate.setEnabled(producto.isEnabled());
 
 
         returnValue = repository.save(productoForUpdate);

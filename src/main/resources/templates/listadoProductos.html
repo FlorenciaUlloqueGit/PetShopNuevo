@@ -68,6 +68,14 @@
 <br>
 <br>
 <br>
+<div class="container">
+    <div th:if=${param.errorCodBarras}>
+        <div class="alert alert-danger">Reintente. El código de barras no puede ser 0, busque por nombre</div></div>
+</div>
+<div class="container">
+    <div th:if=${param.errorNombre}>
+        <div class="alert alert-danger">No se ha encontrado ningun producto con ese nombre, reintente </div></div>
+</div>
 
 
 <div class="container">
@@ -107,7 +115,8 @@
                 <div class="col">
                     <div class="form-group">
                         <input type="number" class="form-control" style="text-align=left" id="codBarras" th:field="*{codBarras}"
-                               required autofocus="autofocus" >
+                               required autofocus="autofocus"
+                        placeholder="Ingrese el código de barras del producto">
                     </div>
                 </div>
                 <div class="col">
@@ -170,13 +179,13 @@
             <nav aria-label="Pagination">
                 <ul class="pagination justify-content-center" style="background=gray">
                     <li class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{|/productos/listar/?page=${prev}|}" >Anterior</a>
+                        <a class="page-link" th:href="@{|/productos/?page=${prev}|}" >Anterior</a>
                     </li>
                     <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}" >
-                        <a class="page-link" th:href="@{|/productos/listar/?page=${page}|}" th:text="${page}"></a>
+                        <a class="page-link" th:href="@{|/productos/?page=${page}|}" th:text="${page}"></a>
                     </li>
                     <li class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{|/productos/listar/?page=${next}|}" > Siguiente</a>
+                        <a class="page-link" th:href="@{|/productos/?page=${next}|}" > Siguiente</a>
                     </li>
                 </ul>
             </nav>

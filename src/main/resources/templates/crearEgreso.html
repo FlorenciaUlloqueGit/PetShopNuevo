@@ -92,7 +92,7 @@
             <select th:field="*{cliente}" class="form-control form-control" id="cliente">
                 <option th:each="cliente:${clientes}"
                         th:value="${cliente.idCliente}"
-                        th:text="${cliente.email}"/>
+                        th:text="${cliente.nombre} +' ' +  ${cliente.apellido}" />
             </select>
         </div>
 
@@ -109,7 +109,6 @@
         </div>
 
         <div class="form-group">
-            <label for="formaPago">Forma de pago</label>
             <select th:field="*{formaPago}" class="form-control form-control" id="formaPago" hidden>
                 <option th:each="formaPago:${formasPagos                                                                                                                                            }"
                         th:value="${formaPago.idFormaPago}"

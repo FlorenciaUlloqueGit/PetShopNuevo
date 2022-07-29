@@ -31,13 +31,13 @@ public interface ProductoRepository extends CrudRepository<Producto,Integer > {
     List<Producto> findAllByCodBarras(long codBarras);
     List<Producto> findAllByOrderByNombreAsc();
 
-    @Query(value="select* from productos where enabled = true order by nombre asc",nativeQuery = true)
+    @Query(value="select * from productos where enabled = true order by nombre asc",nativeQuery = true)
     Page<Producto>  findAllByOrderByNombreAsc(Pageable pageable);
 
     //trae TODOS los datos de los productos por marca
     List<Producto> findAllDatesByMarcaNombre(String nombre);
 
-    @Query(value="select* from productos p join stocks stock on p.id_producto = stock.id_producto " +
+    @Query(value="select * from productos p join stocks stock on p.id_producto = stock.id_producto " +
             "where stock.cantidad = 0 order by p.nombre asc",nativeQuery = true)
     List<Producto> findAllProductosByStockCERO();
 
@@ -146,7 +146,7 @@ public interface ProductoRepository extends CrudRepository<Producto,Integer > {
     @Query(value = "select  sum(de.cantidad)'cantidad vendida'  from productos p join detalle_egreso de on de.id_producto = p.id_Producto\n" +
             "join egreso_productos e on e.id_egreso = de.id_egreso\n" +
             "join stocks s on s.id_producto = p.id_producto\n" +
-            "where p.id_forma_venta = 2 and Month(e.fecha) = month(curdate())", nativeQuery = true)
-    List<Float> findCantidadProductoVendidoXKg();
+            "where p.id_forma_venta = 2 and Month(e.fecha) = month(curdate())  and p.id_producto = :idProducto", nativeQuery = true)
+    float findCantidadProductoVendidoXKg(@Param("idProducto") int idProducto);
 
 }

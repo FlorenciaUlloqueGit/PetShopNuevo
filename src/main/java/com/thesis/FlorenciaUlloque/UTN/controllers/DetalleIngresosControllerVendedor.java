@@ -461,7 +461,7 @@ public class DetalleIngresosControllerVendedor {
         ingresoProductosService.updateIngreso(ingresoProductos);
 
 
-        return "redirect:/detalleIngresosProovedor/listar/"+idIngreso;
+        return "redirect:/detalleIngresosProveedor/listar/"+idIngreso;
     }
 //-------------------------------------------------------------------------------------
 

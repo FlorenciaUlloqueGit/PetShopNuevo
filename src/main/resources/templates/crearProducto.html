@@ -93,7 +93,7 @@
         <div class="alert alert-danger">El precio de compra o venta no acepta números negativos</div>
     </div>
 
-      <form th:action="@{/productos/nuevo}" method="post" th:object="${productoDtos}" >
+      <form th:action="@{/productos}" method="post" th:object="${productoDtos}" >
 
           <div class="form-group">
               <label for="codBarras">Ingrese el código de barras (si es que corresponde)</label>
@@ -116,7 +116,7 @@
 
           <div class="form-group">
               <label for="pesoNeto">Ingrese el Peso del producto (en caso de no contar con el peso, ingrese aproximado)</label>
-              <input type="number" class="form-control" id="pesoNeto" th:field="*{pesoNeto}" style="text-align=left"
+              <input type="number"step=".01"  class="form-control" id="pesoNeto" th:field="*{pesoNeto}" style="text-align=left"
                      required autofocus="autofocus" >
           </div>
 

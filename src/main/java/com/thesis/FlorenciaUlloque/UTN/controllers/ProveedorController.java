@@ -85,7 +85,7 @@ public class ProveedorController {
         proveedorExiste.setNombre(proveedor.getNombre());
         proveedorExiste.setTelefono(proveedor.getTelefono());
         proveedorExiste.setRepresentante(proveedor.getRepresentante());
-        proveedorExiste.setEnabled(proveedor.isEnabled());
+        proveedorExiste.setEnabled(proveedorExiste.isEnabled());
         proveedorService.updateProveedor(proveedorExiste);
 
         return "redirect:/proveedores/update/{idProveedor}?exito";
@@ -165,6 +165,7 @@ public class ProveedorController {
         proveedorExiste.setNombre(proveedor.getNombre());
         proveedorExiste.setTelefono(proveedor.getTelefono());
         proveedorExiste.setRepresentante(proveedor.getRepresentante());
+        proveedorExiste.setEnabled(proveedorExiste.isEnabled());
         proveedorService.updateProveedor(proveedorExiste);
 
         return "redirect:/proveedores/updateProveedor/{idProveedor}?exito";

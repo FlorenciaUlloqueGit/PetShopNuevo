@@ -69,7 +69,9 @@
 <br>
 <br>
 
-
+<div class="container" th:if=${param.errorFechaSeleccion}>
+    <div class="alert alert-info">Debe seleccionar una fecha antes de poder ver los gráficos</div>
+</div>
 
 <div class="container" th:if=${param.errorFecha}>
     <div class="alert alert-info">No existen ventas registradas para la fecha solicitada</div>
@@ -110,8 +112,6 @@
             <th scope="col">Forma de venta</th>
             <th colspan="2" scope="col">Precio de venta</th>
             <th scope="col">Cantidad vendida</th>
-            <th scope="col">Cant. cuotas</th>
-            <th scope="col">% incremento</th>
             <th colspan="2" scope="col">Subtotal</th>
 
         </tr>
@@ -123,8 +123,6 @@
             <td th:text="${producto.formaVenta}"></td>
             <td  style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.precioVenta}"></td>
             <td style="text-align:left" th:text="${producto.cantidad}"></td>
-            <td style="text-align:left" th:text="${producto.cantidadCuotas}"></td>
-            <td style="text-align:left" th:text="${producto.porcentajeInteres}"></td>
             <td style="text-align:left">AR$<td style="text-align:left align:left" th:text="${producto.total}"></td></td>
         </tbody>
     </table>

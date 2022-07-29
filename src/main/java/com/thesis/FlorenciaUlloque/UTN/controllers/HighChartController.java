@@ -37,6 +37,9 @@ public class HighChartController{
         int cantCatSalud;
 
         LocalDate dia = reporteController.obtenerFechaDiaria();
+        if(dia == null){
+            return "redirect:/reportes/productosDiarios?errorFechaSeleccion";
+        }
         if(null == detalleEgresoRepository.findCantidadTotalVendidoProductoCategoria1Hoy(dia)){
             cantidadCategoriaAlimentos = 0;
         } else {
@@ -169,6 +172,11 @@ public class HighChartController{
     public String barChartIngresos(Model model){
 
         LocalDate fecha = reporteController.fechaVentas();
+      if(fecha == null){
+            return "redirect:/reportes/ingresosPorVentas?errorFechaSeleccion";
+        }
+
+
         //TODO: cambiar fecha
     //    LocalDate fecha = LocalDate.parse("2022-06-06");
 
@@ -228,10 +236,10 @@ public class HighChartController{
     @GetMapping("/reporteIngresos")
     public String barChartEgresos(Model model){
 
-        //TODO: cambiar fecha
         LocalDate fecha = reporteController.obtenerFecha();
-      //  LocalDate fecha = LocalDate.parse("2022-06-06"); //cambiarFecha
-
+        if(fecha == null){
+            return "redirect:/reportes/GastosMensualesProveedores?errorFechaSeleccion";
+        }
         float totalMesActual = 0;
         float totalMesAnterior = 0;
         float totalMesAnteAnterior = 0;

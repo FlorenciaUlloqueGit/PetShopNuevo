@@ -78,7 +78,7 @@
         <div class="alert alert-info">Se han modificado los datos exitosamente.</div>
     </div>
 
-      <form th:action="@{/marcas/updateSpecificMarca/{idMarca}(idMarca=${marca.idMarca})}" method="post" th:object="${marcaDtos}" >
+      <form th:action="@{/marcas/updateSpecificMarca/{idMarca}(idMarca=${marca.idMarca})}" method="post" th:object="${marca}" >
 
 
               <div class="form-group">

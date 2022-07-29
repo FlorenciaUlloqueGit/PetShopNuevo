@@ -152,7 +152,7 @@ public class MarcaController {
         marcaExiste.setIdMarca(marca.getIdMarca());
         marcaExiste.setNombre(marca.getNombre());
         marcaExiste.setProveedor(marca.getProveedor());
-        marcaExiste.setEnabled(marca.isEnabled());
+        marcaExiste.setEnabled(true);
         marcaService.updateMarca(marcaExiste);
 
         return "redirect:/marcas/updateMarca/{idMarca}?exito";

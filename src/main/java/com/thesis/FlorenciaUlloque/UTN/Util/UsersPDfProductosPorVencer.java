@@ -42,7 +42,7 @@ public class UsersPDfProductosPorVencer {
         table.addCell(cell);
         cell.setPhrase(new Phrase("Unidad medida", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Cantidad en medida", font));
+        cell.setPhrase(new Phrase("Cantidad en stock", font));
         table.addCell(cell);
 
 

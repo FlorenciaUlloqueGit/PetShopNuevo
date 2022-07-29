@@ -164,7 +164,6 @@
                 <th colspan="2" scope="col">Precio Kilogramo</th>
                 <th scope="col">Cantidad (Expresada en KG)</th>
                 <th scope="col">Registrar venta</th>
-                <th scope="col">Modificar producto</th>
 
 
             </tr>
@@ -183,10 +182,6 @@
                     <button type="submit" class="btn btn-success">Registrar</button>
                 </td>
 
-                <td><a th:href="@{/productos/updateProductoDetalleEgresoCliente/{idProducto}(idProducto=${producto.idProducto})}"
-                       class="btn btn-info">
-                    Editar producto</a></td>
-                <td>
                     <input class="form-control" type="text"
                            th:value="${producto.precioVenta}" id="precioVenta" name="precioVenta
 " hidden/></td>

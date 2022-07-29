@@ -53,6 +53,14 @@
     </div>
 </nav>
 
+<div class="container">
+    <div th:if=${param.errorCodBarras}>
+        <div class="alert alert-danger">Reintente. El código de barras no puede ser 0, busque por nombre</div></div>
+</div>
+<div class="container">
+    <div th:if=${param.errorNombre}>
+        <div class="alert alert-danger">No se ha encontrado ningun producto con ese nombre, reintente </div></div>
+</div>
 
 <div class="container-fluid text-white" style="background-color: rgb(254, 93, 38)">
     <h1 style="text-align: center">
@@ -77,6 +85,7 @@
 <div class="container">
     <td><a  th:href="@{/productos/mostrarForm}" class="btn btn-danger"> Crear nuevo producto</a></td>
 </div>
+
 <br>
 <br>
 
@@ -117,7 +126,7 @@
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-success">Buscar por código</button>
+                        <button type="submit" class="btn btn-success">Buscar por código de barras</button>
                     </div>
                 </div>
             </div>

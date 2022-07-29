@@ -88,7 +88,7 @@ public class IngresoProductosServiceImpl implements IngresoProductosService {
     @Override
     public List<Proveedor> listaProveedores() {
         List<Proveedor> proveedorList;
-        proveedorList = (List<Proveedor>) proveedorRepository.findAll();
+        proveedorList = (List<Proveedor>) proveedorRepository.findAllByOrderByNombreAsc();
         return  proveedorList;
     }
 

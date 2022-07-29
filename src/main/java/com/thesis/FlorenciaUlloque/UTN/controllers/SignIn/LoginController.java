@@ -25,37 +25,7 @@ public class LoginController {
         this.administradorRepository = administradorRepository;
     }
 
-    /*
 
-        @RequestMapping(value="/index", method = RequestMethod.GET)
-        public String getLoginCliente(){
-            return "index";
-        }
-        //cheching login credentials
-
-        @RequestMapping(value="/index", method = RequestMethod.POST)
-        public String loginCliente (@ModelAttribute(name = "cliente") Cliente cliente, Model model){
-
-            String email = cliente.getEmail();
-            System.out.println(cliente.getEmail());
-            System.out.println(cliente.getPass());
-            Cliente clienteDB;
-
-            clienteDB = repository.findByEmail(email);
-
-            if(clienteDB.getEmail().equals(cliente.getEmail()) && clienteDB.getPass().equals(cliente.getPass())) {
-                //if email y pass are correct
-                return "homeCliente";
-
-            } else {
-                model.addAttribute("invalidCredentials", true);
-                //returnin again a login page
-                return "redirect:/loginNuevo?error";
-            }
-
-        }
-
-     */
     @RequestMapping(value = "/preguntasFrecuentesAdmin", method = RequestMethod.GET)
     public String getPregFrecuentesAdmin() {
         return "PreguntasFrecuentesAdmin";
@@ -143,12 +113,19 @@ public class LoginController {
         Vendedor vendedorDb;
 
         vendedorDb = vendedoRepository.findByUsuario(usuario);
+        boolean logueado = false;
 
         if (vendedorDb == null) {
+            logueado = false;
             return "redirect:/index?error";
         }
         if (vendedorDb.getUsuario().equals(vendedor.getUsuario()) && vendedorDb.getPass().equals(vendedor.getPass())) {
             //if email y pass are correct
+            logueado = true;
+            UsuarioLogueado usuarioLogueado = new UsuarioLogueado();
+            UsuarioLogueado usuarioLog = usuarioLogueado.getThisInstance();
+            usuarioLog.setUsuario(vendedor.getUsuario());
+            usuarioLog.setLogueado(logueado);
             return "homeVendedor";
 
         } else {

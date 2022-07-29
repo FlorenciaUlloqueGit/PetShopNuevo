@@ -404,7 +404,7 @@ public class ReporteController {
         int totalPage = pageVenta.getTotalPages();
         if (totalPage > 0) {
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
-            model.addAttribute("page", pages);
+            model.addAttribute("pages", pages);
         }
 
         float totalVentas;
@@ -491,6 +491,10 @@ public class ReporteController {
             ventaKg.setUnidadMedida(producto.getUnidadMedida());
             ventaKg.setPesoNeto((int) producto.getPesoNeto());
             ventaKg.setMarca(producto.getMarca());
+            float cantidad;
+            float cantProdVendido = productoRepository.findCantidadProductoVendidoXKg(producto.getIdProducto());
+            cantidad = cantProdVendido;
+            /*
             int cantProdVendido = productoRepository.findCantidadProductoVendidoXKg().size();
             float cantidad;
             if(list.size() < cantProdVendido){
@@ -498,6 +502,8 @@ public class ReporteController {
             }else{
              cantidad = 1;
             }
+
+             */
 
 
             DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
@@ -629,7 +635,7 @@ public class ReporteController {
         List<Producto> listaProductos = productoRepository.findProductosVencidos();
 
 
-        UsersPDfProductosPorVencer exporter = new UsersPDfProductosPorVencer(listaProductos);
+        UsersPDfProductosVencidos exporter = new UsersPDfProductosVencidos(listaProductos);
         exporter.export(response);
     }
 
@@ -774,7 +780,6 @@ public class ReporteController {
         String headerValue = "attachment; filename=users.pdf";
 
         response.setHeader(headerKey, headerValue);
-
         int i = 0;
         List<Producto> productoVentaKg = productoRepository.findProductosVendidosKG();
         List<ProductoReporteBolsaCerrada> listaProductos = new ArrayList<>();
@@ -786,7 +791,7 @@ public class ReporteController {
             ventaKg.setUnidadMedida(producto.getUnidadMedida());
             ventaKg.setPesoNeto((int) producto.getPesoNeto());
             ventaKg.setMarca(producto.getMarca());
-            float cantidad = productoRepository.findCantidadProductoVendidoXKg().get(i);
+            float cantidad = productoRepository.findCantidadProductoVendidoXKg(producto.getIdProducto());
             float cantidadFormateada = Math.round(cantidad * 100.0 / 100.0);
 
             DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
@@ -807,7 +812,8 @@ public class ReporteController {
     }
 
     @GetMapping("/ingresosMensuales/export")
-    public void exportToPDFEgresosProveedores(HttpServletResponse response) throws DocumentException, IOException {
+    public String exportToPDFEgresosProveedores(HttpServletResponse response) throws DocumentException, IOException {
+
         response.setContentType("application/pdf");
 
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -819,6 +825,11 @@ public class ReporteController {
         response.setHeader(headerKey, headerValue);
 
         int i = 0;
+    /*    if(fechaCompras == null){
+            return "redirect:/reportes/ingresosPorVentas?errorFechaSeleccion";
+        }
+
+     */
         List<IngresoProductos> ingresoProductos = ingresoProductosRepository.findIngresosbyMoth(String.valueOf(fechaCompras));
         List<IngresoProductos> listadoProductos = new ArrayList<>();
         for (IngresoProductos ingreso : ingresoProductos) {
@@ -841,6 +852,7 @@ public class ReporteController {
 
         ReporteIngresosPDF exporter = new ReporteIngresosPDF(listadoProductos, fechaCompras);
         exporter.export(response);
+        return currentDateTime;
     }
 
     @GetMapping("/ventasMensuales/export")

@@ -165,7 +165,6 @@
                 <th colspan="2" scope="col">Precio unitario</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Registrar venta</th>
-                <th scope="col">Modificar producto</th>
 
 
             </tr>
@@ -185,10 +184,6 @@
                     <button type="submit" class="btn btn-success">Registrar</button>
                 </td>
 
-                <td><a th:href="@{/productos/updateProductoDetalleEgresoVendedor/{idProducto}(idProducto=${producto.idProducto})}"
-                       class="btn btn-info">
-                    Editar producto</a></td>
-                <td>
                     <input class="form-control" type="text"
                            th:value="${producto.precioVenta}" id="precioVenta" name="precioVenta
 " hidden/></td>
